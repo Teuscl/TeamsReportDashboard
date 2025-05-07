@@ -1,32 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard.Frontend\\teamsreportdashboard.frontend.esproj": {}
+    "/home/mateus/MessagesReport/project/TeamsReportDashboard/teamsreportdashboard.frontend/teamsreportdashboard.frontend.esproj": {}
   },
   "projects": {
-    "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard.Frontend\\teamsreportdashboard.frontend.esproj": {
+    "/home/mateus/MessagesReport/project/TeamsReportDashboard/teamsreportdashboard.frontend/teamsreportdashboard.frontend.esproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard.Frontend\\teamsreportdashboard.frontend.esproj",
+        "projectUniqueName": "/home/mateus/MessagesReport/project/TeamsReportDashboard/teamsreportdashboard.frontend/teamsreportdashboard.frontend.esproj",
         "projectName": "teamsreportdashboard.frontend",
-        "projectPath": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard.Frontend\\teamsreportdashboard.frontend.esproj",
-        "packagesPath": "C:\\Users\\Mateus\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard.Frontend\\obj\\",
+        "projectPath": "/home/mateus/MessagesReport/project/TeamsReportDashboard/teamsreportdashboard.frontend/teamsreportdashboard.frontend.esproj",
+        "packagesPath": "/home/mateus/.nuget/packages/",
+        "outputPath": "/home/mateus/MessagesReport/project/TeamsReportDashboard/teamsreportdashboard.frontend/obj/",
         "projectStyle": "PackageReference",
         "UsingMicrosoftNETSdk": false,
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Mateus\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/home/mateus/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

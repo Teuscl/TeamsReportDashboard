@@ -1,0 +1,201 @@
+/* Sidebar Geral */
+.sidenav {
+    background: #012a5b;
+    transition: all 0.5s ease;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 16.5625rem;
+    height: 100vh;
+    box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidenav-collapsed {
+    width: 5rem;
+}
+
+/* Logo da Sidebar */
+.sidenav .logo-container {
+    display: flex;
+    align-items: center;
+    padding: 0.938rem;
+    width: 100%;
+}
+
+.sidenav .logo-container .logo {
+    background: #fff;
+    text-align: center;
+    width: 3rem;
+    min-width: 3rem;
+    border-radius: 0.313rem;
+    padding: 0.313rem;
+    font-size: 24px;
+    font-weight: 900;
+    cursor: pointer;
+    border: none;
+}
+
+.sidenav .logo-container .logo-text {
+    margin-left: 1.5rem;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* Navegação */
+.sidenav-nav {
+    list-style: none;
+    padding: 0.938rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1; /* Preenche o restante do espaço disponível */
+}
+
+.sidenav-nav .sidenav-nav-item {
+    width: 100%;
+    margin-bottom: 0.625rem;
+}
+
+.sidenav-nav .sidenav-nav-item .sidenav-nav-link {
+    display: flex;
+    align-items: center;
+    height: 3rem;
+    color: #f3f3f3;
+    text-decoration: none;
+    border-radius: 0.625rem;
+    transition: all 0.3s ease;
+}
+
+.sidenav-nav .sidenav-nav-item .sidenav-nav-link .sidenav-link-icon {
+    font-size: 22px;
+    width: 2rem;
+    min-width: 2rem;
+    text-align: center;
+    padding: 12px;
+}
+
+.sidenav-nav .sidenav-nav-item .sidenav-nav-link .sidenav-link-text {
+    margin-left: 1.5rem;
+}
+
+.sidenav-nav .sidenav-nav-item .sidenav-nav-link-user {
+    background-color: #042247;
+}
+
+.sidenav-nav .sidenav-nav-item:hover .sidenav-nav-link,
+.sidenav-nav .sidenav-nav-item:hover .sidenav-nav-link-user {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Ativo */
+.active {
+    background-color: #fff;
+}
+
+.active .sidenav-link-icon,
+.active .sidenav-link-text {
+    color: #000;
+}
+
+/* Divisores */
+hr {
+    width: 80%;
+    margin: 0.625rem auto;
+    border: 0.063rem solid #f3f3f3;
+}
+
+/* Seção do Usuário */
+.user-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 10px;
+    background-color: #042247; /* Cor de fundo da seção do usuário */
+    border-radius: 0.625rem;
+    margin-top: auto; /* Move a seção para a parte inferior da sidebar */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    text-decoration: none; /* Remove sublinhado do link */
+
+}
+.user-info:hover {
+    color: #d32f2f; /* Cor ao passar o mouse */
+}
+
+.user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #d32f2f; /* Cor de fundo do avatar */
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.user-name {
+    font-size: 14px;
+    color: #f3f3f3;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: opacity 0.3s ease; /* Transição suave ao ocultar */
+}
+
+/* Botão de Logout */
+.logout-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #f3f3f3;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.logout-button:hover .logout-icon {
+    color: #d32f2f; /* Cor ao passar o mouse */
+}
+
+.logout-icon {
+    font-size: 18px;
+}
+
+/* Responsividade para barra lateral colapsada */
+.sidenav-collapsed .user-name {
+    opacity: 0; /* Oculta o nome do usuário */
+    width: 0; /* Remove o espaço ocupado pelo nome */
+    margin: 0; /* Remove margens desnecessárias */
+    pointer-events: none; /* Impede interação com o nome */
+}
+
+.sidenav-collapsed .user-info {
+    justify-content: center; /* Centraliza apenas o avatar */
+    width: 100%;
+}
+
+/* Centralizar o avatar dentro do contêiner */
+.sidenav-collapsed .user-avatar {
+    margin: 0 auto; /* Centraliza o avatar no contêiner */
+}
+.sidenav-collapsed .logout-button {
+    opacity: 0; /* Oculta visualmente */
+    width: 0; /* Remove o espaço ocupado */
+    margin: 0; /* Remove margens */
+    pointer-events: none; /* Impede interação */
+}
