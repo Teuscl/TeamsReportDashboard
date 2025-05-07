@@ -1,0 +1,6 @@
+@TeamsReportDashboard_HostAddress = http://localhost:5289
+
+POST {{TeamsReportDashboard_HostAddress}}/api/User/
+Accept: application/json
+
+###
