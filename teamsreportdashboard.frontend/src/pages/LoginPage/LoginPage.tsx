@@ -100,7 +100,7 @@ const LoginPage = ({ onLogin }: { onLogin: any }) => {
 
                             <div className="text-center mt-4">
                                 <Button
-                                    variant="success"
+                                    
                                     type="submit"
                                     disabled={loading}
                                     className="w-100"

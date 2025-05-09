@@ -1,25 +1,87 @@
-﻿.login-box {
-    background: #94154a;
-    border-radius: 16px;
-    padding: 30px;
+﻿body {
+    background: linear-gradient(135deg, #051e77, #071558); /* Fundo com gradiente suave */
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #f0f0f0; /* Cor de texto suave */
 }
 
 .login-box h3 {
     font-weight: 600;
+    color: #0b0101; /* Cor escura para o título */
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 a {
     text-decoration: none;
-    color: #198754;
+    color: #f31010; /* Cor de link verde mais claro */
 }
 
 a:hover {
     text-decoration: underline;
-    color: #145c32;
+    color: #171ca8; /* Cor do link ao passar o mouse */
 }
-body {
-    background: linear-gradient(135deg, #e0eafc, #cfdef3);
-    
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+button {
+    background-color: #2f00ff; /* Botão verde */
+    color: white;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    padding: 10px;
+}
+
+button:disabled {
+    background-color: #bdbdbd; /* Cor do botão quando desabilitado */
+    cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+    background-color: #000000; /* Cor mais escura ao passar o mouse */
+}
+
+input, .form-control {
+    border-radius: 10px; /* Bordas arredondadas para campos de input */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+}
+
+input:focus, .form-control:focus {
+    border-color: #8d3a6f; /* Cor de foco verde */
+    box-shadow: 0 0 5px rgba(66, 5, 15, 0.6);
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.input-group-text {
+    background-color: #4a6fa5;
+    color: #fff;
+}
+
+.text-center {
+    margin-top: 20px;
+}
+
+.alert {
+    border-radius: 10px;
+    background-color: #ffebee; /* Alerta suave com fundo claro */
+    color: #f44336; /* Cor do texto do alerta */
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.form-label {
+    color: #070707; /* Cor escura para o texto do label */
+    font-weight: 500; /* Deixando o texto dos labels mais forte */
+}
+
+input, .form-control {
+    background-color: #f8f9fa; /* Fundo claro para campos de input */
+    color: #100000; /* Texto do campo de input em cinza escuro */
+}
+
+input:focus, .form-control:focus {
+    border-color: #ffffff; /* Destaque verde para o foco */
+    box-shadow: 0 0 5px rgba(7, 46, 241, 0.6);
 }

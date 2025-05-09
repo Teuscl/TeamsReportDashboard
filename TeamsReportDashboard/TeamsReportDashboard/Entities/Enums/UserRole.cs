@@ -1,8 +1,8 @@
-﻿namespace TeamsReportDashboard.Entities.Enums;
+﻿    namespace TeamsReportDashboard.Entities.Enums;
 
-public enum UserRole
-{
-    Master,
-    Admin,
-    Viewer,
-}
+    public enum UserRole
+    {
+        Master,
+        Admin,
+        Viewer,
+    }

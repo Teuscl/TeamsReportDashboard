@@ -58,8 +58,9 @@ public class AuthController : ControllerBase
             
             var newToken = _tokenService.GenerateToken(matchedUser);
             var newRefreshToken = _tokenService.GenerateRefreshToken();
-            matchedUser.RefreshToken = newToken;
-            matchedUser.RefreshTokenExpiryTime = DateTime.Now;
+            
+            matchedUser.RefreshToken = newRefreshToken;
+            matchedUser.RefreshTokenExpiryTime = DateTime.Now.AddDays(2);
             
             _unitOfWork.UserRepository.Update(matchedUser);
             await _unitOfWork.CommitAsync();

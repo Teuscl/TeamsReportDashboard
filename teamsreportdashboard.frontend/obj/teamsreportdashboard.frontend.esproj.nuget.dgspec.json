@@ -1,26 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "/home/mateus/MessagesReport/project/TeamsReportDashboard/teamsreportdashboard.frontend/teamsreportdashboard.frontend.esproj": {}
+    "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard.Frontend\\teamsreportdashboard.frontend.esproj": {}
   },
   "projects": {
-    "/home/mateus/MessagesReport/project/TeamsReportDashboard/teamsreportdashboard.frontend/teamsreportdashboard.frontend.esproj": {
+    "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard.Frontend\\teamsreportdashboard.frontend.esproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/mateus/MessagesReport/project/TeamsReportDashboard/teamsreportdashboard.frontend/teamsreportdashboard.frontend.esproj",
+        "projectUniqueName": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard.Frontend\\teamsreportdashboard.frontend.esproj",
         "projectName": "teamsreportdashboard.frontend",
-        "projectPath": "/home/mateus/MessagesReport/project/TeamsReportDashboard/teamsreportdashboard.frontend/teamsreportdashboard.frontend.esproj",
-        "packagesPath": "/home/mateus/.nuget/packages/",
-        "outputPath": "/home/mateus/MessagesReport/project/TeamsReportDashboard/teamsreportdashboard.frontend/obj/",
+        "projectPath": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard.Frontend\\teamsreportdashboard.frontend.esproj",
+        "packagesPath": "C:\\Users\\MateusCarvalhoLucas\\.nuget\\packages\\",
+        "outputPath": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard.Frontend\\obj\\",
         "projectStyle": "PackageReference",
         "UsingMicrosoftNETSdk": false,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/mateus/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\MateusCarvalhoLucas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

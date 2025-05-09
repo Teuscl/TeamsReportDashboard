@@ -1,23 +1,33 @@
 import { Link } from "react-router-dom";
 import "./sidebar.css";
+import JwtUser from "../../types/JwtUser";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faHome, faFileLines, faUserGear, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 type SidebarProps = {
     isSidebarCollapsed: boolean;
     changeIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void;
+    port: string;
+    loggedUser: JwtUser | null;
 };
 
 const Sidebar = ({
                      isSidebarCollapsed,
                      changeIsSidebarCollapsed,
+                     port,
+                     loggedUser,
                  }: SidebarProps) => {
+    
+    const [hasAdminRole, setHasAdminRole] = useState<boolean>(false);
 
     const sidebarItems = [
         { routerLink: "dashboard", icon: faHome, label: "Dashboard" },
         { routerLink: "atendimentos", icon: faFileLines, label: "Atendimentos" },
+    ];
+
+    const adminItems = [
         { routerLink: "usuarios", icon: faUserGear, label: "Usuários" },
     ];
 
@@ -33,6 +43,11 @@ const Sidebar = ({
     const handleLogout = () => {
         console.log("Logout clicado");
     };
+
+    useEffect(() => {
+        const checkAdminRole = async () => {
+            try {
+                await await.
 
     return (
         <div className={sidebarClasses}>

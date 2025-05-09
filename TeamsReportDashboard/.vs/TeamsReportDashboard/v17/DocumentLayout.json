@@ -1,29 +1,29 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\",
+  "WorkspaceRootPath": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.csproj|c:\\users\\mateus\\desktop\\projects\\teamsreportdashboard\\teamsreportdashboard\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.csproj|solutionrelative:teamsreportdashboard\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj|g:\\projects\\teamsreportdashboard\\teamsreportdashboard\\teamsreportdashboard\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj|solutionrelative:teamsreportdashboard\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.csproj|c:\\users\\mateus\\desktop\\projects\\teamsreportdashboard\\teamsreportdashboard\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.csproj|solutionrelative:teamsreportdashboard\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj|g:\\projects\\teamsreportdashboard\\teamsreportdashboard\\teamsreportdashboard\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj|solutionrelative:teamsreportdashboard\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.csproj|c:\\users\\mateus\\desktop\\projects\\teamsreportdashboard\\teamsreportdashboard\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.csproj|solutionrelative:teamsreportdashboard\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.csproj|c:\\users\\mateus\\desktop\\projects\\teamsreportdashboard\\teamsreportdashboard\\services\\user\\create\\createuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.csproj|solutionrelative:teamsreportdashboard\\services\\user\\create\\createuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.csproj|c:\\users\\mateus\\desktop\\projects\\teamsreportdashboard\\teamsreportdashboard\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.csproj|solutionrelative:teamsreportdashboard\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj|g:\\projects\\teamsreportdashboard\\teamsreportdashboard\\teamsreportdashboard\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj|solutionrelative:teamsreportdashboard\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/TeamsReports/True/SqlTable/dbo.Users.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj|g:\\projects\\teamsreportdashboard\\teamsreportdashboard\\teamsreportdashboard\\services\\user\\create\\createuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj|solutionrelative:teamsreportdashboard\\services\\user\\create\\createuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj|g:\\projects\\teamsreportdashboard\\teamsreportdashboard\\teamsreportdashboard\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{07CB2266-8DB4-45CC-A040-CC89277F7485}|TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj|solutionrelative:teamsreportdashboard\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -33,63 +33,66 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "launchSettings.json",
-              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\Properties\\launchSettings.json",
+              "DocumentMoniker": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "TeamsReportDashboard\\Properties\\launchSettings.json",
-              "ToolTip": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\Properties\\launchSettings.json",
+              "ToolTip": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\Properties\\launchSettings.json",
               "RelativeToolTip": "TeamsReportDashboard\\Properties\\launchSettings.json",
-              "ViewState": "AgIAABIAAAAAAAAAAAAUwCMAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-23T00:12:38.416Z",
+              "WhenOpened": "2025-05-09T11:57:47.572Z",
               "EditorCaption": ""
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\appsettings.json",
+              "DocumentMoniker": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\appsettings.json",
               "RelativeDocumentMoniker": "TeamsReportDashboard\\appsettings.json",
-              "ToolTip": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\appsettings.json",
+              "ToolTip": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\appsettings.json",
               "RelativeToolTip": "TeamsReportDashboard\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-04-23T00:12:34.341Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "CreateUserService.cs",
-              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\Services\\User\\Create\\CreateUserService.cs",
+              "DocumentMoniker": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\Services\\User\\Create\\CreateUserService.cs",
               "RelativeDocumentMoniker": "TeamsReportDashboard\\Services\\User\\Create\\CreateUserService.cs",
-              "ToolTip": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\Services\\User\\Create\\CreateUserService.cs",
+              "ToolTip": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\Services\\User\\Create\\CreateUserService.cs",
               "RelativeToolTip": "TeamsReportDashboard\\Services\\User\\Create\\CreateUserService.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAABBwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T00:09:30.626Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-23T00:09:30.626Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "UserController.cs",
-              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\Controllers\\UserController.cs",
+              "DocumentMoniker": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "TeamsReportDashboard\\Controllers\\UserController.cs",
-              "ToolTip": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\Controllers\\UserController.cs",
+              "ToolTip": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\Controllers\\UserController.cs",
               "RelativeToolTip": "TeamsReportDashboard\\Controllers\\UserController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA9wBkAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-23T00:09:04.757Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "dbo.Users.sql",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/TeamsReports/True/SqlTable/dbo.Users.sql",
               "ToolTip": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/TeamsReports/True/SqlTable/dbo.Users.sql",
@@ -98,16 +101,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\Program.cs",
+              "DocumentMoniker": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\Program.cs",
               "RelativeDocumentMoniker": "TeamsReportDashboard\\Program.cs",
-              "ToolTip": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\Program.cs",
+              "ToolTip": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\Program.cs",
               "RelativeToolTip": "TeamsReportDashboard\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-23T00:04:46.633Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-23T00:04:46.633Z"
             }
           ]
         }

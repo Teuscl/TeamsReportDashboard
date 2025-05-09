@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TeamsReportDashboard.Entities;
 using TeamsReportDashboard.Models.Dto;
 using TeamsReportDashboard.Services.User.ChangePassword;
@@ -8,7 +9,7 @@ using TeamsReportDashboard.Services.User.Read;
 using TeamsReportDashboard.Services.User.Update;
 
 namespace TeamsReportDashboard.Controllers;
-    [Route("[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class UserController : Controller
 {
@@ -20,6 +21,7 @@ public class UserController : Controller
     // }
 
     [HttpPost]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Create(
         [FromServices]ICreateUserService service,
         [FromBody] CreateUserDto createUserDto)
@@ -29,6 +31,7 @@ public class UserController : Controller
     }
 
     [HttpPut]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Update(
         [FromServices]IUpdateUserService service,
         [FromBody] UpdateUserDto updateUserDto)
@@ -36,8 +39,9 @@ public class UserController : Controller
         await service.Execute(updateUserDto);
         return NoContent();
     }
-
+    
     [HttpDelete]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Delete(
         [FromServices]IDeleteUserService service,
         int id)
@@ -47,6 +51,7 @@ public class UserController : Controller
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<User>>>GetAll(
         [FromServices]IGetUsersService service)
     {
@@ -54,6 +59,7 @@ public class UserController : Controller
     }
 
     [HttpPut("change-password")]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> ChangePassword(
         [FromServices]IChangePasswordService service,
         [FromBody] ChangePasswordDto changePasswordDto, int id)
