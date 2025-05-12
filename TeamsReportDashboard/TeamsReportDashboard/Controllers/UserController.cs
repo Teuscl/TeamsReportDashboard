@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamsReportDashboard.Entities;
 using TeamsReportDashboard.Models.Dto;
@@ -13,15 +14,8 @@ namespace TeamsReportDashboard.Controllers;
 [ApiController]
 public class UserController : Controller
 {
-    
-    //Implementar recuperar usuario atual para evitar delete do usuario logado
-    // private int GetCurrentUserId()
-    // {
-    //     var userID = int.Parse(HttpContext.User.Claims.FirstOrDefault(x => x.Type == "id").Value);
-    // }
-
     [HttpPost]
-    [Authorize(Roles = "Admin, Master")]
+    //[Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Create(
         [FromServices]ICreateUserService service,
         [FromBody] CreateUserDto createUserDto)
@@ -31,7 +25,7 @@ public class UserController : Controller
     }
 
     [HttpPut]
-    [Authorize(Roles = "Admin, Master")]
+    ///[Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Update(
         [FromServices]IUpdateUserService service,
         [FromBody] UpdateUserDto updateUserDto)
@@ -41,17 +35,22 @@ public class UserController : Controller
     }
     
     [HttpDelete]
-    [Authorize(Roles = "Admin, Master")]
+    //[Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Delete(
         [FromServices]IDeleteUserService service,
         int id)
     {
+        var currentUser = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+        if (currentUser == id)
+        {
+            return BadRequest(new { message = "You cannot delete your own account." });
+        }
         await service.Execute(id);
         return Ok(new {Message = "User has been deleted"});
     }
 
     [HttpGet]
-    [Authorize]
+    //[Authorize]
     public async Task<ActionResult<IEnumerable<User>>>GetAll(
         [FromServices]IGetUsersService service)
     {
@@ -59,7 +58,7 @@ public class UserController : Controller
     }
 
     [HttpPut("change-password")]
-    [Authorize(Roles = "Admin, Master")]
+    //[Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> ChangePassword(
         [FromServices]IChangePasswordService service,
         [FromBody] ChangePasswordDto changePasswordDto, int id)

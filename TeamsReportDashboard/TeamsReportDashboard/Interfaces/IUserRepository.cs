@@ -8,6 +8,7 @@ public interface IUserRepository
     void Update(User user);
     Task DeleteAsync(int id);
     Task<User> GetByIdAsync(int id);
-    Task<User> GetByEmailAsync(string email);
+    Task<User?> GetByEmailAsync(string email);
     Task<IEnumerable<User>> GetAllAsync();
+    Task<User?> GetByRefreshTokenAsync(string refreshToken);
 }

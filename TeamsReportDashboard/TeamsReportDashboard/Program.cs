@@ -40,8 +40,8 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -53,12 +53,13 @@ builder.Services.AddAuthentication("Bearer")
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
+builder.Services.AddAuthorization();
     
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Injeção de dependências
-builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddScoped<ITokenService, TokenService>();  // Adiciona o TokenService
 builder.Services.AddScoped<IAuthService, AuthService>();  // Adiciona o AuthService
 builder.Services.AddScoped<IValidator<CreateUserDto>, CreateUserValidator>();  // Validador do CreateUserDto

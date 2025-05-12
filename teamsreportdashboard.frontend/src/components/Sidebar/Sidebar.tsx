@@ -3,8 +3,15 @@ import "./sidebar.css";
 import JwtUser from "../../types/JwtUser";
 import classNames from "classnames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faHome, faFileLines, faUserGear, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { Fragment, useEffect, useState } from "react";
+import {
+    faBars,
+    faHome,
+    faFileLines,
+    faUserGear,
+    faArrowRightFromBracket
+} from "@fortawesome/free-solid-svg-icons";
+import { Fragment } from "react";
+import { logout } from "../../utils/auth"; // <-- novo helper de logout
 
 type SidebarProps = {
     isSidebarCollapsed: boolean;
@@ -14,21 +21,18 @@ type SidebarProps = {
 };
 
 const Sidebar = ({
-                     isSidebarCollapsed,
-                     changeIsSidebarCollapsed,
-                     port,
-                     loggedUser,
-                 }: SidebarProps) => {
-    
-    const [hasAdminRole, setHasAdminRole] = useState<boolean>(false);
-
+    isSidebarCollapsed,
+    changeIsSidebarCollapsed,
+    port,
+    loggedUser,
+}: SidebarProps) => {
     const sidebarItems = [
-        { routerLink: "dashboard", icon: faHome, label: "Dashboard" },
-        { routerLink: "atendimentos", icon: faFileLines, label: "Atendimentos" },
+        { routerLink: "/dashboard", icon: faHome, label: "Dashboard" },
+        { routerLink: "/atendimentos", icon: faFileLines, label: "Atendimentos" },
     ];
 
     const adminItems = [
-        { routerLink: "usuarios", icon: faUserGear, label: "Usuários" },
+        { routerLink: "/usuarios", icon: faUserGear, label: "Usuários" },
     ];
 
     const sidebarClasses = classNames({
@@ -40,14 +44,17 @@ const Sidebar = ({
         changeIsSidebarCollapsed(!isSidebarCollapsed);
     };
 
-    const handleLogout = () => {
-        console.log("Logout clicado");
-    };
+    // normaliza o role (caso venha como string ou array)
+    const roles = loggedUser?.role
+        ? Array.isArray(loggedUser.role)
+            ? loggedUser.role
+            : [loggedUser.role]
+        : [];
 
-    useEffect(() => {
-        const checkAdminRole = async () => {
-            try {
-                await await.
+    const isAdmin = roles.includes("admin");
+
+    const userName = loggedUser?.name || "Usuário";
+    const avatarLetter = userName[0]?.toUpperCase() || "U";
 
     return (
         <div className={sidebarClasses}>
@@ -62,11 +69,13 @@ const Sidebar = ({
                 )}
             </div>
             <div className="sidenav-nav">
-                {sidebarItems.map(item => (
+                {[...sidebarItems, ...(isAdmin ? adminItems : [])].map(item => (
                     <li key={item.label} className="sidenav-nav-item">
                         <Link className="sidenav-nav-link" to={item.routerLink}>
                             <FontAwesomeIcon icon={item.icon} className="sidenav-link-icon" />
-                            {!isSidebarCollapsed && <span className="sidenav-link-text">{item.label}</span>}
+                            {!isSidebarCollapsed && (
+                                <span className="sidenav-link-text">{item.label}</span>
+                            )}
                         </Link>
                     </li>
                 ))}
@@ -75,11 +84,13 @@ const Sidebar = ({
                 <div className="sidenav-nav-item user-section">
                     <div className="user-info">
                         <div className="user-avatar">
-                            <span>U</span> {/* Letra fixa para simular avatar */}
+                            <span>{avatarLetter}</span>
                         </div>
-                        <span className="user-name">Usuário Demo</span>
+                        {!isSidebarCollapsed && (
+                            <span className="user-name">{userName}</span>
+                        )}
                     </div>
-                    <button className="logout-button" onClick={handleLogout}>
+                    <button className="logout-button" onClick={logout}>
                         <FontAwesomeIcon icon={faArrowRightFromBracket} className="logout-icon" />
                     </button>
                 </div>

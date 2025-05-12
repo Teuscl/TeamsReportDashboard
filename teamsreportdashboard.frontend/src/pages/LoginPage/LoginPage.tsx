@@ -1,10 +1,7 @@
-﻿// src/components/LoginPage.tsx
-
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import "./LoginPage.css";
 import axios from "../../services/axiosConfig";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import {
     Alert,
     Button,
@@ -19,23 +16,12 @@ import {
 } from "react-bootstrap";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 
-const LoginPage = ({ onLogin }: { onLogin: any }) => {
+const LoginPage = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
-
-    const getCurrentUser = () => {
-        const token = localStorage.getItem("token");
-        if (!token) return null;
-
-        try {
-            return jwtDecode(token);
-        } catch {
-            return null;
-        }
-    };
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,7 +36,6 @@ const LoginPage = ({ onLogin }: { onLogin: any }) => {
 
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("refreshToken", response.data.refreshToken);
-            onLogin(getCurrentUser());
             navigate("/dashboard");
         } catch (err) {
             setError("E-mail ou senha incorretos. Tente novamente.");
@@ -100,7 +85,6 @@ const LoginPage = ({ onLogin }: { onLogin: any }) => {
 
                             <div className="text-center mt-4">
                                 <Button
-                                    
                                     type="submit"
                                     disabled={loading}
                                     className="w-100"

@@ -1,37 +1,32 @@
-import {Outlet} from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import "./layout.css";
 import classNames from "classnames";
-import Sidebar from "../Sidebar/Sidebar";;
-import JwtUser from "../types/JwtUser.tsx";
-import {jwtDecode} from "jwt-decode"; // Importando a Sidebar
+import Sidebar from "../Sidebar/Sidebar";
+import { getCurrentUser } from "../../utils/auth";
+import JwtUser from "../../types/JwtUser";
 
 type LayoutProps = {
     port: string;
     isSidebarCollapsed: boolean;
     screenWidth: number;
-    setIsSidebarCollapsed: (isSidebarCollapsed: boolean) => void;
-    loggedUser: JwtUser | null;
+    setIsSidebarCollapsed: (collapsed: boolean) => void;
 };
 
-const Layout = ({port, isSidebarCollapsed, screenWidth, setIsSidebarCollapsed, loggedUser}: LayoutProps) => {
-    const classes = classNames({
-        body: true,
-        "body-trimmed": !isSidebarCollapsed && screenWidth > 768, // Aplica o estilo quando a sidebar não está colapsada e a tela é maior que 768px
+const Layout = ({
+    port,
+    isSidebarCollapsed,
+    screenWidth,
+    setIsSidebarCollapsed,
+}: LayoutProps) => {
+    const loggedUser: JwtUser | null = getCurrentUser();
+
+    if (!loggedUser) {
+        return <Navigate to="/" replace />;
+    }
+
+    const layoutClass = classNames("body", {
+        "body-trimmed": !isSidebarCollapsed && screenWidth > 768,
     });
-
-    const getCurrentUser = () => {
-        const token = localStorage.getItem("token");
-        if (!token) return null;
-
-        try {
-            return jwtDecode(token) as JwtUser; // Retorna o usuário logado decodificado
-        } catch {
-            return null;
-        }
-    };
-
-    if (!loggedUser)
-        loggedUser = getCurrentUser();
 
     return (
         <div className="layout-container">
@@ -41,11 +36,8 @@ const Layout = ({port, isSidebarCollapsed, screenWidth, setIsSidebarCollapsed, l
                 port={port}
                 loggedUser={loggedUser}
             />
-
-            {/* O conteúdo principal da página será renderizado aqui */}
-            <div className={classes}>
-                {/* O Outlet renderiza o conteúdo das rotas dentro deste Layout */}
-                <Outlet/>
+            <div className={layoutClass}>
+                <Outlet />
             </div>
         </div>
     );

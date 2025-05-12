@@ -25,10 +25,10 @@ public class TokenService : ITokenService
         
         var claims = new List<Claim>()
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Name),
-            new Claim(ClaimTypes.Role, user.Role.ToString()),
-            new Claim(ClaimTypes.Email, user.Email)
+            new Claim("id", user.Id.ToString()),
+            new Claim("name", user.Name),
+            new Claim("role", user.Role.ToString()),
+            new Claim("email", user.Email)
         };
         
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));

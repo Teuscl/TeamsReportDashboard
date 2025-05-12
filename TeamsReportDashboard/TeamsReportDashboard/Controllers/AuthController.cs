@@ -45,38 +45,37 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var user = await _unitOfWork.UserRepository.GetAllAsync();
+            var user = await _unitOfWork.UserRepository.GetByRefreshTokenAsync(req.RefreshToken);
             
-            var matchedUser = user.FirstOrDefault(u =>
-                u.RefreshToken == req.RefreshToken &&
-                u.RefreshTokenExpiryTime > DateTime.Now);
-
-            if (matchedUser == null)
+            if (user == null || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
-                return Unauthorized(new { message = "Refresh token is expired." });
+                return Unauthorized(new { message = "Refresh token is invalid or expired." });
             }
             
-            var newToken = _tokenService.GenerateToken(matchedUser);
+            var newToken = _tokenService.GenerateToken(user);
             var newRefreshToken = _tokenService.GenerateRefreshToken();
             
-            matchedUser.RefreshToken = newRefreshToken;
-            matchedUser.RefreshTokenExpiryTime = DateTime.Now.AddDays(2);
+            user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(2);
             
-            _unitOfWork.UserRepository.Update(matchedUser);
+            _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.CommitAsync();
             
             return Ok(new LoginResponse
             {
                 Token = newToken,
                 RefreshToken = newRefreshToken,
-                Name = matchedUser.Name,
-                Role = matchedUser.Role.ToString()
+                Name = user.Name,
+                Role = user.Role.ToString()
             });
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            return StatusCode(500, new
+            {
+                message = "An error occurred while refreshing the token.",
+                details = e.Message // ou apenas `message` se quiser esconder detalhes técnicos
+            });
         }
     }
 }
