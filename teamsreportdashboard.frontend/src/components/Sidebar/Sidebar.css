@@ -1,171 +1,341 @@
 /* Sidebar base */
+
 .sidenav {
+
     background-color: #0b1f3a;
+
     width: 16rem;
+
     height: 100vh;
+
     position: fixed;
+
     left: 0;
+
     top: 0;
+
     display: flex;
+
     flex-direction: column;
+
     transition: width 0.3s ease;
+
     padding: 1rem 0.5rem;
+
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+
 }
+
+ 
 
 .sidenav-collapsed {
+
     width: 5rem;
+
 }
+
+ 
 
 /* Logo container */
+
 .logo-container {
+
     display: flex;
+
     align-items: center;
+
     padding: 0.5rem 1rem;
+
     margin-bottom: 1rem;
+
 }
+
+ 
 
 .logo {
+
     background-color: #fff;
+
     border: none;
+
     border-radius: 0.5rem;
+
     font-size: 1.25rem;
+
     font-weight: bold;
+
     padding: 0.5rem;
+
     cursor: pointer;
+
     color: #0b1f3a;
+
 }
+
+ 
 
 .logo-text {
+
     color: #fff;
+
     font-size: 1.25rem;
+
     font-weight: 600;
+
     margin-left: 1rem;
+
 }
+
+ 
 
 /* Nav items */
+
 .sidenav-nav {
+
     list-style: none;
+
     padding: 0;
+
     margin: 0;
+
     flex-grow: 1;
+
     display: flex;
+
     flex-direction: column;
+
     gap: 0.25rem;
+
 }
+
+ 
 
 .sidenav-nav-item {
+
     width: 100%;
+
 }
+
+ 
 
 .sidenav-nav-link {
+
     display: flex;
+
     align-items: center;
+
     color: #e0e0e0;
+
     text-decoration: none;
+
     padding: 0.75rem 1rem;
+
     border-radius: 0.5rem;
+
     transition: background-color 0.3s ease;
+
 }
+
+ 
 
 .sidenav-nav-link:hover {
+
     background-color: #1f3b5b;
+
     color: #fff;
+
 }
+
+ 
 
 .sidenav-link-icon {
+
     font-size: 1.1rem;
+
     width: 1.5rem;
+
     text-align: center;
+
 }
+
+ 
 
 .sidenav-link-text {
+
     margin-left: 1rem;
+
     font-size: 0.95rem;
+
 }
+
+ 
 
 /* Active item */
+
 .active {
+
     background-color: #ffffff;
+
     color: #0b1f3a;
+
 }
+
+ 
 
 .active .sidenav-link-icon,
+
 .active .sidenav-link-text {
+
     color: #0b1f3a;
+
 }
+
+ 
 
 /* Divider */
+
 hr {
+
     border: none;
+
     border-top: 1px solid #2f455f;
+
     margin: 1rem 0;
+
 }
+
+ 
 
 /* User section */
+
 .user-section {
+
     background-color: #1a2e4f;
+
     border-radius: 0.5rem;
+
     padding: 0.5rem 1rem;
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
+    margin-top: auto;
+
 }
+
+ 
 
 .user-info {
+
     display: flex;
+
     align-items: center;
+
     overflow: hidden;
+
 }
+
+ 
 
 .user-avatar {
+
     width: 36px;
+
     height: 36px;
-    background-color: #f44336;
+
+    background-color: #ff7d13;
+
     border-radius: 50%;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     color: #fff;
+
     font-weight: bold;
+
     font-size: 16px;
+
     margin-right: 0.5rem;
+
 }
+
+ 
 
 .user-name {
+
     font-size: 0.9rem;
+
     color: #fff;
+
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
+
 }
+
+ 
 
 .logout-button {
+
     background: none;
+
     border: none;
+
     color: #e0e0e0;
+
     font-size: 1rem;
+
     cursor: pointer;
+
     padding: 0.25rem;
+
     transition: color 0.3s ease;
+
 }
+
+ 
 
 .logout-button:hover {
+
     color: #f44336;
+
 }
+
+ 
 
 /* Collapsed sidebar tweaks */
+
 .sidenav-collapsed .sidenav-link-text,
+
 .sidenav-collapsed .logo-text,
+
 .sidenav-collapsed .user-name,
+
 .sidenav-collapsed .logout-button {
+
     display: none;
+
 }
+
+ 
 
 .sidenav-collapsed .user-info {
+
     justify-content: center;
-}
+
+} 
 
 .sidenav-collapsed .user-avatar {
+
     margin: 0 auto;
+
 }

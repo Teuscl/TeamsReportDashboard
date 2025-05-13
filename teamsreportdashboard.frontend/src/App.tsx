@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import LoginPage from "./pages/LoginPage/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import Layout from "./components/Layout/Layout";
+import UsersPage from "./pages/UsersPage/UsersPage";
 
 function App() {
     const port: string = "7258";
@@ -38,7 +39,7 @@ function App() {
                 >
                     <Route path="/dashboard" element={<DashboardPage />} />
                     {/* Outras rotas protegidas */}
-                    {/* <Route path="/usuarios" element={<UsuariosPage />} /> */}
+                    { <Route path="/users" element={<UsersPage />} />}
                     {/* <Route path="/atendimentos" element={<AtendimentosPage />} /> */}
                 </Route>
             </Routes>
