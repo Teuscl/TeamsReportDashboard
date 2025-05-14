@@ -32,7 +32,7 @@ const Sidebar = ({
     ];
 
     const adminItems = [
-        { routerLink: "/usuarios", icon: faUserGear, label: "Usuários" },
+        { routerLink: "/users", icon: faUserGear, label: "Usuários" },
     ];
 
     const sidebarClasses = classNames({

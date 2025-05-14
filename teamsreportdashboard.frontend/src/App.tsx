@@ -4,6 +4,9 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import Layout from "./components/Layout/Layout";
 import UsersPage from "./pages/UsersPage/UsersPage";
+import "./index.css";
+import { Button } from "@/components/ui/button"
+
 
 function App() {
     const port: string = "7258";
@@ -24,26 +27,29 @@ function App() {
 
 
     return (
-        <Router>
-            <Routes>
-            <Route path="/" element={<LoginPage />} />
-                <Route
-                    element={
-                        <Layout
-                            port={port}
-                            screenWidth={screenWidth}
-                            setIsSidebarCollapsed={setIsSidebarCollapsed}
-                            isSidebarCollapsed={isSidebarCollapsed}
-                        />
-                    }
-                >
-                    <Route path="/dashboard" element={<DashboardPage />} />
-                    {/* Outras rotas protegidas */}
-                    { <Route path="/users" element={<UsersPage />} />}
-                    {/* <Route path="/atendimentos" element={<AtendimentosPage />} /> */}
-                </Route>
-            </Routes>
-        </Router>
+        // <Router>
+        //     <Routes>
+        //     <Route path="/" element={<LoginPage />} />
+        //         <Route
+        //             element={
+        //                 <Layout
+        //                     port={port}
+        //                     screenWidth={screenWidth}
+        //                     setIsSidebarCollapsed={setIsSidebarCollapsed}
+        //                     isSidebarCollapsed={isSidebarCollapsed}
+        //                 />
+        //             }
+        //         >
+        //             <Route path="/dashboard" element={<DashboardPage />} />
+        //             {/* Outras rotas protegidas */}
+        //             { <Route path="/users" element={<UsersPage />} />}
+        //             {/* <Route path="/atendimentos" element={<AtendimentosPage />} /> */}
+        //         </Route>
+        //     </Routes>
+        // </Router>
+         <div className="flex flex-col items-center justify-center min-h-svh">
+            <Button>Click me</Button>
+        </div>
     );
 }
 

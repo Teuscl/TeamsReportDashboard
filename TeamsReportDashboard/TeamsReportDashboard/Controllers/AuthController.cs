@@ -6,7 +6,7 @@ using TeamsReportDashboard.Models.Auth;
 using LoginRequest = TeamsReportDashboard.Models.Auth.LoginRequest;
 
 namespace TeamsReportDashboard.Controllers;
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
 {
