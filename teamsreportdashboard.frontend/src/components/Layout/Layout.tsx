@@ -1,46 +1,19 @@
-import { Outlet, Navigate } from "react-router-dom";
-import "./layout.css";
-import classNames from "classnames";
-import Sidebar from "../Sidebar/Sidebar";
-import { getCurrentUser } from "../../utils/auth";
-import JwtUser from "../../types/JwtUser";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/Sidebar/app-sidebar"
+import App from "@/App"
 
-type LayoutProps = {
-    port: string;
-    isSidebarCollapsed: boolean;
-    screenWidth: number;
-    setIsSidebarCollapsed: (collapsed: boolean) => void;
-};
-
-const Layout = ({
-    port,
-    isSidebarCollapsed,
-    screenWidth,
-    setIsSidebarCollapsed,
-}: LayoutProps) => {
-    const loggedUser: JwtUser | null = getCurrentUser();
-
-    if (!loggedUser) {
-        return <Navigate to="/" replace />;
-    }
-
-    const layoutClass = classNames("body", {
-        "body-trimmed": !isSidebarCollapsed && screenWidth > 768,
-    });
-
-    return (
-        <div className="layout-container">
-            <Sidebar
-                isSidebarCollapsed={isSidebarCollapsed}
-                changeIsSidebarCollapsed={setIsSidebarCollapsed}
-                port={port}
-                loggedUser={loggedUser}
-            />
-            <div className={layoutClass}>
-                <Outlet />
-            </div>
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="flex flex-1 flex-col  p-4 pt-0 w-full h-screen">
+        <div className="flex items-center justify-between">
+          <SidebarTrigger/>
         </div>
-    );
-};
-
-export default Layout;
+        <div className="flex gap-3 items-center">
+        </div>
+        {children}
+      </main>      
+    </SidebarProvider>
+  )
+}

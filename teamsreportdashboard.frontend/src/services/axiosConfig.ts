@@ -1,5 +1,4 @@
 ﻿// src/services/axiosConfig.ts
-
 import axios from 'axios';
 
 const axiosConfig = axios.create({

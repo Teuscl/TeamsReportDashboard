@@ -41,11 +41,10 @@ export function DataTable<TData, TValue>({
   })
 
  return (
-    <div>   
-
-        <div className="rounded-md border">
-            <Table>
-                <TableHeader>
+    <div className="w-full">
+        <div className="rounded-md border shadow-md">
+            <Table >
+                <TableHeader className="sticky top-0 bg-secondary">
                 {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
@@ -63,10 +62,10 @@ export function DataTable<TData, TValue>({
                     </TableRow>
                 ))}
                 </TableHeader>
-                <TableBody>
+                <TableBody className="flex-1 overflow-y-auto">
                 {table.getRowModel().rows?.length ? (
                     table.getRowModel().rows.map((row) => (
-                    <TableRow
+                    <TableRow 
                         key={row.id}
                         data-state={row.getIsSelected() && "selected"}
                     >

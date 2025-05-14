@@ -66,33 +66,34 @@ const UsersPage: React.FC = () => {
     {
       accessorKey: 'name',
       header: 'Name',
-      cell: ({ row }) => <span>{row.getValue('name')}</span>,
+      cell: ({ row }) => <div>{row.getValue('name')}</div>,
     },
     {
       accessorKey: 'email',
       header: 'Email',
-      cell: ({ row }) => <span>{row.getValue('email')}</span>,
+      cell: ({ row }) => <div>{row.getValue('email')}</div>,
     },
     {
       accessorKey: 'role',
       header: 'Role',
-      cell: ({ row }) => <span>{row.getValue('role')}</span>,
+      cell: ({ row }) => <div>{row.getValue('role')}</div>,
     },
     {
       accessorKey: 'isActive',
       header: 'Status',
-      cell: ({ row }) => <span>{row.getValue('isActive') ? 'Active' : 'Inactive'}</span>,
+      cell: ({ row }) => <div>{row.getValue('isActive') ? 'Active' : 'Inactive'}</div>,
     },
     {
       id: "actions",
       cell: ({ row }) => {
         const user = row.original;
+        
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <MoreHorizontal className="h-4 w-4" />
+              <Button variant="ghost" className="h-8 w-8 p-0">                
                 <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
