@@ -20,7 +20,6 @@ public class AuthService : IAuthService
         _passwordService = passwordService;
         
     }
-    
     public async Task<LoginResponse> LoginAsync(LoginRequest loginRequest)
     {
         var user = await _unitOfWork.UserRepository.GetByEmailAsync(loginRequest.Email);
@@ -44,6 +43,7 @@ public class AuthService : IAuthService
 
         return new LoginResponse()
         {
+            Id = user.Id,
             Token = token,
             RefreshToken = refreshToken,
             Name = user.Name,

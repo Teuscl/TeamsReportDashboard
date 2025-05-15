@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import {getCurrentUser} from '../../utils/auth'; // Função para obter o usuário atual
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '../../components/CustomTable/DataTable'; // Importe seu componente de tabela
 import AxiosConfig from '../../services/axiosConfig'; // Para fazer as requisições à API
 import { MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox"
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 
 interface User {
   id: number;
@@ -25,6 +26,8 @@ interface User {
 
 const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const currentUser = getCurrentUser();
+  const currentUserId = Number(currentUser?.id);
 
   useEffect(() => {
     // Função para carregar os usuários
@@ -39,6 +42,27 @@ const UsersPage: React.FC = () => {
 
     fetchUsers();
   }, []);
+
+  const handleDelete = async (id: number) => {
+
+    console.log("ID do usuário a ser excluído:", id);
+    console.log("ID do usuário atual:", currentUserId);
+
+  if(id === currentUserId) {
+    alert("Você não pode excluir a si mesmo.");
+    return;
+  }
+
+  if (!window.confirm("Você tem certeza que deseja excluir esse usuário?")) return;
+
+  try {
+    await AxiosConfig.delete(`/user`, { params: { id } });
+    setUsers(prev => prev.filter(user => user.id !== id));
+  } catch (error) {
+    console.error("Failed to delete user", error);
+    alert("Failed to delete user.");
+  }
+};
 
   const columns: ColumnDef<User>[] = [
     {
@@ -65,7 +89,7 @@ const UsersPage: React.FC = () => {
   },
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: 'Nome',
       cell: ({ row }) => <div>{row.getValue('name')}</div>,
     },
     {
@@ -81,7 +105,7 @@ const UsersPage: React.FC = () => {
     {
       accessorKey: 'isActive',
       header: 'Status',
-      cell: ({ row }) => <div>{row.getValue('isActive') ? 'Active' : 'Inactive'}</div>,
+      cell: ({ row }) => <div>{row.getValue('isActive') ? 'Ativo' : 'Inativo'}</div>,
     },
     {
       id: "actions",
@@ -100,7 +124,7 @@ const UsersPage: React.FC = () => {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Edit</DropdownMenuItem> {/*onClick={() => handleEdit(user.id)} */}
-              <DropdownMenuItem>Delete</DropdownMenuItem> {/*onClick={() => handleDelete(user.id)} */}
+              <DropdownMenuItem onClick={() => handleDelete(user.id)}>Delete</DropdownMenuItem> 
             </DropdownMenuContent>
           </DropdownMenu>
         );

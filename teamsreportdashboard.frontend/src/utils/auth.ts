@@ -5,7 +5,6 @@ import JwtUser from "../types/JwtUser";
 export function getToken(): string | null {
     return localStorage.getItem("token");
 }
-
 export function getCurrentUser(): JwtUser | null {
     const token = getToken();
     if (!token) return null;
@@ -15,7 +14,6 @@ export function getCurrentUser(): JwtUser | null {
         return null;
     }
 }
-
 export function logout(): void {
     localStorage.removeItem("token");
     window.location.href = "/";

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TeamsReportDashboard.Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+90b9727c5d39010d8358ce98b887480dedf9b01f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+669b3b06a35e4ffefbe05b3808b5292c01811303")]
 [assembly: System.Reflection.AssemblyProductAttribute("TeamsReportDashboard.Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TeamsReportDashboard.Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

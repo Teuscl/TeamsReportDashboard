@@ -33,6 +33,7 @@ public class UpdateUserService : IUpdateUserService
         user.Email = updateUserDto.Email;
         user.Role = updateUserDto.Role;
         user.UpdatedAt = DateTime.Now;
+        user.IsActive = updateUserDto.IsActive;
         
         _unitOfWork.UserRepository.Update(user);
         await _unitOfWork.CommitAsync();
