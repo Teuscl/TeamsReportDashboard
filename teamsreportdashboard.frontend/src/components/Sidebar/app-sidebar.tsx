@@ -1,6 +1,7 @@
 import { Home, FileText} from "lucide-react"
 import "../../index.css"
 import { NavUser } from "./nav-user"
+import { getCurrentUser } from "../../utils/auth"
 
 import {
   Sidebar,
@@ -16,14 +17,18 @@ import {
 } from "@/components/ui/sidebar"
 import { LogoHandler } from "./logo-handler"
 
+const loggedUser = getCurrentUser()
+console.log("loggedUser", loggedUser)
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: loggedUser?.name || "Usuário",
+    email: loggedUser?.email || "",
+    avatar: loggedUser?.name[0].toUpperCase() || "",
   },
 }
+console.log("loggedUser", data.user)
+
 // Menu items.
 const items = [
   {
@@ -67,7 +72,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="">
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>

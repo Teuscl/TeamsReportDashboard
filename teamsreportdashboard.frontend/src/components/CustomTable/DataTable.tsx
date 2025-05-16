@@ -42,9 +42,9 @@ export function DataTable<TData, TValue>({
 
  return (
     <div className="w-full">
-        <div className="rounded-md border shadow-md">
+        <div className="rounded-md sm:border">
             <Table >
-                <TableHeader className="bg-primary dark sticky top-0 bg-secondary dark">
+                <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
@@ -62,7 +62,7 @@ export function DataTable<TData, TValue>({
                     </TableRow>
                 ))}
                 </TableHeader>
-                <TableBody className="flex-1 overflow-y-auto">
+                <TableBody className="flex-1 overflow-y-auto text">
                 {table.getRowModel().rows?.length ? (
                     table.getRowModel().rows.map((row) => (
                     <TableRow 
@@ -103,8 +103,8 @@ export function DataTable<TData, TValue>({
             >
                 Next
             </Button>
-      </div>
-      <div className="flex-1 text-sm text-muted-foreground">
+        </div>
+        <div className="flex-1 text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>

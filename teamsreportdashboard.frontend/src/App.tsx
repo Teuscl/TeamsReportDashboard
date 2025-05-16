@@ -1,25 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { DataTable } from './components/CustomTable/DataTable'
-import { Sidebar, Users } from 'lucide-react'
-import UsersPage from './pages/UsersPage/UsersPage'
-import Layout from './components/Layout/layout'
-import { SidebarProvider } from './components/ui/sidebar'
-import LoginPage from './pages/LoginPage/LoginPage'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import UsersPage from "./pages/UsersPage/UsersPage";
+import Layout from "./components/Layout/layout";
+import { SidebarProvider } from "./components/ui/sidebar";
+import LoginPage from "./pages/LoginPage/LoginPage";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    // <SidebarProvider>
-    //   <Layout>
-    //     <UsersPage />
-    //   </Layout>
-    // </SidebarProvider>
-    <LoginPage></LoginPage>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route
+          path="/users"
+          element={
+            <SidebarProvider>
+              <Layout>
+                <UsersPage/>
+              </Layout>
+            </SidebarProvider>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

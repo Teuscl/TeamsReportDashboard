@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from 'react-router-dom';
 
 
 interface User {
@@ -27,9 +28,14 @@ interface User {
 const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const currentUser = getCurrentUser();
-  const currentUserId = Number(currentUser?.id);
+  const currentUserId = Number(currentUser?.id)
+  const navigate = useNavigate();
 
   useEffect(() => {
+
+    if(!currentUser) {
+      navigate("/login");
+    }
     // Função para carregar os usuários
     const fetchUsers = async () => {
       try {
@@ -48,7 +54,7 @@ const UsersPage: React.FC = () => {
     console.log("ID do usuário a ser excluído:", id);
     console.log("ID do usuário atual:", currentUserId);
 
-  if(id === currentUserId) {
+  if(id == currentUserId) {
     alert("Você não pode excluir a si mesmo.");
     return;
   }
