@@ -3,8 +3,10 @@ import {
   ChevronsUpDown,
   Key,
   LogOut,
+  Moon,
+  Sun,
 } from "lucide-react"
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 import {
   Avatar,
   AvatarFallback,
@@ -25,6 +27,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { useTheme } from "@/components/theme-provider"
+
 export function NavUser({
   user,
 }: {
@@ -35,13 +39,13 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-  const navigate = useNavigate();
+  const { theme, setTheme } = useTheme()
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     localStorage.removeItem("token")
-    window.location.replace("/");
+    window.location.replace("/")
   }
-  //console.log("user", user)
 
   return (
     <SidebarMenu>
@@ -63,8 +67,9 @@ export function NavUser({
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            className="min-w-56 rounded-lg"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}
@@ -81,21 +86,39 @@ export function NavUser({
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />           
+
+            <DropdownMenuSeparator />
+
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
+              <DropdownMenuItem onClick={() => navigate("/profile")}>
+                <BadgeCheck className="mr-2 h-4 w-4" />
+                Conta
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Key />
-                Reset password
+                <Key className="mr-2 h-4 w-4" />
+                Redefinir senha
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuLabel>Tema</DropdownMenuLabel>
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={() => setTheme("light")}>
+                <Sun className="mr-2 h-4 w-4" />
+                <span className={theme === "light" ? "font-semibold" : ""}>Claro</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("dark")}>
+                <Moon className="mr-2 h-4 w-4" />
+                <span className={theme === "dark" ? "font-semibold" : ""}>Escuro</span>
               </DropdownMenuItem>              
             </DropdownMenuGroup>
+
             <DropdownMenuSeparator />
+
             <DropdownMenuItem onClick={handleLogout}>
-              <LogOut />
-              Log out
+              <LogOut className="mr-2 h-4 w-4" />
+              Sair
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

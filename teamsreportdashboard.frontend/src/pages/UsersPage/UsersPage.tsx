@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {getCurrentUser} from '../../utils/auth'; // Função para obter o usuário atual
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '../../components/CustomTable/DataTable'; // Importe seu componente de tabela
-import AxiosConfig from '../../services/axiosConfig'; // Para fazer as requisições à API
 import { MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from 'react-router-dom';
+import { EditUserModal } from '@/components/EditUserModal';
+import { getUsers, deleteUser } from '@/services/userService';
+import { toast } from 'sonner';
+
 
 
 interface User {
@@ -29,45 +32,59 @@ const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const currentUser = getCurrentUser();
   const currentUserId = Number(currentUser?.id)
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
 
     if(!currentUser) {
       navigate("/login");
+      return;
     }
     // Função para carregar os usuários
     const fetchUsers = async () => {
       try {
-        const response = await AxiosConfig.get('/user');
-        setUsers(response.data);
+        const data = await getUsers();
+        setUsers(data);
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error('Erro ao buscar usuários:', error);
+        toast("Erro ao buscar usuários: " + error);
       }
     };
 
     fetchUsers();
   }, []);
 
-  const handleDelete = async (id: number) => {
+    const handleDelete = async (id: number) => {
+    if (id === currentUserId) {
+      toast("Você não pode excluir a si mesmo.");
+      return;
+    }
 
-    console.log("ID do usuário a ser excluído:", id);
-    console.log("ID do usuário atual:", currentUserId);
+    const confirmed = window.confirm("Você tem certeza que deseja excluir esse usuário?");
+    if (!confirmed) return;
 
-  if(id == currentUserId) {
-    alert("Você não pode excluir a si mesmo.");
-    return;
-  }
+    try {
+      await deleteUser(id);
+      setUsers(prev => prev.filter(user => user.id !== id));
+      toast("O usuário foi removido com sucesso.");
+    } catch (error: any) {
+      const message = error?.response?.data?.message || "Erro ao excluir o usuário.";
+      toast("Erro ao excluir usuário: " + message);
+      console.error("Erro ao excluir usuário:", error);
+    }
+  };
 
-  if (!window.confirm("Você tem certeza que deseja excluir esse usuário?")) return;
+const handleEdit = (user: User) => {
+  setEditingUser(user);
+  setIsModalOpen(true);
+};
 
-  try {
-    await AxiosConfig.delete(`/user`, { params: { id } });
-    setUsers(prev => prev.filter(user => user.id !== id));
-  } catch (error) {
-    console.error("Failed to delete user", error);
-    alert("Failed to delete user.");
-  }
+const handleUserUpdate = (updatedUser: User) => {
+  setUsers(prev =>
+    prev.map(user => (user.id === updatedUser.id ? updatedUser : user))
+  );
 };
 
   const columns: ColumnDef<User>[] = [
@@ -105,8 +122,16 @@ const UsersPage: React.FC = () => {
     },
     {
       accessorKey: 'role',
-      header: 'Role',
-      cell: ({ row }) => <div>{row.getValue('role')}</div>,
+      header: 'Função',
+      cell: ({ row }) => {
+        const roleMap: Record<string, string> = {
+          0: "Master",
+          1: "Admin",
+          2: "Viewer"
+        };
+        const role = row.getValue('role');
+        return <div>{roleMap[role as string] || "Desconhecido"}</div>;
+      },
     },
     {
       accessorKey: 'isActive',
@@ -129,7 +154,7 @@ const UsersPage: React.FC = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Edit</DropdownMenuItem> {/*onClick={() => handleEdit(user.id)} */}
+              <DropdownMenuItem onClick={() => handleEdit(user)}>Editar</DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleDelete(user.id)}>Delete</DropdownMenuItem> 
             </DropdownMenuContent>
           </DropdownMenu>
@@ -144,6 +169,15 @@ const UsersPage: React.FC = () => {
       <DataTable
         columns={columns}
         data={users}
+      />
+      <EditUserModal
+        user={editingUser}
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingUser(null);
+        }}
+        onSave={handleUserUpdate}
       />
     </div>
   );

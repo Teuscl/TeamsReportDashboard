@@ -1,7 +1,8 @@
-type User = {
-    id: string;
-    name: string;
-    role: string;
-    email: string;
-    status: string;
+// src/types/User.ts
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: number;
+  isActive: boolean;
 }

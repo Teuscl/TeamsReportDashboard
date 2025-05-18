@@ -1,4 +1,4 @@
-import { Home, FileText} from "lucide-react"
+import { Home, FileText, Users} from "lucide-react"
 import "../../index.css"
 import { NavUser } from "./nav-user"
 import { getCurrentUser } from "../../utils/auth"
@@ -27,7 +27,6 @@ const data = {
     avatar: loggedUser?.name[0].toUpperCase() || "",
   },
 }
-console.log("loggedUser", data.user)
 
 // Menu items.
 const items = [
@@ -43,7 +42,14 @@ const items = [
     icon: FileText,
   },
 ]
-
+// ✅ Adiciona o item "Usuários" apenas se for Master
+if (loggedUser?.role === "Master") {
+  items.push({
+    title: "Usuários",
+    url: "/users",
+    icon: Users,
+  })
+}
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" variant="sidebar" className="bg-primary bg-red-500  bg-secondary dark  text-white" {...props} >
