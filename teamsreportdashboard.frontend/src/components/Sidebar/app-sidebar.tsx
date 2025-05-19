@@ -1,7 +1,8 @@
-import { Home, FileText, Users} from "lucide-react"
+import { Home, FileText, Users } from "lucide-react"
 import "../../index.css"
 import { NavUser } from "./nav-user"
 import { getCurrentUser } from "../../utils/auth"
+import { useEffect, useState } from "react"
 
 import {
   Sidebar,
@@ -17,48 +18,58 @@ import {
 } from "@/components/ui/sidebar"
 import { LogoHandler } from "./logo-handler"
 
-const loggedUser = getCurrentUser()
-console.log("loggedUser", loggedUser)
-
-const data = {
-  user: {
-    name: loggedUser?.name || "Usuário",
-    email: loggedUser?.email || "",
-    avatar: loggedUser?.name[0].toUpperCase() || "",
-  },
-}
-
-// Menu items.
-const items = [
-  {
-    title: "Dashboard",
-    url: "#",
-    icon: Home,
-  },    
- 
-  {
-    title: "Atendimentos",
-    url: "#",
-    icon: FileText,
-  },
-]
-// ✅ Adiciona o item "Usuários" apenas se for Master
-if (loggedUser?.role === "Master") {
-  items.push({
-    title: "Usuários",
-    url: "/users",
-    icon: Users,
-  })
-}
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [user, setUser] = useState({
+    name: "Usuário",
+    email: "",
+    avatar: "U",
+  })
+
+  useEffect(() => {
+    const loggedUser = getCurrentUser()
+    if (loggedUser) {
+      setUser({
+        name: loggedUser.name,
+        email: loggedUser.email,
+        avatar: loggedUser.name?.[0].toUpperCase() || "U",
+      })
+    }
+  }, [])
+
+  const items = [
+    {
+      title: "Dashboard",
+      url: "#",
+      icon: Home,
+    },
+    {
+      title: "Atendimentos",
+      url: "#",
+      icon: FileText,
+    },
+  ]
+
+  if (getCurrentUser()?.role === "Master") {
+    items.push({
+      title: "Usuários",
+      url: "/users",
+      icon: Users,
+    })
+  }
+
   return (
-    <Sidebar collapsible="icon" variant="sidebar" className="bg-primary bg-red-500  bg-secondary dark  text-white" {...props} >
+    <Sidebar
+      collapsible="icon"
+      variant="sidebar"
+      className="bg-primary bg-red-500 bg-secondary dark text-white"
+      {...props}
+    >
       <SidebarHeader>
-        <LogoHandler 
+        <LogoHandler
           logoPath="/pecege.png"
           name="Sistema de Relatórios"
         />
-      </SidebarHeader>      
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
@@ -78,8 +89,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="">
-        <NavUser user={data.user} />
+      <SidebarFooter>
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   )

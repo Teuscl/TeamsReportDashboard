@@ -20,7 +20,9 @@ const LoginPage = () => {
                 email,
                 password,
             });
-            localStorage.setItem("token", response.data.token);
+            const token = response.data.token;
+            localStorage.setItem("token", token);
+            axiosConfig.defaults.headers.common["Authorization"] = `Bearer ${token}`;
             navigate("/users");
         } catch (err) {
             setError("Email ou senha inválidos.");
