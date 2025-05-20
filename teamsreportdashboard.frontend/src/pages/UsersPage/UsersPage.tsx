@@ -18,8 +18,6 @@ import { EditUserModal } from '@/components/EditUserModal';
 import { getUsers, deleteUser } from '@/services/userService';
 import { toast } from 'sonner';
 
-
-
 interface User {
   id: number;
   name: string;

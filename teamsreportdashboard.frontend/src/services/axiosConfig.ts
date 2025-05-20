@@ -19,11 +19,12 @@ axiosConfig.interceptors.request.use(
 
             try {
                 const refreshToken = await axiosConfig.post("auth/refresh");
-
+                
+                //Recebe o novo token de acesso e refresh 
                 const newToken = refreshToken.data.token;
-                localStorage.setItem("token", newToken);
-
                 axiosConfig.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+
+                // Atualiza o cabeçadalho da requisição original com o novo token
                 originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
                 return axiosConfig(originalRequest);
             } catch (refreshError) {

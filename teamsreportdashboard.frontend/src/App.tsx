@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import { ProtectedRoute } from "./components/Routes/ProtectedRoute";
 import { PublicRoute } from "./components/Routes/PublicRoute";
+import DashboardPage from "./pages/DashboardPage/DashboardPage";
 
 function App() {
   return (
@@ -37,6 +38,16 @@ function App() {
             <SidebarProvider>
               <Layout>
                 <ProfilePage/>
+              </Layout>
+            </SidebarProvider>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <SidebarProvider>
+              <Layout>
+                <DashboardPage/>
               </Layout>
             </SidebarProvider>
           }

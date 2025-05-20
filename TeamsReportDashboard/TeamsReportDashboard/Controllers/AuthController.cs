@@ -27,13 +27,17 @@ public class AuthController : ControllerBase
         try
         {
             var loginResponse = await _authService.LoginAsync(loginRequest);
-            HttpContext.Response.Cookies.Append("refreshToken", loginResponse.RefreshToken, new CookieOptions
+            var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
+                Secure = true,  // se estiver usando HTTPS
                 SameSite = SameSiteMode.Strict,
-                Expires = DateTime.Now.AddDays(2) // 2 dias de validade
-            });
+                Expires = DateTimeOffset.Now.AddHours(2)
+            };
+            
+            Response.Cookies.Append("accessToken", loginResponse.Token, cookieOptions);
+            Response.Cookies.Append("refreshToken", loginResponse.RefreshToken, cookieOptions);
+            
             return Ok(new
             {
                 token = loginResponse.Token,
@@ -58,13 +62,14 @@ public class AuthController : ControllerBase
     {
         try
         {
-            if (!Request.Cookies.TryGetValue("refreshToken", out string refreshToken))
+            if (!Request.Cookies.TryGetValue("refresh-token", out string refreshToken))
                 return Unauthorized(new { message = "Refresh token is missing." });
 
             var user = await _unitOfWork.UserRepository.GetByRefreshTokenAsync(refreshToken);
 
             if (user == null || user.RefreshTokenExpiryTime <= DateTime.Now)
             {
+                // Caso o refresh token tenha expirado ou sido invalidado
                 return Unauthorized(new { message = "Refresh token is invalid or expired." });
             }
 
@@ -72,18 +77,18 @@ public class AuthController : ControllerBase
             var newRefreshToken = _tokenService.GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(2);
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7); // A expiração pode ser configurada como desejado
 
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.CommitAsync();
 
             // Atualiza o cookie com novo refresh token
-            HttpContext.Response.Cookies.Append("refreshToken", newRefreshToken, new CookieOptions
+            HttpContext.Response.Cookies.Append("refresh-token", newRefreshToken, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddDays(2)
+                Expires = DateTime.UtcNow.AddDays(7)  // Define o tempo de expiração conforme desejado
             });
 
             return Ok(new

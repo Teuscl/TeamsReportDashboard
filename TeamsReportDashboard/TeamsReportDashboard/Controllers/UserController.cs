@@ -66,4 +66,23 @@ public class UserController : Controller
         await service.Execute(id, changePasswordDto);
         return NoContent();
     }
+
+    [HttpGet("me")]
+    public async Task<IActionResult> GetLoggedUser([FromServices] IGetUsersService service)
+    {
+        var userIdClaim = User.FindFirst("id");
+        if (userIdClaim == null) return Unauthorized();
+
+        var userId = int.Parse(userIdClaim.Value);
+        var user = await service.Get(userId);
+
+        return Ok(new
+        {
+            id = user.Id,
+            name = user.Name,
+            email = user.Email,
+            role = user.Role
+        });
+
+    }
 }

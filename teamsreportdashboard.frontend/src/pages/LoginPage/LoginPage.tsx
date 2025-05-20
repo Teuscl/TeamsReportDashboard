@@ -21,9 +21,8 @@ const LoginPage = () => {
                 password,
             });
             const token = response.data.token;
-            localStorage.setItem("token", token);
             axiosConfig.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-            navigate("/users");
+            navigate("/dashboard");
         } catch (err) {
             setError("Email ou senha inválidos.");
         } finally {
