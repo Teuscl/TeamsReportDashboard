@@ -11,14 +11,15 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 
-interface LoginFormProps extends React.ComponentProps<"div"> {
+interface LoginFormProps {
   email: string;
   password: string;
   loading: boolean;
   error: string | null;
   onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onPasswordChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  className?: string;
 }
 
 export function LoginForm({

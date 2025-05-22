@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.Data;
 using TeamsReportDashboard.Interfaces;
-using TeamsReportDashboard.Models.Auth;
 using LoginRequest = TeamsReportDashboard.Models.Auth.LoginRequest;
 
-namespace TeamsReportDashboard.Controllers;
+namespace TeamsReportDashboard.Backend.Controllers;
 [Route("[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
@@ -31,7 +28,7 @@ public class AuthController : ControllerBase
             {
                 HttpOnly = true,
                 Secure = true,  // se estiver usando HTTPS
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None,
                 Expires = DateTimeOffset.Now.AddHours(2)
             };
             
@@ -62,7 +59,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            if (!Request.Cookies.TryGetValue("refresh-token", out string refreshToken))
+            if (!Request.Cookies.TryGetValue("refreshToken", out string refreshToken))
                 return Unauthorized(new { message = "Refresh token is missing." });
 
             var user = await _unitOfWork.UserRepository.GetByRefreshTokenAsync(refreshToken);
@@ -81,13 +78,24 @@ public class AuthController : ControllerBase
 
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.CommitAsync();
-
+            
+            
+            // Define o NOVO Access Token como um cookie HttpOnly
+            var accessTokenCookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, 
+                SameSite = SameSiteMode.None,
+                Expires = DateTimeOffset.Now.AddHours(2) // Consistente com a expiração do token
+            };
+            Response.Cookies.Append("accessToken", newAccessToken, accessTokenCookieOptions);
+            
             // Atualiza o cookie com novo refresh token
-            HttpContext.Response.Cookies.Append("refresh-token", newRefreshToken, new CookieOptions
+            HttpContext.Response.Cookies.Append("refreshToken", newRefreshToken, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddDays(7)  // Define o tempo de expiração conforme desejado
             });
 
@@ -104,5 +112,25 @@ public class AuthController : ControllerBase
                 details = ex.Message
             });
         }
+    }
+    
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Append("accessToken", "", new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Expires = DateTimeOffset.UtcNow.AddDays(-1) // Data de expiração no passado
+        });
+        Response.Cookies.Append("refreshToken", "", new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.None,
+            Expires = DateTimeOffset.UtcNow.AddDays(-1) // Data de expiração no passado
+        });
+        return Ok(new { message = "Logged out successfully" });
     }
 }

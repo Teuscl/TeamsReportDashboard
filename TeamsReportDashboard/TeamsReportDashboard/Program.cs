@@ -48,7 +48,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             OnMessageReceived = context =>
             {
                 // Pega o token do cookie "jwt-token"
-                var accessToken = context.Request.Cookies["acessToken"];
+                var accessToken = context.Request.Cookies["accessToken"];
                 if (!string.IsNullOrEmpty(accessToken))
                 {
                     context.Token = accessToken;

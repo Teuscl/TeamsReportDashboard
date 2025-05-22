@@ -1,38 +1,42 @@
 import { LoginForm } from "@/components/Login/login-form";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosConfig  from "../../services/axiosConfig"; 
+import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
 
 const LoginPage = () => {
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { login } = useAuth();
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
-        setError("");
+        setError(null);
 
         try {
-            const response = await axiosConfig.post("/auth/login", {
-                email,
-                password,
-            });
-            const token = response.data.token;
-            axiosConfig.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-            navigate("/dashboard");
+            const success = await login({ email, password });
+            if (success) {
+                navigate("/dashboard");
+            } else {
+                setError("Email ou senha inválidos.");
+            }
         } catch (err) {
-            setError("Email ou senha inválidos.");
+            if (axios.isAxiosError(err) && err.response?.status === 401) {
+                setError("Email ou senha inválidos.");
+            } else {
+                setError("Erro inesperado. Tente novamente mais tarde.");
+            }
         } finally {
             setLoading(false);
         }
     };
 
-
     return (
-         <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 bg-background">
+        <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 bg-background">
             <div className="w-full max-w-sm">
                 <LoginForm
                     email={email}
@@ -45,6 +49,7 @@ const LoginPage = () => {
                 />
             </div>
         </div>
-    )
-}
+    );
+};
+
 export default LoginPage;

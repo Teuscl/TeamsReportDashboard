@@ -1,59 +1,61 @@
+// src/App.tsx
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import UsersPage from "./pages/UsersPage/UsersPage";
-import Layout from "@/components/Layout/Layout";
-import { SidebarProvider } from "./components/ui/sidebar";
+// Importe suas páginas e componentes de rota
 import LoginPage from "./pages/LoginPage/LoginPage";
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import { ProtectedRoute } from "./components/Routes/ProtectedRoute";
-import { PublicRoute } from "./components/Routes/PublicRoute";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import UsersPage from "./pages/UsersPage/UsersPage"; // Exemplo
+import ProfilePage from "./pages/ProfilePage/ProfilePage"; // Exemplo
+
+
+import Layout from "@/components/Layout/Layout"; // Seu componente de Layout visual
+import { SidebarProvider } from "./components/ui/sidebar"; // Se usado com Layout
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <PublicRoute>
-              <LoginPage />
-            </PublicRoute>
-          } 
-          />
-        <Route
-          path="/users"
-          element={
-            <ProtectedRoute allowedRoles={["Master"]}>
-              <SidebarProvider>
-              <Layout>
-                <UsersPage/>
-              </Layout>
-              </SidebarProvider>
-            </ProtectedRoute>           
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <SidebarProvider>
-              <Layout>
-                <ProfilePage/>
-              </Layout>
-            </SidebarProvider>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <SidebarProvider>
-              <Layout>
-                <DashboardPage/>
-              </Layout>
-            </SidebarProvider>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <LoginPage />              
+              }
+              />          
+            <Route
+              path="/dashboard"
+              element={
+                <SidebarProvider>
+                    <Layout>
+                      <DashboardPage />
+                    </Layout>
+                  </SidebarProvider>
+              }
+              />
+            <Route
+              path="/users"
+              element={
+                <SidebarProvider>
+                    <Layout>
+                      <UsersPage />
+                    </Layout>
+                  </SidebarProvider>
+              }
+              />
+            <Route
+              path="/profile"
+              element={
+                <SidebarProvider>
+                    <Layout>
+                      <ProfilePage />
+                    </Layout>
+                  </SidebarProvider>                  
+              }
+              />          
+          </Routes>
+        </BrowserRouter>
+    </AuthProvider>
+    
   );
 }
 

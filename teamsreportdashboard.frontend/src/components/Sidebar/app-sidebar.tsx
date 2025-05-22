@@ -1,8 +1,6 @@
 import { Home, FileText, Users } from "lucide-react"
 import "../../index.css"
 import { NavUser } from "./nav-user"
-import { getCurrentUser } from "../../utils/auth"
-import { useEffect, useState } from "react"
 
 import {
   Sidebar,
@@ -19,22 +17,7 @@ import {
 import { LogoHandler } from "./logo-handler"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [user, setUser] = useState({
-    name: "Usuário",
-    email: "",
-    avatar: "U",
-  })
-
-  useEffect(() => {
-    const loggedUser = getCurrentUser()
-    if (loggedUser) {
-      setUser({
-        name: loggedUser.name,
-        email: loggedUser.email,
-        avatar: loggedUser.name?.[0].toUpperCase() || "U",
-      })
-    }
-  }, [])
+   //const { user } = useUser()
 
   const items = [
     {
@@ -49,13 +32,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
   ]
 
-  if (getCurrentUser()?.role === "Master") {
-    items.push({
-      title: "Usuários",
-      url: "/users",
-      icon: Users,
-    })
-  }
+  // if (user?.role === 0 /* ou 'Master', dependendo do seu tipo */) {
+  //   items.push({
+  //     title: "Usuários",
+  //     url: "/users",
+  //     icon: Users,
+  //   })
+  // }
 
   return (
     <Sidebar
@@ -90,7 +73,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <NavUser
+          user={{
+            name: "Usuário",
+            email:  "",
+            avatar: "U",
+          }}
+        />
       </SidebarFooter>
     </Sidebar>
   )

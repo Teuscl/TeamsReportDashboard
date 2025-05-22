@@ -24,7 +24,7 @@ public class AuthService : IAuthService
     {
         var user = await _unitOfWork.UserRepository.GetByEmailAsync(loginRequest.Email);
         if(user == null)
-            throw new UnauthorizedAccessException("User not found");
+            throw new KeyNotFoundException("User not found");
         
         var result = _passwordService.VerifyPassword(loginRequest.Password, user.Password);
         if (!result)

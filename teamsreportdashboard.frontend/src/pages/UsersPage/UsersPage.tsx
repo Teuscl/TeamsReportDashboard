@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import {getCurrentUser} from '../../utils/auth'; // Função para obter o usuário atual
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '../../components/CustomTable/DataTable'; // Importe seu componente de tabela
 import { MoreHorizontal } from "lucide-react";

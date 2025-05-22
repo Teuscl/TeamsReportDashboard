@@ -28,6 +28,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useTheme } from "@/components/theme-provider"
+import axiosConfig from "@/services/axiosConfig"
 
 export function NavUser({
   user,
@@ -42,10 +43,18 @@ export function NavUser({
   const { theme, setTheme } = useTheme()
   const navigate = useNavigate()
 
-  const handleLogout = () => {
-    localStorage.removeItem("token")
-    window.location.replace("/")
-  }
+  const handleLogout = async () => {
+    try {
+      await axiosConfig.post("/auth/logout"); 
+      // Opcional: limpar qualquer estado de usuário no frontend (ex: UserContext)
+      // setUser(null); // Se estiver usando UserContext para o estado do usuário
+      window.location.replace("/"); // Ou navigate("/login")
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Tratar erro de logout se necessário
+    }
+};
+
 
   return (
     <SidebarMenu>

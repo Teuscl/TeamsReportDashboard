@@ -1,71 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react"
 import {
   Card,
   CardContent,
   CardHeader,
-  CardTitle
-} from "@/components/ui/card";
-import {
-  Avatar,
-  AvatarFallback,
-} from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { getCurrentUser } from "@/utils/auth";
-import { updateUser } from "@/services/userService";
-import { getRoleLabel, getRoleValue } from "@/utils/role";
-
-
-const roleMap: Record<string, string> = {
-  "0": "Master",
-  "1": "Admin",
-  "2": "Viewer",  
-};
+  CardTitle,
+} from "@/components/ui/card"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+import { getMe, updateUser } from "@/services/userService"
+import { getRoleLabel, getRoleValue } from "@/utils/role"
+//import { useUser } from "@/context/UserContext"
 
 const ProfilePage: React.FC = () => {
-  const user = getCurrentUser();
-  console.log("user", user);
-  const [formData, setFormData] = useState({
-    name: user?.name || "",
-    email: user?.email || ""
-  });
-  const [loading, setLoading] = useState(false);
+  // const { user, setUser } = useUser()
+  // const [formData, setFormData] = useState({ name: "", email: "" })
+  // const [loading, setLoading] = useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  // useEffect(() => {
+  //   if (user) {
+  //     setFormData({ name: user.name, email: user.email })
+  //   }
+  // }, [user])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target
+  //   setFormData((prev) => ({ ...prev, [name]: value }))
+  // }
 
-    setLoading(true);
-    try {
-      await updateUser({
-        id: Number(user.id), 
-        name: formData.name,
-        email: formData.email,
-        role: getRoleValue(user.role), // não alteramos role aqui
-        isActive: true
-      });
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   if (!user) return
 
-      toast.success("Perfil atualizado com sucesso!");
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.errors?.join(", ") ||
-        error?.response?.data?.message ||
-        "Erro ao atualizar perfil.";
+  //   setLoading(true)
+  //   try {
+  //     const updated = await updateUser({
+  //       id: user.id,
+  //       name: formData.name,
+  //       email: formData.email,
+  //       role: user.role, // manter mesmo papel
+  //       isActive: user.isActive,
+  //     })
 
-      toast.error(message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     setUser(updated) // atualiza contexto global
+  //     toast.success("Perfil atualizado com sucesso!")
+  //   } catch (error: any) {
+  //     const message =
+  //       error?.response?.data?.errors?.join(", ") ||
+  //       error?.response?.data?.message ||
+  //       "Erro ao atualizar perfil."
 
-  if (!user) return null;
+  //     toast.error(message)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
+  // if (!user) return null
 
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-80px)] px-4">
@@ -78,36 +71,36 @@ const ProfilePage: React.FC = () => {
           <div className="flex flex-col items-center gap-4 mb-8">
             <Avatar className="h-24 w-24 ring-2 ring-primary shadow-md">
               <AvatarFallback className="text-xl">
-                {user.name?.charAt(0)}
+                {/* {user.name.charAt(0).toUpperCase()} */}
+                {'A'}
               </AvatarFallback>
             </Avatar>
-            <p>Função: <b>{user.role}</b></p>
+            <p>
+              {/* Função: <b>{getRoleLabel(user.role)}</b> */}
+              Função: <b>{"a"}</b>
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form /*onSubmit={handleSubmit}*/ className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-sm">
-                Nome
-              </Label>
+              <Label htmlFor="name">Nome</Label>
               <Input
                 id="name"
                 name="name"
-                value={formData.name}
-                onChange={handleChange}
+                //value={formData.name}
+                //onChange={handleChange}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm">
-                Email
-              </Label>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 name="email"
                 type="email"
-                value={formData.email}
-                onChange={handleChange}
+                //value={formData.email}
+                //onChange={handleChange}
                 required
               />
             </div>
@@ -116,17 +109,16 @@ const ProfilePage: React.FC = () => {
               <Button
                 type="submit"
                 className="w-full text-base font-semibold"
-                disabled={loading}
-                onClick={handleSubmit}
+                //disabled={loading}
               >
-                {loading ? "Salvando..." : "Salvar alterações"}
+                {/* {loading ? "Salvando..." : "Salvar alterações"} */}
               </Button>
             </div>
           </form>
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}
 
-export default ProfilePage;
+export default ProfilePage
