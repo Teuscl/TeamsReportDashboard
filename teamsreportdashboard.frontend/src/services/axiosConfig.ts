@@ -59,8 +59,8 @@ axiosConfig.interceptors.response.use(
 
                 // Redireciona para a página de login
                 // Verifique se já não está na página de login para evitar loop de redirect
-                if (window.location.pathname !== "/login") {
-                    window.location.href = "/login";
+                if (window.location.pathname !== "/") {
+                    window.location.href = "/";
                 }
                 
                 return Promise.reject(refreshError); // Rejeita a promessa da requisição original

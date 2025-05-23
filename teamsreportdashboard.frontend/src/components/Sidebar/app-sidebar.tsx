@@ -1,6 +1,8 @@
-import { Home, FileText, Users } from "lucide-react"
-import "../../index.css"
-import { NavUser } from "./nav-user"
+// src/components/layout/app-sidebar.tsx (ou o caminho correto)
+import { Home, FileText, Users } from "lucide-react";
+import { Link } from "react-router-dom"; // 👈 Importar Link para navegação SPA
+import "../../index.css"; // Verifique se este caminho está correto ou se é necessário
+import { NavUser } from "./nav-user";
 
 import {
   Sidebar,
@@ -13,43 +15,58 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { LogoHandler } from "./logo-handler"
+} from "@/components/ui/sidebar"; // Componentes da sua UI de Sidebar
+import { LogoHandler } from "./logo-handler";
+import { useAuth } from "@/context/AuthContext"; // 👈 Importar useAuth
+import { RoleEnum } from "@/utils/role";      // 👈 Importar RoleEnum (ajuste o caminho se necessário)
+
+// Defina um tipo para os itens do menu para melhor tipagem
+interface MenuItemType {
+  title: string;
+  url: string;
+  icon: React.ElementType; // Para componentes de ícone como Home, FileText
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-   //const { user } = useUser()
+  const { user, isLoading } = useAuth(); // 👈 Obter usuário e estado de carregamento do contexto
 
-  const items = [
+  // Itens base do menu que todos os usuários logados veem
+  const baseItems: MenuItemType[] = [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard", // ✨ Sugestão: use caminhos reais
       icon: Home,
     },
     {
       title: "Atendimentos",
-      url: "#",
+      url: "/atendimentos", // ✨ Sugestão: use caminhos reais
       icon: FileText,
     },
-  ]
+  ];
 
-  // if (user?.role === 0 /* ou 'Master', dependendo do seu tipo */) {
-  //   items.push({
-  //     title: "Usuários",
-  //     url: "/users",
-  //     icon: Users,
-  //   })
-  // }
+  let finalItems: MenuItemType[] = [...baseItems];
+
+  // Adiciona o item "Usuários" apenas se o usuário estiver carregado, autenticado e for Master
+  // A verificação !isLoading garante que só avaliamos user.role quando 'user' já foi definido pelo AuthContext
+  if (!isLoading && user && user.role === RoleEnum.Master) {
+    finalItems.push({
+      title: "Usuários",
+      url: "/users", // Rota para a página de gerenciamento de usuários
+      icon: Users,
+    });
+  }
 
   return (
     <Sidebar
       collapsible="icon"
       variant="sidebar"
-      className="bg-primary bg-red-500 bg-secondary dark text-white"
+      // className="bg-primary bg-red-500 bg-secondary dark text-white" // Revise esta linha, parece ter múltiplos bgs
+      className="bg-secondary dark text-white" // Exemplo com um BG, ajuste conforme seu tema
       {...props}
     >
       <SidebarHeader>
         <LogoHandler
-          logoPath="/pecege.png"
+          logoPath="/pecege.png" // Verifique se este é o caminho correto no seu diretório public
           name="Sistema de Relatórios"
         />
       </SidebarHeader>
@@ -58,13 +75,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {finalItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
+                    {/* ✨ Use o componente Link para navegação interna SPA */}
+                    <Link to={item.url}>
+                      <item.icon className="mr-2 h-5 w-5" /> {/* Adicionado margin e tamanho */}
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -73,14 +91,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser
-          user={{
-            name: "Usuário",
-            email:  "",
-            avatar: "U",
-          }}
-        />
+        <NavUser /> 
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

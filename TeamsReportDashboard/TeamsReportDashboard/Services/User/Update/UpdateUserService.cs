@@ -19,7 +19,6 @@ public class UpdateUserService : IUpdateUserService
         _unitOfWork = unitOfWork;
         _validator = validator;
         _context = context;
-        
     }
 
 
@@ -34,7 +33,6 @@ public class UpdateUserService : IUpdateUserService
         user.Role = updateUserDto.Role;
         user.UpdatedAt = DateTime.Now;
         user.IsActive = updateUserDto.IsActive;
-        
         _unitOfWork.UserRepository.Update(user);
         await _unitOfWork.CommitAsync();
 

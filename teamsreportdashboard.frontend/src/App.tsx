@@ -10,6 +10,7 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage"; // Exemplo
 import Layout from "@/components/Layout/Layout"; // Seu componente de Layout visual
 import { SidebarProvider } from "./components/ui/sidebar"; // Se usado com Layout
 import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./Routes/ProtectedRoute";
 
 function App() {
   return (
@@ -21,8 +22,9 @@ function App() {
               element={
                 <LoginPage />              
               }
-              />          
-            <Route
+              />
+            <Route element={<ProtectedRoute />}>
+              <Route
               path="/dashboard"
               element={
                 <SidebarProvider>
@@ -32,6 +34,9 @@ function App() {
                   </SidebarProvider>
               }
               />
+
+            </Route>          
+            
             <Route
               path="/users"
               element={

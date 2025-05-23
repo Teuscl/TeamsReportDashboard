@@ -1,3 +1,4 @@
+// src/components/layout/nav-user.tsx (ou o caminho correto para seu arquivo)
 import {
   BadgeCheck,
   ChevronsUpDown,
@@ -5,13 +6,13 @@ import {
   LogOut,
   Moon,
   Sun,
-} from "lucide-react"
-import { useNavigate } from "react-router-dom"
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
+  AvatarImage, // Manteremos caso você adicione uma URL de avatar no futuro
+} from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,41 +21,65 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { useTheme } from "@/components/theme-provider"
-import axiosConfig from "@/services/axiosConfig"
+} from "@/components/ui/sidebar";
+import { useTheme } from "@/components/theme-provider";
+import { useAuth } from "@/context/AuthContext"; // 👈 Importe o useAuth
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
-  const { isMobile } = useSidebar()
-  const { theme, setTheme } = useTheme()
-  const navigate = useNavigate()
-
-  const handleLogout = async () => {
-    try {
-      await axiosConfig.post("/auth/logout"); 
-      // Opcional: limpar qualquer estado de usuário no frontend (ex: UserContext)
-      // setUser(null); // Se estiver usando UserContext para o estado do usuário
-      window.location.replace("/"); // Ou navigate("/login")
-    } catch (error) {
-      console.error("Logout failed:", error);
-      // Tratar erro de logout se necessário
-    }
+// Função para gerar iniciais a partir do nome
+const getInitials = (name: string): string => {
+  if (!name) return "?";
+  const parts = name.trim().split(/\s+/); // Divide por espaços, tratando múltiplos espaços
+  if (parts.length === 0 || parts[0] === "") return "?";
+  if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 };
 
+export function NavUser() { // Removida a prop 'user'
+  const { user, logout, isLoading } = useAuth(); // 👈 Use o hook useAuth
+  const { isMobile } = useSidebar();
+  const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout(); // 👈 Chama a função logout do AuthContext
+    navigate("/"); // Redireciona para o login após o logout
+  };
+
+  // Se estiver carregando o estado de autenticação, pode mostrar um placeholder ou nada
+  if (isLoading) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size="lg" className="opacity-50 cursor-wait">
+            <Avatar className="h-8 w-8 rounded-lg">
+              <AvatarFallback className="rounded-lg">...</AvatarFallback>
+            </Avatar>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-medium">Carregando...</span>
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
+
+  // Se não houver usuário autenticado (após o carregamento),
+  // este componente provavelmente não deveria ser renderizado
+  // (assumindo que ele está dentro de uma rota/layout protegido).
+  // Mas, por segurança, podemos retornar null.
+  if (!user) {
+    return null; // Ou um botão de login se este componente pudesse aparecer para usuários não logados
+  }
+
+  const initials = getInitials(user.name);
+  // Se você tiver uma URL de avatar no objeto user (ex: user.avatarUrl), use-a aqui:
+  const avatarSrc = undefined; // user.avatarUrl || undefined;
 
   return (
     <SidebarMenu>
@@ -66,8 +91,10 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">{user.avatar}</AvatarFallback>
+                {/* Se tiver avatarSrc, a imagem será mostrada */}
+                <AvatarImage src={avatarSrc} alt={user.name} />
+                {/* Caso contrário, o fallback com as iniciais */}
+                <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
@@ -86,8 +113,8 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">{user.avatar}</AvatarFallback>
+                  <AvatarImage src={avatarSrc} alt={user.name} />
+                  <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
@@ -99,11 +126,11 @@ export function NavUser({
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => navigate("/profile")}>
+              <DropdownMenuItem onClick={() => navigate("/profile")}> {/* Certifique-se que /profile existe e é protegida */}
                 <BadgeCheck className="mr-2 h-4 w-4" />
                 Conta
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/change-password")}> {/* Certifique-se que esta rota existe */}
                 <Key className="mr-2 h-4 w-4" />
                 Redefinir senha
               </DropdownMenuItem>
@@ -120,7 +147,7 @@ export function NavUser({
               <DropdownMenuItem onClick={() => setTheme("dark")}>
                 <Moon className="mr-2 h-4 w-4" />
                 <span className={theme === "dark" ? "font-semibold" : ""}>Escuro</span>
-              </DropdownMenuItem>              
+              </DropdownMenuItem>
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
@@ -133,5 +160,5 @@ export function NavUser({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }
