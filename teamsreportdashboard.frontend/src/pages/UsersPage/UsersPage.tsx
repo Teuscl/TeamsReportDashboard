@@ -1,8 +1,8 @@
 // src/pages/Users/UsersPage.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '../../components/CustomTable/DataTable';
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react"; // Ícone User de lucide-react não estava sendo usado, removi
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,86 +13,83 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// useNavigate não é mais necessário para redirecionamento de login aqui
-import { EditUserModal } from '@/components/EditUserModal'; // Assumindo que este componente existe e funciona
-import { getUsers, deleteUser } from '@/services/userService'; // Seus serviços
+import { UserFormModal } from '@/components/UserFormModal'; // 👈 Importando o modal unificado
+import { getUsers, deleteUser } from '@/services/userService';
 import { toast } from 'sonner';
-import { useAuth } from '@/context/AuthContext'; // 👈 Importe useAuth
-import { User } from '@/types/User';
-import { RoleEnum } from '@/utils/role'; // Assumindo que você tem um arquivo de utilitário para roles
-
-// A interface User aqui é para a lista de usuários, pode ser diferente do User do AuthContext
-// Se for a mesma, você pode importar de src/types/User.ts
+import { useAuth } from '@/context/AuthContext';
+import { User } from '@/types/User'; // 👈 Sua interface User global de @/types/User
+import { RoleEnum, getRoleLabel } from '@/utils/role'; // 👈 Seus utilitários de Role
 
 const UsersPage: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const { user: currentUser, isLoading: authIsLoading } = useAuth(); // 👈 Obtenha o usuário logado do contexto
+  const [users, setUsers] = useState<User[]>([]); // Usando a interface User global
+  const { user: currentUser, isLoading: authIsLoading } = useAuth();
   
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [dataLoading, setDataLoading] = useState(true); // Estado de loading para os dados da tabela
+  const [modalMode, setModalMode] = useState<'create' | 'edit' | null>(null);
+  const [userForModal, setUserForModal] = useState<User | null>(null); // Usuário para edição ou nulo para criação
+  const [dataLoading, setDataLoading] = useState(true);
+
+  const fetchUsers = useCallback(async () => {
+    setDataLoading(true);
+    try {
+      const data = await getUsers(); // getUsers deve retornar User[] com role: RoleEnum (numérico)
+      setUsers(data);
+    } catch (error) {
+      console.error('Erro ao buscar usuários:', error);
+      toast.error("Erro ao buscar usuários. Verifique o console para detalhes.");
+    } finally {
+      setDataLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    // MasterRoute já garante que currentUser é um Master ou redireciona.
-    // Se currentUser não estiver carregado (authIsLoading), esperamos.
     if (authIsLoading) {
-      return; // Aguarda o AuthContext carregar o usuário
+      return; 
     }
-
-    // Se, por alguma razão extraordinária, currentUser for null aqui após authIsLoading ser false,
-    // e MasterRoute não redirecionou, é um estado inesperado.
-    // Mas MasterRoute deve ter cuidado disso.
-    
-    const fetchUsers = async () => {
-      setDataLoading(true);
-      try {
-        const data = await getUsers(); // Seu serviço para buscar todos os usuários
-        setUsers(data);
-      } catch (error) {
-        console.error('Erro ao buscar usuários:', error);
-        toast.error("Erro ao buscar usuários. Verifique o console para detalhes.");
-      } finally {
-        setDataLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, [authIsLoading]); // Depende de authIsLoading para garantir que currentUser foi processado
+    // MasterRoute já garante que currentUser é Master, então podemos buscar os usuários.
+    if (currentUser && currentUser.role === RoleEnum.Master) {
+        fetchUsers();
+    }
+  }, [authIsLoading, currentUser, fetchUsers]); // Adicionado currentUser e fetchUsers como dependências
 
   const handleDelete = async (id: number) => {
-    if (!currentUser) return; // Guarda de segurança
-
+    if (!currentUser) return;
     if (id === currentUser.id) {
       toast.warning("Você não pode excluir a si mesmo.");
       return;
     }
-
     const confirmed = window.confirm("Você tem certeza que deseja excluir este usuário?");
     if (!confirmed) return;
 
     try {
       await deleteUser(id);
+      // Atualiza o estado local removendo o usuário ou recarrega a lista
       setUsers(prev => prev.filter(user => user.id !== id));
       toast.success("O usuário foi removido com sucesso.");
     } catch (error: any) {
       const message = error?.response?.data?.message || "Erro ao excluir o usuário.";
-      toast.error("Erro ao excluir usuário: " + message);
-      console.error("Erro ao excluir usuário:", error);
+      toast.error(`Erro ao excluir usuário: ${message}`);
     }
   };
 
-  const handleEdit = (user: User) => {
-    setEditingUser(user);
-    setIsModalOpen(true);
+  const handleOpenCreateModal = () => {
+    setUserForModal(null); // Nenhum usuário para editar, é criação
+    setModalMode('create');
   };
 
-  // Chamado pelo EditUserModal quando um usuário é salvo com sucesso
-  const handleUserUpdate = (updatedUser: User) => {
-    setUsers(prev =>
-      prev.map(user => (user.id === updatedUser.id ? updatedUser : user))
-    );
-    // Opcionalmente, pode recarregar todos os usuários se a atualização for complexa
-    // fetchUsers();
+  const handleOpenEditModal = (userToEdit: User) => {
+    setUserForModal(userToEdit);
+    setModalMode('edit');
+  };
+
+  const closeModal = () => {
+    setModalMode(null);
+    setUserForModal(null);
+  };
+
+  // Chamado após sucesso na criação ou edição dentro do UserFormModal
+  const handleSaveSuccess = () => {
+    toast.info("Atualizando lista de usuários..."); // Feedback opcional
+    fetchUsers(); // Recarrega a lista de usuários
   };
 
   const columns: ColumnDef<User>[] = [
@@ -109,21 +106,15 @@ const UsersPage: React.FC = () => {
       accessorKey: 'role',
       header: 'Função',
       cell: ({ row }) => {
-        // Este roleMap assume que user.role na lista de usuários é uma string "0", "1", "2"
-        // Se getUsers() retornar role como número, ajuste o acesso: roleMap[String(row.getValue('role'))]
-        const roleMap: Record<string, string> = {
-          "0": "Master",
-          "1": "Admin",
-          "2": "Viewer"
-        };
-        const roleValue = row.getValue('role') as string;
-        return <div>{roleMap[roleValue] || "Desconhecido"}</div>;
+        // Assumindo que row.original.role é do tipo RoleEnum (numérico)
+        // como definido na interface User global e retornado por getUsers()
+        return <div>{getRoleLabel(row.original.role)}</div>; // 👈 Usando getRoleLabel
       },
     },
     {
       accessorKey: 'isActive',
       header: 'Status',
-      cell: ({ row }) => <div>{row.getValue('isActive') ? 'Ativo' : 'Inativo'}</div>,
+      cell: ({ row }) => <div>{row.original.isActive ? 'Ativo' : 'Inativo'}</div>,
     },
     {
       id: "actions",
@@ -137,11 +128,11 @@ const UsersPage: React.FC = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Ações</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleEdit(userRowData)}>Editar</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleOpenEditModal(userRowData)}>Editar</DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => handleDelete(userRowData.id)}
-                disabled={currentUser?.id === userRowData.id} // Desabilita se for o próprio usuário
-                className={currentUser?.id === userRowData.id ? "text-muted-foreground" : ""}
+                disabled={currentUser?.id === userRowData.id}
+                className={currentUser?.id === userRowData.id ? "text-muted-foreground cursor-not-allowed" : "cursor-pointer"}
               >
                 Excluir
               </DropdownMenuItem>
@@ -152,32 +143,43 @@ const UsersPage: React.FC = () => {
     },
   ];
 
-  if (authIsLoading || dataLoading) { // Mostra loading enquanto o user do contexto ou os dados da tabela carregam
-    return <div className="container mx-auto py-10 text-center">Carregando dados...</div>;
+  if (authIsLoading) { // Prioridade para o carregamento da autenticação
+    return <div className="container mx-auto py-10 text-center">Carregando informações de autenticação...</div>;
   }
 
-  // Se MasterRoute falhou em redirecionar e currentUser não é Master por algum motivo (não deveria acontecer)
+  // MasterRoute já deve ter redirecionado se não for Master.
+  // Esta é uma verificação adicional de segurança ou para o caso de carregamento inicial.
   if (!currentUser || currentUser.role !== RoleEnum.Master) {
       return <div className="container mx-auto py-10 text-center">Acesso não autorizado.</div>;
   }
-
+  
+  // Se currentUser é Master, mas os dados da tabela ainda estão carregando
+  if (dataLoading && users.length === 0) { 
+      return <div className="container mx-auto py-10 text-center">Carregando usuários...</div>;
+  }
 
   return (
-    <div className='container mx-auto py-10'>
-      <h1 className="text-2xl font-bold mb-6">Gerenciamento de Usuários</h1>
+    <div className='container mx-auto py-10 px-4 md:px-0'>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold">Gerenciamento de Usuários</h1>
+        <Button onClick={handleOpenCreateModal}> {/* 👈 Botão para abrir o modal de criação */}
+          Criar Usuário
+        </Button>
+      </div>
       <DataTable
         columns={columns}
         data={users}
+        // Passa o estado de loading para a tabela se já houver dados mas uma atualização está em curso
+        // (dataLoading será true durante fetchUsers)
       />
-      {editingUser && ( // Garante que editingUser não é null antes de renderizar o modal
-        <EditUserModal
-          user={editingUser}
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setEditingUser(null);
-          }}
-          onSave={handleUserUpdate} // Esta função atualiza o estado local 'users'
+      {/* Renderiza o UserFormModal se modalMode estiver definido */}
+      {modalMode && (
+        <UserFormModal
+          mode={modalMode}
+          userToEdit={userForModal}
+          isOpen={!!modalMode}
+          onClose={closeModal}
+          onSaveSuccess={handleSaveSuccess}
         />
       )}
     </div>
