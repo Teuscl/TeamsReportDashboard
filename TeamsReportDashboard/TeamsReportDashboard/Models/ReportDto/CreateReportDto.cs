@@ -1,4 +1,4 @@
-﻿namespace TeamsReportDashboard.Models.Dto;
+﻿namespace TeamsReportDashboard.Backend.Models.ReportDto;
 
 public class CreateReportDto
 {

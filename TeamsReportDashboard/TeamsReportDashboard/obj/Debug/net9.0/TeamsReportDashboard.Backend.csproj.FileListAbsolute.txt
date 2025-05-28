@@ -680,3 +680,4 @@ G:\Projects\TeamsReportDashboard\TeamsReportDashboard\obj\Debug\net9.0\refint\Te
 G:\Projects\TeamsReportDashboard\TeamsReportDashboard\obj\Debug\net9.0\TeamsReportDashboard.Backend.pdb
 G:\Projects\TeamsReportDashboard\TeamsReportDashboard\obj\Debug\net9.0\TeamsReportDashboard.Backend.genruntimeconfig.cache
 G:\Projects\TeamsReportDashboard\TeamsReportDashboard\obj\Debug\net9.0\ref\TeamsReportDashboard.Backend.dll
+C:\Users\Mateus\Desktop\Projects\TeamsReportDashboard\TeamsReportDashboard\bin\Debug\net9.0\AutoMapper.dll

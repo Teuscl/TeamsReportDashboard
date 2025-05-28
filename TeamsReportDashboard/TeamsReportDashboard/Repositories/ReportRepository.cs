@@ -3,7 +3,8 @@ using TeamsReportDashboard.Data;
 using TeamsReportDashboard.Entities;
 using TeamsReportDashboard.Interfaces;
 using System.Collections.Generic; // Para List
-using System.Threading.Tasks; // Para Task
+using System.Threading.Tasks;
+using TeamsReportDashboard.Backend.Entities; // Para Task
 
 namespace TeamsReportDashboard.Repositories;
 
@@ -16,7 +17,7 @@ public class ReportRepository : IReportRepository
         _context = context;
     }
 
-    public async Task<List<Report>> GetReportsAsync() =>
+    public async Task<List<Report>> GetAllAsync() =>
         await _context.Reports.AsNoTracking().ToListAsync(); // Adicionado AsNoTracking
 
     public async Task<Report?> GetReportAsync(int id) 
@@ -28,7 +29,6 @@ public class ReportRepository : IReportRepository
     {
         if (report == null)
             throw new ArgumentNullException(nameof(report));
-
         await _context.Reports.AddAsync(report);
         await _context.SaveChangesAsync();
         return report; // Retorna a entidade criada (com ID preenchido)
@@ -70,7 +70,6 @@ public class ReportRepository : IReportRepository
         {
             return false; // Ou lançar KeyNotFoundException se preferir que o chamador trate
         }
-
         _context.Reports.Remove(report);
         return await _context.SaveChangesAsync() > 0;
     }

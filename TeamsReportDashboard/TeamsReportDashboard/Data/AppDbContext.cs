@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Entities;
 
 namespace TeamsReportDashboard.Data;

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "eWT70zA6h70=",
+  "dgSpecHash": "k05+HLWXJSs=",
   "success": true,
   "projectFilePath": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Mateus\\.nuget\\packages\\automapper\\14.0.0\\automapper.14.0.0.nupkg.sha512",
     "C:\\Users\\Mateus\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Mateus\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
     "C:\\Users\\Mateus\\.nuget\\packages\\bcrypt.net\\0.1.0\\bcrypt.net.0.1.0.nupkg.sha512",

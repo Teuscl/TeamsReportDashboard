@@ -1,8 +1,14 @@
+using System.Reflection;
 using System.Text;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using TeamsReportDashboard.Backend.Models.ReportDto;
+using TeamsReportDashboard.Backend.Services.Report.Create;
+using TeamsReportDashboard.Backend.Services.Report.Read;
+using TeamsReportDashboard.Backend.Services.Report.Update;
+using TeamsReportDashboard.Backend.Services.User.Update;
 using TeamsReportDashboard.Data;
 using TeamsReportDashboard.Filters;
 using TeamsReportDashboard.Interfaces;
@@ -77,15 +83,27 @@ builder.Services.AddScoped<ITokenService, TokenService>();  // Adiciona o TokenS
 builder.Services.AddScoped<IAuthService, AuthService>();  // Adiciona o AuthService
 builder.Services.AddScoped<IValidator<CreateUserDto>, CreateUserValidator>();  // Validador do CreateUserDto
 builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();  // Validador do UpdateUserDto
+builder.Services.AddScoped<IValidator<CreateReportDto>, CreateReportValidator>();  // Validador do CreateUserDto
+builder.Services.AddScoped<IValidator<UpdateReportDto>, UpdateReportValidator>();  // Validador do UpdateUserDto
 builder.Services.AddScoped<IValidator<ChangePasswordDto>, ChangePasswordValidator>();  // Validador do UpdateUserDto
 builder.Services.AddScoped<IUnitOfWork,  UnitOfWork>();
+
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+
 builder.Services.AddScoped<ICreateUserService, CreateUserService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IDeleteUserService, DeleteUserService>();
 builder.Services.AddScoped<IGetUsersService, GetUsersService>();
 builder.Services.AddScoped<IUpdateUserService, UpdateUserService>();
 builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
+
+builder.Services.AddScoped<ICreateReportService, CreateReportService>();
+builder.Services.AddScoped<IUpdateReportService, UpdateReportService>();
+builder.Services.AddScoped<IGetReportService, GetReportService>();
+builder.Services.AddScoped<IDeleteReportService, DeleteReportService>();
 
 
 var app = builder.Build();

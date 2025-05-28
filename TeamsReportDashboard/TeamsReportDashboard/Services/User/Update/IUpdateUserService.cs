@@ -1,6 +1,6 @@
 ﻿using TeamsReportDashboard.Models.Dto;
 
-namespace TeamsReportDashboard.Services.User.Update;
+namespace TeamsReportDashboard.Backend.Services.User.Update;
 
 public interface IUpdateUserService
 {

@@ -8,15 +8,18 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
     private IUserRepository _userRepository;
+    private IReportRepository _reportRepository;
 
-    public UnitOfWork(AppDbContext context,IUserRepository userRepository)
+    public UnitOfWork(AppDbContext context,IUserRepository userRepository, IReportRepository reportRepository)
     {
         _context = context;
         _userRepository = userRepository;
+        _reportRepository = reportRepository;
     }
     
     public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
-    
+    public IReportRepository ReportRepository => _reportRepository ??= new ReportRepository(_context);
+
     public async Task<int> CommitAsync()
     {
         return await _context.SaveChangesAsync();
