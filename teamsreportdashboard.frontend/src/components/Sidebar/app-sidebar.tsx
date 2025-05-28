@@ -39,7 +39,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
     {
       title: "Atendimentos",
-      url: "/atendimentos", // ✨ Sugestão: use caminhos reais
+      url: "/reports", // ✨ Sugestão: use caminhos reais
       icon: FileText,
     },
   ];

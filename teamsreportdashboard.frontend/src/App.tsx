@@ -11,6 +11,7 @@ import Layout from "@/components/Layout/Layout"; // Seu componente de Layout vis
 import { SidebarProvider } from "./components/ui/sidebar"; // Se usado com Layout
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./Routes/ProtectedRoute";
+import ReportsPage from "./pages/ReportsPage/ReportsPage";
 
 function App() {
   return (
@@ -30,6 +31,19 @@ function App() {
                 <SidebarProvider>
                     <Layout>
                       <DashboardPage />
+                    </Layout>
+                  </SidebarProvider>
+              }
+              />
+
+            </Route>
+             <Route element={<ProtectedRoute />}>
+              <Route
+              path="/reports"
+              element={
+                <SidebarProvider>
+                    <Layout>
+                      <ReportsPage />
                     </Layout>
                   </SidebarProvider>
               }
