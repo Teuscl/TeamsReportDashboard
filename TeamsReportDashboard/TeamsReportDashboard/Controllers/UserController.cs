@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeamsReportDashboard.Backend.Services.User.ChangeMyPassword;
 using TeamsReportDashboard.Backend.Services.User.Update;
 using TeamsReportDashboard.Entities;
 using TeamsReportDashboard.Models.Dto;
@@ -58,13 +59,24 @@ public class UserController : Controller
         return Ok(await service.GetAll());
     }
 
-    [HttpPut("change-password")]
-    //[Authorize(Roles = "Admin, Master")]
-    public async Task<IActionResult> ChangePassword(
-        [FromServices]IChangePasswordService service,
-        [FromBody] ChangePasswordDto changePasswordDto, int id)
+    [HttpPut("change-my-password")] // A rota da action permanece a mesma
+    public async Task<IActionResult> ChangeMyPassword(
+        [FromServices] IChangeMyPasswordService service,
+        [FromBody] ChangeMyPasswordDto changeMyPasswordDto) // 👈 O parâmetro 'int id' foi removido daqui
     {
-        await service.Execute(id, changePasswordDto);
+        // Obter o ID do usuário logado a partir das claims do token JWT
+        var userIdString = User.FindFirst("id")?.Value; 
+        // Ou use ClaimTypes.NameIdentifier se você configurou o JWT para usar essa claim como ID
+        // var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
+        {
+            // Isso não deveria acontecer se o usuário estiver autenticado e o token contiver a claim "id"
+            return Unauthorized(new { message = "Não foi possível identificar o usuário autenticado." });
+        }
+
+        // Agora use o userId obtido do token para chamar o serviço
+        await service.Execute(userId, changeMyPasswordDto);
         return NoContent();
     }
 

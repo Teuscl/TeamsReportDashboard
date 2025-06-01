@@ -3,6 +3,7 @@ import { RoleEnum } from '@/utils/role';
 import axiosConfig from './axiosConfig';
 import AxiosConfig from './axiosConfig';
 import { User } from '@/types/User';
+import { ChangeMyPasswordPayload } from '@/types/ChangeMyPasswordPayload';
 
 
 // Payload para criar um usuário
@@ -60,4 +61,10 @@ export const deleteUser = async (id: number): Promise<void> => {
   await AxiosConfig.delete('/user', {
     params: { id },
   });
+
+  
+};
+
+export const changeMyPassword = async (payload: ChangeMyPasswordPayload): Promise<void> => {
+  await axiosConfig.put(`/user/change-my-password`, payload);
 };

@@ -130,7 +130,7 @@ export function NavUser() { // Removida a prop 'user'
                 <BadgeCheck className="mr-2 h-4 w-4" />
                 Conta
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/change-password")}> {/* Certifique-se que esta rota existe */}
+              <DropdownMenuItem onClick={() => navigate("/change-my-password")}> {/* Certifique-se que esta rota existe */}
                 <Key className="mr-2 h-4 w-4" />
                 Redefinir senha
               </DropdownMenuItem>

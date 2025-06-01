@@ -1,80 +1,52 @@
 // src/App.tsx
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom"; // Adicionado Outlet e Navigate
 // Importe suas páginas e componentes de rota
 import LoginPage from "./pages/LoginPage/LoginPage";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
-import UsersPage from "./pages/UsersPage/UsersPage"; // Exemplo
-import ProfilePage from "./pages/ProfilePage/ProfilePage"; // Exemplo
-
+import UsersPage from "./pages/UsersPage/UsersPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import ReportsPage from "./pages/ReportsPage/ReportsPage";
+import ChangeMyPasswordPage from "./pages/ChangeMyPasswordPage/ChangeMyPasswordPage"; // 👈 Importe a nova página
 
 import Layout from "@/components/Layout/Layout"; // Seu componente de Layout visual
 import { SidebarProvider } from "./components/ui/sidebar"; // Se usado com Layout
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./Routes/ProtectedRoute";
-import ReportsPage from "./pages/ReportsPage/ReportsPage";
-
+import PasswordChangedSuccessPage from "./pages/PasswordChangedSuccessPage/PasswordChangedSuccessPage";
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <LoginPage />              
-              }
-              />
-            <Route element={<ProtectedRoute />}>
-              <Route
-              path="/dashboard"
-              element={
-                <SidebarProvider>
-                    <Layout>
-                      <DashboardPage />
-                    </Layout>
-                  </SidebarProvider>
-              }
-              />
+        <Routes>
+          {/* Rota Pública */}
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/auth/password-changed-successfully" element={<PasswordChangedSuccessPage />} /> 
 
+          {/* Rotas Protegidas Genéricas (requerem apenas login) */}
+          <Route element={<ProtectedRoute />}> {/* Protege todas as rotas aninhadas abaixo */}
+            <Route element={ /* Elemento de Layout para estas rotas */
+              <SidebarProvider>
+                <Layout>
+                  <Outlet /> {/* O Outlet renderizará o componente da rota filha */}
+                </Layout>
+              </SidebarProvider>
+            }>
+              {/* Rotas filhas que usam o Layout e são protegidas */}
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/reports" element={<ReportsPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/change-my-password" element={<ChangeMyPasswordPage />} /> 
+              <Route path="/users" element={<UsersPage />} />''
             </Route>
-             <Route element={<ProtectedRoute />}>
-              <Route
-              path="/reports"
-              element={
-                <SidebarProvider>
-                    <Layout>
-                      <ReportsPage />
-                    </Layout>
-                  </SidebarProvider>
-              }
-              />
+          </Route>
+          
+          
 
-            </Route>          
-            
-            <Route
-              path="/users"
-              element={
-                <SidebarProvider>
-                    <Layout>
-                      <UsersPage />
-                    </Layout>
-                  </SidebarProvider>
-              }
-              />
-            <Route
-              path="/profile"
-              element={
-                <SidebarProvider>
-                    <Layout>
-                      <ProfilePage />
-                    </Layout>
-                  </SidebarProvider>                  
-              }
-              />          
-          </Routes>
-        </BrowserRouter>
+         
+
+        </Routes>
+      </BrowserRouter>
     </AuthProvider>
-    
   );
 }
 

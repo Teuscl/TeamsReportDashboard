@@ -1,19 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TeamsReportDashboard.Backend.Entities; 
-using TeamsReportDashboard.Backend.Models.ReportDto; 
+using TeamsReportDashboard.Backend.Entities; // Para a entidade Report
+using TeamsReportDashboard.Backend.Models.ReportDto; // Para CreateReportDto e UpdateReportDto
 using TeamsReportDashboard.Backend.Services.Report.Read;
 using TeamsReportDashboard.Services.User.Create;
-using TeamsReportDashboard.Services.User.Delete; 
+using TeamsReportDashboard.Services.User.Delete; // Supondo que suas interfaces de serviço de Report estejam aqui
+// A interface IUpdateReportService já está definida em TeamsReportDashboard.Backend.Services.Report.Update.IUpdateReportService
+// Vamos usar o namespace completo para ela se não houver um using geral para TeamsReportDashboard.Backend.Interfaces.Report
+// ou TeamsReportDashboard.Backend.Services.Report.Update
 
 namespace TeamsReportDashboard.Backend.Controllers
 {
-    [Route("[controller]")] 
+    [Route("[controller]")] // Será /Report
     [ApiController]
     public class ReportController : ControllerBase
     {
-        
+        // POST: /Report
         [HttpPost]
         //[Authorize(Roles = "SeuRoleDeCriacao")] // Descomente e ajuste a autorização conforme necessário
         public async Task<IActionResult> CreateReport(

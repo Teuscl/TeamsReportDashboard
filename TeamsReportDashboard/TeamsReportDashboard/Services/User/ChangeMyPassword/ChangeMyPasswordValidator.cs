@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using TeamsReportDashboard.Models.Dto;
 
-namespace TeamsReportDashboard.Services.User.ChangePassword;
+namespace TeamsReportDashboard.Backend.Services.User.ChangeMyPassword;
 
-public class ChangePasswordValidator : AbstractValidator<ChangePasswordDto>
+public class ChangeMyPasswordValidator : AbstractValidator<ChangeMyPasswordDto>
 {
-    public ChangePasswordValidator()
+    public ChangeMyPasswordValidator()
     {
         //Validate if the old password was entered
         RuleFor(x => x.OldPassword)
