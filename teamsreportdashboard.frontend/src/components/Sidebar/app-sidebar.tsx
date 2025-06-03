@@ -34,12 +34,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const baseItems: MenuItemType[] = [
     {
       title: "Dashboard",
-      url: "/dashboard", // ✨ Sugestão: use caminhos reais
+      url: "/dashboard", 
       icon: Home,
     },
     {
       title: "Atendimentos",
-      url: "/reports", // ✨ Sugestão: use caminhos reais
+      url: "/reports", 
       icon: FileText,
     },
   ];

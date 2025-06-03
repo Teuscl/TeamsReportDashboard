@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Models.Dto;
 
 namespace TeamsReportDashboard.Services.User.Create;

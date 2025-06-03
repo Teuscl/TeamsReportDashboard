@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
 using TeamsReportDashboard.Models.Dto;

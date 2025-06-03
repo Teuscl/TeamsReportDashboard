@@ -1,6 +1,6 @@
 ﻿using TeamsReportDashboard.Entities.Enums;
 
-namespace TeamsReportDashboard.Models.Dto;
+namespace TeamsReportDashboard.Backend.Models.UserDto;
 
 public class CreateUserDto
 {

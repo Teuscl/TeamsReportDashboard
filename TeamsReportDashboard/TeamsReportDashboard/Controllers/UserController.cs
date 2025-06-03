@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Backend.Services.User.ChangeMyPassword;
 using TeamsReportDashboard.Backend.Services.User.Update;
 using TeamsReportDashboard.Entities;
