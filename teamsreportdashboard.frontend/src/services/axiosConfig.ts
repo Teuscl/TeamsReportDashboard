@@ -1,4 +1,4 @@
-﻿// src/services/axiosConfig.ts
+﻿// src/services/axiosConfig.ts (VERSÃO CORRIGIDA E RECOMENDADA)
 import axios from 'axios';
 import { eventEmitter, AUTH_EVENTS } from './eventEmitter'; 
 
@@ -18,7 +18,7 @@ const processQueue = (error: any | null, token: string | null = null) => {
         if (error) {
             prom.reject(error);
         } else {
-            prom.resolve(token); // Para HttpOnly, o token não é passado, o navegador lida
+            prom.resolve(token); // Para HttpOnly, token não é realmente usado aqui
         }
     });
     failedQueue = [];
@@ -29,46 +29,55 @@ axiosConfig.interceptors.response.use(
     async error => {
         const originalRequest = error.config;
 
-        // Verifica se é um erro 401 e se não é uma tentativa de retry que já falhou
+        // URLs que NÃO devem acionar o refresh token em caso de 401
+        const noRefreshEndpoints = ['/auth/login', '/auth/refresh']; 
+
         if (error.response?.status === 401 && !originalRequest._retry) {
+            
+            // Se a URL original é um dos endpoints que não devem dar refresh (EX: /auth/login),
+            // apenas rejeite o erro diretamente. O AuthContext.login tratará este erro.
+            if (originalRequest.url && noRefreshEndpoints.includes(originalRequest.url)) {
+                console.log(`Interceptor: 401 on auth endpoint (${originalRequest.url}). Rejecting directly.`);
+                return Promise.reject(error); // <-- ESSENCIAL PARA O FLUXO DE LOGIN FALHO
+            }
+
+            // Para outros 401s (ex: /user/me em uma sessão expirada, /reports, etc.)
+            // tentar o refresh token:
             if (isRefreshing) {
-                // Se já estiver atualizando, adiciona a requisição à fila
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 })
-                .then(() => axiosConfig(originalRequest)) // Tenta a requisição original novamente
+                .then(() => axiosConfig(originalRequest))
                 .catch(err => Promise.reject(err));
             }
 
-            originalRequest._retry = true; // Marca para evitar loop infinito de retries
+            originalRequest._retry = true;
             isRefreshing = true;
 
             try {
-                console.log("Attempting to refresh token...");
-                await axiosConfig.post("/auth/refresh"); // Tenta renovar o token
-                console.log("Token refreshed successfully.");
-                processQueue(null); // Processa a fila de requisições pendentes com sucesso
-                return axiosConfig(originalRequest); // Reenvia a requisição original
+                console.log("Interceptor: Attempting to refresh token for", originalRequest.url);
+                await axiosConfig.post("/auth/refresh"); 
+                console.log("Interceptor: Token refreshed successfully.");
+                processQueue(null); 
+                // isRefreshing será false no finally, mas para evitar que a primeira request da fila
+                // pense que ainda está refreshing, resetamos aqui antes de processar a originalRequest.
+                // No entanto, o processQueue deve ser chamado antes do isRefreshing = false para que as
+                // requests na fila possam ser refeitas. O finally é o lugar correto para isRefreshing = false.
+                return axiosConfig(originalRequest);
             } catch (refreshError) {
-                console.error("Token refresh failed:", refreshError);
-                processQueue(refreshError, null); // Processa a fila com erro
-
-                // Dispara o evento para o AuthContext limpar o estado local
-                console.log("Dispatching FORCE_LOGOUT event.");
+                console.error("Interceptor: Token refresh failed for", originalRequest.url, ". Emitting FORCE_LOGOUT.", refreshError);
+                processQueue(refreshError, null);
                 eventEmitter.dispatch(AUTH_EVENTS.FORCE_LOGOUT);
-
-                // Redireciona para a página de login
-                // Verifique se já não está na página de login para evitar loop de redirect
-                if (window.location.pathname !== "/") {
-                    window.location.href = "/";
-                }
                 
-                return Promise.reject(refreshError); // Rejeita a promessa da requisição original
+                // IMPORTANTE: REMOVIDO o window.location.href = "/"; מכאן.
+                // O AuthContext (via FORCE_LOGOUT) e o ProtectedRoute devem lidar com o redirecionamento.
+                
+                return Promise.reject(refreshError); // Rejeita o erro para a chamada original (ex: para checkAuthStatus)
             } finally {
                 isRefreshing = false;
             }
         }
-        return Promise.reject(error);
+        return Promise.reject(error); // Rejeita outros erros não tratados acima (ex: 500, 403, etc.)
     }
 );
 

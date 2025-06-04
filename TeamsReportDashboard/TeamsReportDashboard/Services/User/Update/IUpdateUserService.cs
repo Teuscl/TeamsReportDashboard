@@ -1,4 +1,5 @@
-﻿using TeamsReportDashboard.Models.Dto;
+﻿using TeamsReportDashboard.Backend.Models.UserDto;
+using TeamsReportDashboard.Models.Dto;
 
 namespace TeamsReportDashboard.Backend.Services.User.Update;
 

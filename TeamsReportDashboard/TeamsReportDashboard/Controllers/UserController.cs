@@ -1,7 +1,9 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Backend.Services.User.ChangeMyPassword;
+using TeamsReportDashboard.Backend.Services.User.ResetPassword;
 using TeamsReportDashboard.Backend.Services.User.Update;
 using TeamsReportDashboard.Entities;
 using TeamsReportDashboard.Models.Dto;
@@ -62,7 +64,7 @@ public class UserController : Controller
     [HttpPut("change-my-password")] // A rota da action permanece a mesma
     public async Task<IActionResult> ChangeMyPassword(
         [FromServices] IChangeMyPasswordService service,
-        [FromBody] ChangeMyPasswordDto changeMyPasswordDto) // 👈 O parâmetro 'int id' foi removido daqui
+        [FromBody] ChangeMyPasswordDto changeMyPasswordDto) 
     {
         // Obter o ID do usuário logado a partir das claims do token JWT
         var userIdString = User.FindFirst("id")?.Value; 
@@ -77,6 +79,19 @@ public class UserController : Controller
 
         // Agora use o userId obtido do token para chamar o serviço
         await service.Execute(userId, changeMyPasswordDto);
+        return NoContent();
+    }
+    
+    
+    [HttpPut("change-password")] 
+    //[Authorize(Roles = "Admin, Master")] // Você precisará garantir que esta rota seja protegida para Masters
+    public async Task<IActionResult> ChangePassword(
+        [FromServices] IResetPasswordService service, 
+        [FromBody] ResetPasswordDto resetPasswordDto,   
+        int id) 
+    {
+        Console.WriteLine(id);
+        await service.Execute(id, resetPasswordDto); // O serviço lida com a lógica
         return NoContent();
     }
 

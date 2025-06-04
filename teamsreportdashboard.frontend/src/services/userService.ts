@@ -23,6 +23,11 @@ export interface UpdateUserPayload {
   isActive: boolean;
 }
 
+export interface AdminChangePasswordPayload {
+  newPassword: string;
+  newPasswordConfirm: string;
+}
+
 export const getUsers = async (): Promise<User[]> => {
   const response = await AxiosConfig.get('/user');
   return response.data;
@@ -60,11 +65,14 @@ export const updateUser = async (payload: UpdateUserPayload): Promise<User> => {
 export const deleteUser = async (id: number): Promise<void> => {
   await AxiosConfig.delete('/user', {
     params: { id },
-  });
-
-  
+  });  
 };
-
 export const changeMyPassword = async (payload: ChangeMyPasswordPayload): Promise<void> => {
   await axiosConfig.put(`/user/change-my-password`, payload);
+};
+
+export const adminChangeUserPassword = async (userId: number, payload: AdminChangePasswordPayload): Promise<void> => {
+  // Assumindo que o backend espera o ID como query param para o endpoint "change-password"
+  // Se o controller for UserController (rota /user), a URL será /user/change-password
+  await axiosConfig.put(`/user/change-password?id=${userId}`, payload);
 };

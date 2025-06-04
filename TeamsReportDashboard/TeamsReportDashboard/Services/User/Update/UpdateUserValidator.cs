@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Entities.Enums;
 using TeamsReportDashboard.Models.Dto;
 

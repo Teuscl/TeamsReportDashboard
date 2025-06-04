@@ -98,10 +98,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(false);
       return success;
     } catch (error) {
-      console.error('Login failed:', error);
-      clearAuthState();
-      setIsLoading(false);
-      return false;
+        // (F) Este CATCH é para erros vindos de (B) ou de (C) se checkAuthStatus lançar erro não tratado internamente
+        console.error('Login failed in AuthContext:', error);
+        clearAuthState(); 
+        setIsLoading(false); // (G) isLoading do AuthContext
+        return false; // (H) Indica falha no login
     }
   };
 

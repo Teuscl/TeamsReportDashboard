@@ -19,6 +19,9 @@ import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { User } from '@/types/User'; // 👈 Sua interface User global de @/types/User
 import { RoleEnum, getRoleLabel } from '@/utils/role'; // 👈 Seus utilitários de Role
+import { ArrowUpDown } from "lucide-react"
+import AdminResetPasswordModal from '@/components/AdminResetPasswordModal'; // 👈 Importe o novo modal
+
 
 const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]); // Usando a interface User global
@@ -27,6 +30,9 @@ const UsersPage: React.FC = () => {
   const [modalMode, setModalMode] = useState<'create' | 'edit' | null>(null);
   const [userForModal, setUserForModal] = useState<User | null>(null); // Usuário para edição ou nulo para criação
   const [dataLoading, setDataLoading] = useState(true);
+
+  const [userToResetPassword, setUserToResetPassword] = useState<User | null>(null); // 👈 Estado para o usuário do reset
+  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);    // 👈 Estado para visibilidade do modal de reset
 
   const fetchUsers = useCallback(async () => {
     setDataLoading(true);
@@ -80,6 +86,22 @@ const UsersPage: React.FC = () => {
     setUserForModal(userToEdit);
     setModalMode('edit');
   };
+   const handleOpenResetPasswordModal = (userToReset: User) => { // 👈 Nova função
+    setUserToResetPassword(userToReset);
+    setIsResetPasswordModalOpen(true);
+  };
+
+  const closeResetPasswordModal = () => { // 👈 Nova função
+    setIsResetPasswordModalOpen(false);
+    setUserToResetPassword(null);
+  };
+
+  const handlePasswordResetSuccess = () => { // 👈 Nova função
+    // A senha foi alterada, não há necessidade de recarregar a lista de usuários por isso.
+    // Apenas fechamos o modal. O toast de sucesso já é mostrado dentro do modal.
+    closeResetPasswordModal();
+  };
+
 
   const closeModal = () => {
     setModalMode(null);
@@ -100,7 +122,20 @@ const UsersPage: React.FC = () => {
       enableSorting: false,
       enableHiding: false,
     },
-    { accessorKey: 'name', header: 'Nome' },
+    { accessorKey: 'name', header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="px"
+        >
+          Nome
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    }, 
+
+    },
     { accessorKey: 'email', header: 'Email' },
     {
       accessorKey: 'role',
@@ -135,6 +170,10 @@ const UsersPage: React.FC = () => {
                 className={currentUser?.id === userRowData.id ? "text-muted-foreground cursor-not-allowed" : "cursor-pointer"}
               >
                 Excluir
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleOpenResetPasswordModal(userRowData)}> 
+                Resetar Senha
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -182,6 +221,13 @@ const UsersPage: React.FC = () => {
           onSaveSuccess={handleSaveSuccess}
         />
       )}
+
+      <AdminResetPasswordModal
+          userToReset={userToResetPassword}
+          isOpen={isResetPasswordModalOpen}
+          onClose={closeResetPasswordModal}
+          onSuccess={handlePasswordResetSuccess}
+      />
     </div>
   );
 };

@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button"
 import {
   ColumnDef,
   flexRender,
+  SortingState,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 
@@ -27,7 +29,8 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
 
-  const [rowSelection, setRowSelection] = React.useState({})
+   const [sorting, setSorting] = React.useState<SortingState>([])
+   const [rowSelection, setRowSelection] = React.useState({})
 
    const table = useReactTable({
     data,
@@ -35,8 +38,11 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {      
       rowSelection,
+      sorting,
     },
   })
 

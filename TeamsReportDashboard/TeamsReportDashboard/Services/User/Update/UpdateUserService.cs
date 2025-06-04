@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Backend.Services.User.Update;
 using TeamsReportDashboard.Data;
 using TeamsReportDashboard.Exceptions;

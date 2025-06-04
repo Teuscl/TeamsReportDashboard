@@ -24,12 +24,12 @@ public class AuthService : IAuthService
     {
         var user = await _unitOfWork.UserRepository.GetByEmailAsync(loginRequest.Email);
         if(user == null)
-            throw new KeyNotFoundException("User not found");
+            throw new KeyNotFoundException("Invalid credentials");
         
         var result = _passwordService.VerifyPassword(loginRequest.Password, user.Password);
         if (!result)
         {
-            throw new UnauthorizedAccessException("Invalid password");
+            throw new UnauthorizedAccessException("Invalid credentials");
         }
         var token = _tokenService.GenerateToken(user);
         var refreshToken = _tokenService.GenerateRefreshToken();
