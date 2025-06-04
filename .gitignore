@@ -1,0 +1,24 @@
+# .NET Core build output
+[Bb]in/
+[Oo]bj/
+
+# Rider specific
+.idea/
+*.sln.iml
+
+# Visual Studio specific
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Outros comuns
+*.DS_Store
+*.log
+*.پژ
+*.pyc
+*.swp
+
+# Cache files
+*.cache
