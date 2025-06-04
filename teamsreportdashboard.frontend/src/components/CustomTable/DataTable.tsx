@@ -68,7 +68,7 @@ export function DataTable<TData, TValue>({
                     </TableRow>
                 ))}
                 </TableHeader>
-                <TableBody className="flex-1 overflow-y-auto text">
+                <TableBody>
                 {table.getRowModel().rows?.length ? (
                     table.getRowModel().rows.map((row) => (
                     <TableRow 
@@ -114,8 +114,6 @@ export function DataTable<TData, TValue>({
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-    </div>
-    
-  )
-  
+    </div>    
+  )  
 }
