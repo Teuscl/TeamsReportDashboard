@@ -208,8 +208,8 @@ const UsersPage: React.FC = () => {
       <DataTable
         columns={columns}
         data={users}
-        // Passa o estado de loading para a tabela se já houver dados mas uma atualização está em curso
-        // (dataLoading será true durante fetchUsers)
+        filterColumnId="email"
+        filterPlaceholder="Filtrar por email do usuário..."        
       />
       {/* Renderiza o UserFormModal se modalMode estiver definido */}
       {modalMode && (

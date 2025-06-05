@@ -85,14 +85,9 @@ const ReportsPage: React.FC = () => {
   };
 
   const columns: ColumnDef<Report>[] = [
-    // Removi a coluna de checkbox de seleção para simplificar, adicione de volta se precisar.
-    { 
-      accessorKey: 'id', 
-      header: 'ID',
-      cell: info => <div className="font-medium">{info.getValue() as number}</div>
-    },
+    // Removi a coluna de checkbox de seleção para simplificar, adicione de volta se precisar.    
     { accessorKey: 'requesterName', header: 'Solicitante' },
-    { accessorKey: 'requesterEmail', header: 'Email Solicitante' },
+    { accessorKey: 'requesterEmail', header: 'Email Solicitante'},
     { 
       accessorKey: 'technicianName', 
       header: 'Técnico', 
@@ -185,7 +180,9 @@ const ReportsPage: React.FC = () => {
       <DataTable
         columns={columns}
         data={reports}
-        // Nenhuma prop isLoading aqui, pois seu DataTable customizado não a tem
+        filterColumnId="requesterName" // 👈 Passe o ID da coluna para filtrar
+        filterPlaceholder="Filtrar por nome do solicitante..." //👈 Passe o placeholder desejado
+        
       />
       {modalMode && (
         <ReportFormModal

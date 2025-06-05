@@ -10,6 +10,7 @@ using TeamsReportDashboard.Backend.Services.Report.Create;
 using TeamsReportDashboard.Backend.Services.Report.Read;
 using TeamsReportDashboard.Backend.Services.Report.Update;
 using TeamsReportDashboard.Backend.Services.User.ChangeMyPassword;
+using TeamsReportDashboard.Backend.Services.User.ResetPassword;
 using TeamsReportDashboard.Backend.Services.User.Update;
 using TeamsReportDashboard.Data;
 using TeamsReportDashboard.Filters;
@@ -88,6 +89,9 @@ builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();  /
 builder.Services.AddScoped<IValidator<CreateReportDto>, CreateReportValidator>();  // Validador do CreateUserDto
 builder.Services.AddScoped<IValidator<UpdateReportDto>, UpdateReportValidator>();  // Validador do UpdateUserDto
 builder.Services.AddScoped<IValidator<ChangeMyPasswordDto>, ChangeMyPasswordValidator>();  // Validador do UpdateUserDto
+builder.Services.AddScoped<IValidator<CreateReportDto>, CreateReportValidator>();
+builder.Services.AddScoped<IValidator<UpdateReportDto>, UpdateReportValidator>();
+builder.Services.AddScoped<IValidator<ResetPasswordDto>, ResetPasswordValidator>();
 builder.Services.AddScoped<IUnitOfWork,  UnitOfWork>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -101,6 +105,7 @@ builder.Services.AddScoped<IDeleteUserService, DeleteUserService>();
 builder.Services.AddScoped<IGetUsersService, GetUsersService>();
 builder.Services.AddScoped<IUpdateUserService, UpdateUserService>();
 builder.Services.AddScoped<IChangeMyPasswordService, ChangeMyPasswordService>();
+builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
 
 builder.Services.AddScoped<ICreateReportService, CreateReportService>();
 builder.Services.AddScoped<IUpdateReportService, UpdateReportService>();

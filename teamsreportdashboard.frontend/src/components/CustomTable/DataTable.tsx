@@ -1,13 +1,17 @@
 import { Button } from "@/components/ui/button"
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   SortingState,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+
+import { Input } from "@/components/ui/input"
 
 import {
   Table,
@@ -21,16 +25,23 @@ import React from "react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  filterColumnId: string 
+  filterPlaceholder?: string 
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filterColumnId, 
+  filterPlaceholder, 
 }: DataTableProps<TData, TValue>) {
 
    const [sorting, setSorting] = React.useState<SortingState>([])
    const [rowSelection, setRowSelection] = React.useState({})
+   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
 
    const table = useReactTable({
     data,
@@ -40,14 +51,28 @@ export function DataTable<TData, TValue>({
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     state: {      
       rowSelection,
       sorting,
+      columnFilters,
     },
   })
 
  return (
     <div className="w-full">
+
+      <div className="flex items-center py-4">
+            <Input
+            placeholder={filterPlaceholder ?? `Filtrar por ${filterColumnId}...`} // Usa o placeholder fornecido ou um padrão
+            value={(table.getColumn(filterColumnId)?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+                table.getColumn(filterColumnId)?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+            />
+       </div>        
         <div className="rounded-md sm:border">
             <Table >
                 <TableHeader>
