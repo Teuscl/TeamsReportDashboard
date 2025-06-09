@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using TeamsReportDashboard.Backend.Models.ReportDto;
-using TeamsReportDashboard.Models.Dto;
+
+namespace TeamsReportDashboard.Backend.Services.Report.Create;
 
 public class CreateReportValidator : AbstractValidator<CreateReportDto>
 {
@@ -31,6 +32,10 @@ public class CreateReportValidator : AbstractValidator<CreateReportDto>
         RuleFor(x => x.ReportedProblem)
             .NotEmpty().WithMessage("O problema relatado é obrigatório.")
             .MaximumLength(255).WithMessage("O problema relatado deve ter no máximo 255 caracteres.");
+        
+        RuleFor(x => x.Category)
+            .NotEmpty().WithMessage("A categoria do problema relatado é obrigatório.")
+            .MaximumLength(255).WithMessage("A categoria do problema relatado deve ter no máximo 255 caracteres.");
 
         RuleFor(x => x.FirstResponseTime)
             .NotEmpty().WithMessage("O tempo da primeira resposta é obrigatório.")

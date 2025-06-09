@@ -12,4 +12,7 @@ public class User : EntityBase
     public bool IsActive { get; set; } = true;
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiryTime { get; set; }
+    
+    public string? PasswordResetToken { get; set; }
+    public DateTime? PasswordResetTokenExpiryTime { get; set; }
 }

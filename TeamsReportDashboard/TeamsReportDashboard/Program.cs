@@ -10,6 +10,8 @@ using TeamsReportDashboard.Backend.Services.Report.Create;
 using TeamsReportDashboard.Backend.Services.Report.Read;
 using TeamsReportDashboard.Backend.Services.Report.Update;
 using TeamsReportDashboard.Backend.Services.User.ChangeMyPassword;
+using TeamsReportDashboard.Backend.Services.User.ForgotPassword;
+using TeamsReportDashboard.Backend.Services.User.ResetForgottenPassword;
 using TeamsReportDashboard.Backend.Services.User.ResetPassword;
 using TeamsReportDashboard.Backend.Services.User.Update;
 using TeamsReportDashboard.Data;
@@ -92,6 +94,7 @@ builder.Services.AddScoped<IValidator<ChangeMyPasswordDto>, ChangeMyPasswordVali
 builder.Services.AddScoped<IValidator<CreateReportDto>, CreateReportValidator>();
 builder.Services.AddScoped<IValidator<UpdateReportDto>, UpdateReportValidator>();
 builder.Services.AddScoped<IValidator<ResetPasswordDto>, ResetPasswordValidator>();
+builder.Services.AddScoped<IValidator<ForgotPasswordDto>, ForgotPasswordValidator>();
 builder.Services.AddScoped<IUnitOfWork,  UnitOfWork>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -106,6 +109,9 @@ builder.Services.AddScoped<IGetUsersService, GetUsersService>();
 builder.Services.AddScoped<IUpdateUserService, UpdateUserService>();
 builder.Services.AddScoped<IChangeMyPasswordService, ChangeMyPasswordService>();
 builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
+builder.Services.AddScoped<IForgotPasswordService, ForgotPasswordService>();
+builder.Services.AddScoped<IResetForgottenPasswordService, ResetForgottenPasswordService>();
+
 
 builder.Services.AddScoped<ICreateReportService, CreateReportService>();
 builder.Services.AddScoped<IUpdateReportService, UpdateReportService>();

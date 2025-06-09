@@ -28,6 +28,7 @@ public class CreateReportService : ICreateReportService
            RequesterEmail = createReportDto.RequesterEmail,
            RequesterName = createReportDto.RequesterName,
            ReportedProblem = createReportDto.ReportedProblem,
+           Category = createReportDto.Category,
            TechnicianName = createReportDto.TechnicianName,
            AverageHandlingTime = createReportDto.AverageHandlingTime,
            CreatedAt = DateTime.Now,

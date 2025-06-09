@@ -11,4 +11,6 @@ public interface IUserRepository
     Task<User?> GetByEmailAsync(string email);
     Task<IEnumerable<User>> GetAllAsync();
     Task<User?> GetByRefreshTokenAsync(string refreshToken);
+    Task<User?> GetByPasswordResetToken(string passwordResetToken);
+    
 }

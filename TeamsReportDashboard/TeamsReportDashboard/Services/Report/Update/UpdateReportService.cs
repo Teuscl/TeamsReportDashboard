@@ -60,9 +60,5 @@ public class UpdateReportService : IUpdateReportService // Certifique-se que est
         return report; // Retorna o relatório se tudo estiver OK
     }
 
-
-    public Task Execute(UpdateReportDto updateReportDto)
-    {
-        throw new NotImplementedException();
-    }
+    
 }

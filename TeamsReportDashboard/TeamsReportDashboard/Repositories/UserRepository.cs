@@ -60,4 +60,7 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<User>> GetAllAsync() => await _context.Users.ToListAsync();
     public async Task<User?> GetByRefreshTokenAsync(string refreshToken) => await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
     
+    public async Task<User?> GetByPasswordResetToken(string resetToken) => await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == resetToken);
+
+    
 }

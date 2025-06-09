@@ -111,15 +111,15 @@ const ReportsPage: React.FC = () => {
       // Permite quebra de linha e limita a largura para melhor visualização
       cell: ({row}) => (
         <div 
-          className="max-w-xs whitespace-normal break-words" 
+          className="max-w-xs whitespace-normal break-words text" 
           title={row.original.reportedProblem}
         >
           {row.original.reportedProblem}
         </div>
       )
     },
-    { accessorKey: 'firstResponseTime', header: 'Tpo. 1ª Resp.' }, // Ex: "00:15:30"
-    { accessorKey: 'averageHandlingTime', header: 'Tpo. Médio Atend.' }, // Ex: "01:00:00"
+    { accessorKey: 'category', header: 'Categoria' }, // Ex: "Hardware", "Software", etc.
+    { accessorKey: 'firstResponseTime', header: 'Tpo. 1ª Resp.' }, // Ex: "00:15:30"    
     {
       id: "actions",
       header: () => <div className="text-right">Ações</div>,

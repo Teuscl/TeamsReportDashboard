@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
+using TeamsReportDashboard.Backend.Models.UserDto;
+using TeamsReportDashboard.Backend.Services.User.ForgotPassword;
+using TeamsReportDashboard.Backend.Services.User.ResetForgottenPassword;
+using TeamsReportDashboard.Backend.Services.User.ResetPassword;
 using TeamsReportDashboard.Interfaces;
 using LoginRequest = TeamsReportDashboard.Models.Auth.LoginRequest;
 
@@ -132,5 +138,25 @@ public class AuthController : ControllerBase
             Expires = DateTimeOffset.UtcNow.AddDays(-1) // Data de expiração no passado
         });
         return Ok(new { message = "Logged out successfully" });
+    }
+
+    [HttpPost("forgot-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ForgotPassword(
+        [FromServices] IForgotPasswordService service,
+        [FromBody] ForgotPasswordDto forgotPasswordDto)
+    {
+        await service.Execute(forgotPasswordDto);
+        return Ok(new { Message = "Se um usuário com este email existir em nosso sistema, um link para redefinição de senha foi enviado." });
+    }
+
+    [HttpPost("reset-password-forgotten")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResetPasswordForgotten(
+        [FromServices] IResetForgottenPasswordService service,
+        [FromBody] ResetForgottenPasswordDto dto )
+    {
+        await service.Execute(dto);
+        return Ok(new { Message = "Sua senha foi redifina com sucesso" });
     }
 }

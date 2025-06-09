@@ -8,6 +8,7 @@ export interface Report {
   technicianName?: string | null; // Pode ser nulo
   requestDate: string; // Manter como string ISO 8601 para transferência, converter para Date na UI se necessário
   reportedProblem: string;
+  category: string; // Opcional, pode ser usado para categorizar problemas
   firstResponseTime: string; // Formato "HH:MM:SS" ou string ISO 8601 Duration "PTnHnM S"
   averageHandlingTime: string; // Mesmo formato que firstResponseTime
   createdAt?: string; // Adicionado de EntityBase (opcional no frontend se não usado)
@@ -21,6 +22,7 @@ export interface CreateReportPayload {
   technicianName?: string | null;
   requestDate: string; // Enviar como string ISO 8601
   reportedProblem: string;
+  category: string;
   firstResponseTime: string; // Enviar como "HH:MM:SS"
   averageHandlingTime: string; // Enviar como "HH:MM:SS"
 }
@@ -33,6 +35,7 @@ export interface UpdateReportPayload {
   technicianName?: string | null;
   requestDate?: string;
   reportedProblem?: string;
+  category?: string;
   firstResponseTime?: string;
   averageHandlingTime?: string;
 }

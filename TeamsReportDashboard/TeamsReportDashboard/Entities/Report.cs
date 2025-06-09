@@ -10,6 +10,8 @@ public class Report : EntityBase
     [MaxLength(50)] public string? TechnicianName { get; set; } = string.Empty;
     public DateTime RequestDate { get; set; }
     [Required] [MaxLength(255)] public string ReportedProblem { get; set; } = string.Empty;
+    [Required] [MaxLength(255)] public string Category { get; set; } = string.Empty;
+    
 
     //Indicates the time that the IT Support took to respond the first message
     public TimeSpan FirstResponseTime { get; set; }

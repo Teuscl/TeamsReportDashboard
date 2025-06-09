@@ -25,6 +25,10 @@ public class UpdateReportValidator : AbstractValidator<UpdateReportDto>
             .NotEmpty().WithMessage("O nome do técnico não pode ser vazio se um valor for fornecido.")
             .MaximumLength(50).WithMessage("O nome do técnico deve ter no máximo 50 caracteres.")
             .When(x => x.TechnicianName != null);
+        RuleFor(x => x.Category)
+            .NotEmpty().WithMessage("O nome do técnico não pode ser vazio se um valor for fornecido.")
+            .MaximumLength(50).WithMessage("O nome do técnico deve ter no máximo 50 caracteres.")
+            .When(x => x.Category != null);
 
         // Para RequestDate: se fornecida, não pode ser no futuro.
         // A validação de "NotEmpty" implícita já é coberta por DateTime? tendo um valor.

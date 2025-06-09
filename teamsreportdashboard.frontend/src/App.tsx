@@ -13,6 +13,8 @@ import { SidebarProvider } from "./components/ui/sidebar"; // Se usado com Layou
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./Routes/ProtectedRoute";
 import PasswordChangedSuccessPage from "./pages/PasswordChangedSuccessPage/PasswordChangedSuccessPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 function App() {
   return (
     <AuthProvider>
@@ -20,6 +22,8 @@ function App() {
         <Routes>
           {/* Rota Pública */}
           <Route path="/" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/auth/password-changed-successfully" element={<PasswordChangedSuccessPage />} /> 
 
           {/* Rotas Protegidas Genéricas (requerem apenas login) */}
