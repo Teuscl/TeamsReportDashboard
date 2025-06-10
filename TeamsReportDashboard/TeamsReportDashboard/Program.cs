@@ -4,8 +4,10 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using TeamsReportDashboard.Backend.Models.Configuration;
 using TeamsReportDashboard.Backend.Models.ReportDto;
 using TeamsReportDashboard.Backend.Models.UserDto;
+using TeamsReportDashboard.Backend.Services;
 using TeamsReportDashboard.Backend.Services.Report.Create;
 using TeamsReportDashboard.Backend.Services.Report.Read;
 using TeamsReportDashboard.Backend.Services.Report.Update;
@@ -32,6 +34,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 builder.Services.AddControllers(options =>
@@ -96,6 +99,7 @@ builder.Services.AddScoped<IValidator<UpdateReportDto>, UpdateReportValidator>()
 builder.Services.AddScoped<IValidator<ResetPasswordDto>, ResetPasswordValidator>();
 builder.Services.AddScoped<IValidator<ForgotPasswordDto>, ForgotPasswordValidator>();
 builder.Services.AddScoped<IUnitOfWork,  UnitOfWork>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
