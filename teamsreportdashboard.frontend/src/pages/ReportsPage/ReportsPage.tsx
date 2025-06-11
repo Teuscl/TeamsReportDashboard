@@ -1,6 +1,6 @@
 // src/pages/ReportsPage/ReportsPage.tsx (NOVO NOME DE ARQUIVO E COMPONENTE)
 import React, { useEffect, useState, useCallback } from 'react';
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, SortingState } from '@tanstack/react-table';
 import { DataTable } from '../../components/CustomTable/DataTable'; // Seu DataTable customizado
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -64,7 +64,13 @@ const ReportsPage: React.FC = () => {
       toast.error(`Erro ao excluir relatório: ${message}`);
     }
   };
-
+  
+  const initialSortConfig: SortingState = [
+    {
+      id: 'requestDate', // A chave da coluna que você quer ordenar
+      desc: true,        // 'true' para ordenar da mais recente para a mais antiga
+    }
+  ];
   const handleOpenCreateModal = () => {
     setReportForModal(null);
     setModalMode('create');
@@ -182,7 +188,7 @@ const ReportsPage: React.FC = () => {
         data={reports}
         filterColumnId="requesterName" // 👈 Passe o ID da coluna para filtrar
         filterPlaceholder="Filtrar por nome do solicitante..." //👈 Passe o placeholder desejado
-        
+        initialSorting={initialSortConfig}
       />
       {modalMode && (
         <ReportFormModal

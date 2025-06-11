@@ -1,0 +1,2483 @@
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Alberto Raymundo",
+      "email_solicitante": "albertoraymundo@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "16:49:39",
+      "tempo_primeira_resposta": "00:01:44",
+      "tempo_total_atendimento": "00:36:29",
+      "problema_relatado": "Notebook não está imprimindo e apresenta erro ao tentar imprimir.",
+      "categoria": "Impressão"
+    },
+    {
+      "quem_solicitou_atendimento": "Alberto Raymundo",
+      "email_solicitante": "albertoraymundo@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-19",
+      "hora_primeira_mensagem": "17:01:17",
+      "tempo_primeira_resposta": "00:00:13",
+      "tempo_total_atendimento": "00:27:53",
+      "problema_relatado": "Impressão demora para sair e apresenta erro ao imprimir.",
+      "categoria": "Impressão"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Alessandra Natalia Taffarello Papik",
+      "email_solicitante": "alessandrapapik@pecege.com",
+      "quem_respondeu": "Barbi",
+      "data_solicitacao": "2025-02-25",
+      "hora_primeira_mensagem": "19:04:34",
+      "tempo_primeira_resposta": "00:00:46",
+      "tempo_total_atendimento": "00:23:28",
+      "problema_relatado": "Solicitação para configurar a impressora Konica na máquina.",
+      "categoria": "Configuração de Impressora"
+    },
+    {
+      "quem_solicitou_atendimento": "Alessandra Natalia Taffarello Papik",
+      "email_solicitante": "alessandrapapik@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "19:14:24",
+      "tempo_primeira_resposta": "00:00:00",
+      "tempo_total_atendimento": "00:19:58",
+      "problema_relatado": "Problemas para imprimir na impressora Konica.",
+      "categoria": "Problemas de Impressão"
+    },
+    {
+      "quem_solicitou_atendimento": "Alessandra Natalia Taffarello Papik",
+      "email_solicitante": "alessandrapapik@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "14:35:57",
+      "tempo_primeira_resposta": "00:01:05",
+      "tempo_total_atendimento": "00:06:27",
+      "problema_relatado": "Não consegue imprimir, precisa de ajuda com a impressora.",
+      "categoria": "Problemas de Impressão"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Alex Nunes de Almeida",
+  "email_solicitante": "alexalmeida@pecegeprojetos.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-18",
+  "hora_primeira_mensagem": "16:45:37",
+  "tempo_primeira_resposta": "00:00:43",
+  "tempo_total_atendimento": "00:32:34",
+  "problema_relatado": "Alex perdeu o arquivo bat com a serial do Windows 11 após resetar o pen drive e pediu para que enviassem novamente.",
+  "categoria": "Recuperação de Serial"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Alex de Almeida",
+      "email_solicitante": "alexdealmeida@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-13",
+      "hora_primeira_mensagem": "12:41:56",
+      "tempo_primeira_resposta": "00:01:05",
+      "tempo_total_atendimento": "00:19:36",
+      "problema_relatado": "A internet está falhando e Alex não consegue conectar ao Wi-Fi.",
+      "categoria": "Conexão de Internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Alex de Almeida",
+      "email_solicitante": "alexdealmeida@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-18",
+      "hora_primeira_mensagem": "12:28:03",
+      "tempo_primeira_resposta": "00:00:17",
+      "tempo_total_atendimento": "00:27:46",
+      "problema_relatado": "Problemas na conexão com a impressora Konica.",
+      "categoria": "Impressão"
+    }
+  ]
+}
+{
+  "atendimentos": []
+}
+{
+  "quem_solicitou_atendimento": "Aline Bigaton",
+  "email_solicitante": "alinebigaton@pecege.com",
+  "quem_respondeu": "Jofre",
+  "data_solicitacao": "2025-02-26",
+  "hora_primeira_mensagem": "17:15:44",
+  "tempo_primeira_resposta": "00:00:04",
+  "tempo_total_atendimento": "00:00:36",
+  "problema_relatado": "A internet está ruim, tanto pelo wi-fi quanto pelo cabo.",
+  "categoria": "Conexão de internet"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Amanda Dechen",
+      "email_solicitante": "amandadechen@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-14",
+      "hora_primeira_mensagem": "15:52:51",
+      "tempo_primeira_resposta": "00:01:07",
+      "tempo_total_atendimento": "00:05:37",
+      "problema_relatado": "Amanda está recebendo apenas um resumo das reuniões pelo 'read ia' e quer saber como ter acesso ao conteúdo completo.",
+      "categoria": "Acesso a informações"
+    },
+    {
+      "quem_solicitou_atendimento": "Amanda Dechen",
+      "email_solicitante": "amandadechen@pecege.com",
+      "quem_respondeu": "Barbi, Jofre",
+      "data_solicitacao": "2025-03-18",
+      "hora_primeira_mensagem": "18:36:46",
+      "tempo_primeira_resposta": "00:06:57",
+      "tempo_total_atendimento": "00:32:30",
+      "problema_relatado": "Amanda acredita que está com um problema no e-mail, já tentou desconectar e conectar novamente, mas não resolveu.",
+      "categoria": "Problema de e-mail"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Ana Flavia Defavari",
+  "email_solicitante": "anadefavari@pecege.com",
+  "quem_respondeu": "Barbi",
+  "data_solicitacao": "2025-03-10",
+  "hora_primeira_mensagem": "16:07:31",
+  "tempo_primeira_resposta": "00:00:46",
+  "tempo_total_atendimento": "00:03:03",
+  "problema_relatado": "Impressora não está enviando arquivos para impressão.",
+  "categoria": "Impressora"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Ana Paula Mendes Vidal Negreiros",
+      "email_solicitante": "ananegreiros@pecege.com",
+      "quem_respondeu": "Jofre",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "13:53:28",
+      "tempo_primeira_resposta": "0:11",
+      "tempo_total_atendimento": "0:43",
+      "problema_relatado": "O computador não conecta à Internet ao conectar o cabo de rede.",
+      "categoria": "Conexão de Internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Ana Paula Mendes Vidal Negreiros",
+      "email_solicitante": "ananegreiros@pecege.com",
+      "quem_respondeu": "Jofre e Barbi",
+      "data_solicitacao": "2025-03-13",
+      "hora_primeira_mensagem": "17:29:05",
+      "tempo_primeira_resposta": "0:27",
+      "tempo_total_atendimento": "0:57",
+      "problema_relatado": "A impressora não está imprimindo.",
+      "categoria": "Impressão"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Ana Rízia Caldeira dos Santos",
+  "email_solicitante": "anarizia@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-11",
+  "hora_primeira_mensagem": "12:35:11",
+  "tempo_primeira_resposta": "00:02:21",
+  "tempo_total_atendimento": "00:10:14",
+  "problema_relatado": "Problemas para imprimir na impressora do 3º andar, que está dando erro.",
+  "categoria": "Impressão"
+}
+{
+  "quem_solicitou_atendimento": "Ana Domingos Rodrigues",
+  "email_solicitante": "anarodrigues@pecege.com",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-03-11",
+  "hora_primeira_mensagem": "17:17:30",
+  "tempo_primeira_resposta": "00:00:04",
+  "tempo_total_atendimento": "00:24:22",
+  "problema_relatado": "Problema de desconexão da internet no PC.",
+  "categoria": "Conexão de Internet"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Angélica Martins Jensen",
+      "email_solicitante": "angelicajensen@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-12",
+      "hora_primeira_mensagem": "15:13:05",
+      "tempo_primeira_resposta": "00:00:00",
+      "tempo_total_atendimento": "00:06:30",
+      "problema_relatado": "Angélica pediu para ser inserida no SHARE POINT de EVENTOS.",
+      "categoria": "Acesso ao SHARE POINT"
+    },
+    {
+      "quem_solicitou_atendimento": "Angélica Martins Jensen",
+      "email_solicitante": "angelicajensen@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-21",
+      "hora_primeira_mensagem": "14:47:34",
+      "tempo_primeira_resposta": "00:00:00",
+      "tempo_total_atendimento": "00:31:00",
+      "problema_relatado": "Angélica relatou que o teclado do Outlook está desconfigurado e que o HUB novo não conecta à Ethernet.",
+      "categoria": "Problemas de hardware e software"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Angelina Bolzam",
+      "email_solicitante": "angelinabolzam@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-02-28",
+      "hora_primeira_mensagem": "11:22:30",
+      "tempo_primeira_resposta": "00:01:17",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Ajuda para o aluno Gabriel acessar o Wi-Fi na sala 15.",
+      "categoria": "Acesso Wi-Fi"
+    },
+    {
+      "quem_solicitou_atendimento": "Angelina Bolzam",
+      "email_solicitante": "angelinabolzam@pecege.com",
+      "quem_respondeu": "Jofre",
+      "data_solicitacao": "2025-02-28",
+      "hora_primeira_mensagem": "13:55:27",
+      "tempo_primeira_resposta": "00:00:06",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Problemas no Teams do computador, não consegue receber mensagens.",
+      "categoria": "Problema no Teams"
+    },
+    {
+      "quem_solicitou_atendimento": "Angelina Bolzam",
+      "email_solicitante": "angelinabolzam@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "11:34:45",
+      "tempo_primeira_resposta": "00:17:27",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "A Professora Lilian está com problemas para projetar conteúdo na sala 15.",
+      "categoria": "Problema de projeção"
+    },
+    {
+      "quem_solicitou_atendimento": "Angelina Bolzam",
+      "email_solicitante": "angelinabolzam@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-13",
+      "hora_primeira_mensagem": "19:13:20",
+      "tempo_primeira_resposta": "00:08:38",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Solicitação da senha do Wi-Fi da rede Pecege.",
+      "categoria": "Acesso Wi-Fi"
+    },
+    {
+      "quem_solicitou_atendimento": "Angelina Bolzam",
+      "email_solicitante": "angelinabolzam@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-21",
+      "hora_primeira_mensagem": "12:18:02",
+      "tempo_primeira_resposta": "00:00:59",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Rede Pecege Wi-Fi não está funcionando.",
+      "categoria": "Problema de internet"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Angelo Ricardo Batista",
+  "email_solicitante": "angelobatista@pecege.com",
+  "quem_respondeu": "Clara",
+  "data_solicitacao": "2025-02-25",
+  "hora_primeira_mensagem": "11:47:54",
+  "tempo_primeira_resposta": "00:00:48",
+  "tempo_total_atendimento": "00:36:29",
+  "problema_relatado": "O OneDrive não está sincronizando automaticamente as alterações feitas online com as pastas locais.",
+  "categoria": "Sincronização OneDrive"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Angreli Alves Paiva Rodovalho",
+      "email_solicitante": "angrelirodovalho@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "11:32:49",
+      "tempo_primeira_resposta": "00:02:11",
+      "tempo_total_atendimento": "00:08:32",
+      "problema_relatado": "A Vanessa Mariano precisa de ajuda para resetar a senha do wifi.",
+      "categoria": "Senha Wifi"
+    },
+    {
+      "quem_solicitou_atendimento": "Angreli Alves Paiva Rodovalho",
+      "email_solicitante": "angrelirodovalho@pecege.com",
+      "quem_respondeu": "Jofre",
+      "data_solicitacao": "2025-03-13",
+      "hora_primeira_mensagem": "17:48:29",
+      "tempo_primeira_resposta": "00:08:48",
+      "tempo_total_atendimento": "00:12:20",
+      "problema_relatado": "Não está conseguindo entrar no wifi pelo PC, a senha não está sendo aceita.",
+      "categoria": "Conexão Wifi"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Anne Caroline Andrade",
+      "email_solicitante": "anneandrade@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-12",
+      "hora_primeira_mensagem": "11:32:18",
+      "tempo_primeira_resposta": "00:00:45",
+      "tempo_total_atendimento": "00:06:49",
+      "problema_relatado": "Impressora Konica_3A não está instalada corretamente e houve erro ao tentar imprimir devido à bandeja.",
+      "categoria": "Impressora"
+    },
+    {
+      "quem_solicitou_atendimento": "Anne Caroline Andrade",
+      "email_solicitante": "anneandrade@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-17",
+      "hora_primeira_mensagem": "17:00:37",
+      "tempo_primeira_resposta": "00:04:34",
+      "tempo_total_atendimento": "00:09:13",
+      "problema_relatado": "Mouse da sala de aula 10 não está funcionando e não foi encontrado o adaptador.",
+      "categoria": "Mouse"
+    },
+    {
+      "quem_solicitou_atendimento": "Anne Caroline Andrade",
+      "email_solicitante": "anneandrade@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-19",
+      "hora_primeira_mensagem": "11:46:33",
+      "tempo_primeira_resposta": "00:00:12",
+      "tempo_total_atendimento": "00:02:30",
+      "problema_relatado": "Verificação sobre a disponibilidade de um cabo de rede e um switch para aulas via Zoom.",
+      "categoria": "Rede"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Ariane Duraes da Silva",
+      "email_solicitante": "arianesilva@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-02-25",
+      "hora_primeira_mensagem": "15:03:26",
+      "tempo_primeira_resposta": "00:10:32",
+      "tempo_total_atendimento": "00:10:32",
+      "problema_relatado": "Ariane precisa de ajuda com arquivos PDF para o convenia.",
+      "categoria": "Arquivos PDF"
+    },
+    {
+      "quem_solicitou_atendimento": "Ariane Duraes da Silva",
+      "email_solicitante": "arianesilva@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "14:46:44",
+      "tempo_primeira_resposta": "00:08:00",
+      "tempo_total_atendimento": "00:13:00",
+      "problema_relatado": "Ariane solicita a instalação da impressora do 3º andar no seu computador.",
+      "categoria": "Impressora"
+    },
+    {
+      "quem_solicitou_atendimento": "Ariane Duraes da Silva",
+      "email_solicitante": "arianesilva@pecege.com",
+      "quem_respondeu": "Barbi",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "19:52:50",
+      "tempo_primeira_resposta": "00:04:35",
+      "tempo_total_atendimento": "00:10:30",
+      "problema_relatado": "Ariane digitalizou um documento, mas a pastinha de scanner está dando erro.",
+      "categoria": "Scanner"
+    },
+    {
+      "quem_solicitou_atendimento": "Ariane Duraes da Silva",
+      "email_solicitante": "arianesilva@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-12",
+      "hora_primeira_mensagem": "13:49:47",
+      "tempo_primeira_resposta": "00:00:06",
+      "tempo_total_atendimento": "00:00:44",
+      "problema_relatado": "Ariane informa que a pastinha de scanner pede senha, mas não foi informada sobre isso.",
+      "categoria": "Scanner"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Barbara Raissa Rodrigues",
+      "email_solicitante": "barbararodrigues@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-06",
+      "hora_primeira_mensagem": "11:08:23",
+      "tempo_primeira_resposta": "00:00:31",
+      "tempo_total_atendimento": "00:03:44",
+      "problema_relatado": "Silvana está sem internet.",
+      "categoria": "Internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Barbara Raissa Rodrigues",
+      "email_solicitante": "barbararodrigues@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "17:28:33",
+      "tempo_primeira_resposta": "00:00:15",
+      "tempo_total_atendimento": "00:00:38",
+      "problema_relatado": "Silvana está sem internet novamente.",
+      "categoria": "Internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Barbara Raissa Rodrigues",
+      "email_solicitante": "barbararodrigues@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-14",
+      "hora_primeira_mensagem": "13:02:36",
+      "tempo_primeira_resposta": "00:00:43",
+      "tempo_total_atendimento": "00:05:40",
+      "problema_relatado": "Computador não está imprimindo, fica carregando o arquivo.",
+      "categoria": "Impressão"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Barbara Paes Sabadin",
+  "email_solicitante": "barbarasabadin@pecege.com",
+  "quem_respondeu": "Jofre",
+  "data_solicitacao": "2025-02-27",
+  "hora_primeira_mensagem": "13:05:14",
+  "tempo_primeira_resposta": "00:00:51",
+  "tempo_total_atendimento": "00:02:13",
+  "problema_relatado": "Problema no microfone.",
+  "categoria": "Hardware"
+}
+{
+  "quem_solicitou_atendimento": "Beatriz Franco",
+  "email_solicitante": "beatrizfranco@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-02-24",
+  "hora_primeira_mensagem": "12:16:57",
+  "tempo_primeira_resposta": "00:03:49",
+  "tempo_total_atendimento": "01:07:25",
+  "problema_relatado": "A internet não está conectando.",
+  "categoria": "Conexão de Internet"
+}
+{
+  "quem_solicitou_atendimento": "Beatriz Almeida Prado Freitas",
+  "email_solicitante": "beatrizfreitas@pecege.com",
+  "quem_respondeu": "André, Jofre",
+  "data_solicitacao": "2025-02-27",
+  "hora_primeira_mensagem": "12:21:03",
+  "tempo_primeira_resposta": "00:01:00",
+  "tempo_total_atendimento": "00:03:05",
+  "problema_relatado": "Demora no carregamento do LMS e do sistema Humaniza.",
+  "categoria": "Desempenho de sistema"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Beatriz Garcia Lopes",
+      "email_solicitante": "beatrizlopes@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-02-27",
+      "hora_primeira_mensagem": "11:40:48",
+      "tempo_primeira_resposta": "00:00:24",
+      "tempo_total_atendimento": "05:49:45",
+      "problema_relatado": "O computador deu tela azul e não funcionou após reiniciar.",
+      "categoria": "Tela azul"
+    },
+    {
+      "quem_solicitou_atendimento": "Beatriz Garcia Lopes",
+      "email_solicitante": "beatrizlopes@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-07",
+      "hora_primeira_mensagem": "18:33:01",
+      "tempo_primeira_resposta": "00:03:13",
+      "tempo_total_atendimento": "00:08:11",
+      "problema_relatado": "A tela do computador está embaçando e começou a piscar.",
+      "categoria": "Problemas de exibição"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Beatriz Oliveira dos Santos",
+  "email_solicitante": "beatrizsantos@pecege.com",
+  "quem_respondeu": "Clara",
+  "data_solicitacao": "2025-02-25",
+  "hora_primeira_mensagem": "11:12:24",
+  "tempo_primeira_resposta": "00:00:53",
+  "tempo_total_atendimento": "00:31:08",
+  "problema_relatado": "Beatriz não consegue enviar mensagens para uma pessoa específica no Teams.",
+  "categoria": "Problemas com Teams"
+}
+{
+  "quem_solicitou_atendimento": "Bianca de Oliveira",
+  "email_solicitante": "biancaoliveira@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-06",
+  "hora_primeira_mensagem": "16:25:21",
+  "tempo_primeira_resposta": "00:01:57",
+  "tempo_total_atendimento": "00:13:06",
+  "problema_relatado": "Dificuldade para logar na internet via cabo, com senha incorreta.",
+  "categoria": "Conexão de Internet"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Bo Yun Hong",
+      "email_solicitante": "boyunhong@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-02-27",
+      "hora_primeira_mensagem": "14:16:31",
+      "tempo_primeira_resposta": "00:01:25",
+      "tempo_total_atendimento": "00:02:19",
+      "problema_relatado": "Conexão wifi lenta e cabo não conecta.",
+      "categoria": "Conexão de internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Bo Yun Hong",
+      "email_solicitante": "boyunhong@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-02-28",
+      "hora_primeira_mensagem": "14:47:36",
+      "tempo_primeira_resposta": "00:02:26",
+      "tempo_total_atendimento": "00:07:11",
+      "problema_relatado": "Dificuldade em enviar um vídeo pelo Outlook devido ao tamanho do arquivo.",
+      "categoria": "Envio de arquivos"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Brisa de Assis Souza",
+  "email_solicitante": "brisasouza@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-18",
+  "hora_primeira_mensagem": "13:15:58",
+  "tempo_primeira_resposta": "00:06:50",
+  "tempo_total_atendimento": "00:06:09",
+  "problema_relatado": "PC lento, travando ao usar Photoshop e Illustrator.",
+  "categoria": "Desempenho do PC"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Bruna Castilho Ferreira",
+      "email_solicitante": "brunaferreira@pecege.com",
+      "quem_respondeu": "Jofre",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "18:50:16",
+      "tempo_primeira_resposta": "00:00:33",
+      "tempo_total_atendimento": "00:00:36",
+      "problema_relatado": "Notebook lento e necessidade de desinstalar programas e aumentar a memória RAM.",
+      "categoria": "Desempenho do Notebook"
+    },
+    {
+      "quem_solicitou_atendimento": "Bruna Castilho Ferreira",
+      "email_solicitante": "brunaferreira@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-12",
+      "hora_primeira_mensagem": "12:02:45",
+      "tempo_primeira_resposta": "00:00:22",
+      "tempo_total_atendimento": "00:49:27",
+      "problema_relatado": "Dificuldade em conectar ao OneDrive, que não fica online.",
+      "categoria": "Conexão OneDrive"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Bruna Duarte Gonçalves",
+      "email_solicitante": "brunagoncalves@pecege.com",
+      "quem_respondeu": "Barbi, Clara",
+      "data_solicitacao": "2025-02-26",
+      "hora_primeira_mensagem": "17:30:44",
+      "tempo_primeira_resposta": "00:00:16",
+      "tempo_total_atendimento": "00:55:20",
+      "problema_relatado": "Bruna precisa criar um e-mail para acessar o Twilio.",
+      "categoria": "Criação de e-mail"
+    }
+  ]
+}
+{"atendimentos":[
+    {
+        "quem_solicitou_atendimento": "Caio Cordeiro Pousa",
+        "email_solicitante": "caiopousa@pecege.com",
+        "quem_respondeu": "Clara",
+        "data_solicitacao": "2025-03-06",
+        "hora_primeira_mensagem": "12:08:10",
+        "tempo_primeira_resposta": "00:00:29",
+        "tempo_total_atendimento": "00:10:28",
+        "problema_relatado": "Dúvidas sobre a ativação do Windows e login na Conta Microsoft após formatação do PC.",
+        "categoria": "Ativação Windows e Conta Microsoft"
+    },
+    {
+        "quem_solicitou_atendimento": "Caio Cordeiro Pousa",
+        "email_solicitante": "caiopousa@pecege.com",
+        "quem_respondeu": "Barbi",
+        "data_solicitacao": "2025-03-10",
+        "hora_primeira_mensagem": "17:14:10",
+        "tempo_primeira_resposta": "00:00:14",
+        "tempo_total_atendimento": "00:04:12",
+        "problema_relatado": "Notebook formatado voltou a dar tela azul, mesmo problema anterior.",
+        "categoria": "Tela Azul"
+    }
+]}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Camila Sacchi",
+      "email_solicitante": "camilasacchi@pecege.com",
+      "quem_respondeu": "Help Desk Pecege, Jofre",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "19:10:50",
+      "tempo_primeira_resposta": "00:00:19",
+      "tempo_total_atendimento": "00:52:19",
+      "problema_relatado": "Camila não consegue imprimir na impressora do 3° andar.",
+      "categoria": "Impressão"
+    },
+    {
+      "quem_solicitou_atendimento": "Camila Sacchi",
+      "email_solicitante": "camilasacchi@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "11:45:41",
+      "tempo_primeira_resposta": "00:00:17",
+      "tempo_total_atendimento": "00:06:40",
+      "problema_relatado": "Camila não consegue acessar a conta do almoxarifado no Outlook.",
+      "categoria": "Acesso a conta"
+    },
+    {
+      "quem_solicitou_atendimento": "Camila Sacchi",
+      "email_solicitante": "camilasacchi@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "17:28:32",
+      "tempo_primeira_resposta": "00:00:01",
+      "tempo_total_atendimento": "00:01:41",
+      "problema_relatado": "Camila não consegue imprimir uma folha colorida na impressora.",
+      "categoria": "Impressão"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Camila Fernandes Braga Zanchini",
+  "email_solicitante": "camilazanchini@pecege.com",
+  "quem_respondeu": "Jofre",
+  "data_solicitacao": "2025-03-17",
+  "hora_primeira_mensagem": "17:33:27",
+  "tempo_primeira_resposta": "00:00:22",
+  "tempo_total_atendimento": "00:08:43",
+  "problema_relatado": "Camila não consegue abrir o Office após fazer login com um e-mail diferente.",
+  "categoria": "Problemas de login no Office"
+}
+
+{
+  "atendimentos": []
+}
+{
+  "quem_solicitou_atendimento": "Cesar Soares Stenico",
+  "email_solicitante": "cesarstenico@pecege.com",
+  "quem_respondeu": "Jofre",
+  "data_solicitacao": "2025-02-24",
+  "hora_primeira_mensagem": "15:58:34",
+  "tempo_primeira_resposta": "00:00:27",
+  "tempo_total_atendimento": "00:00:36",
+  "problema_relatado": "Notebook com problemas nas portas USB, impedindo a configuração de um assistente de braille.",
+  "categoria": "Problemas de hardware"
+}
+{
+  "quem_solicitou_atendimento": "Cristiane Corradin",
+  "email_solicitante": "cristianecorradin@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-02-26",
+  "hora_primeira_mensagem": "19:45:14",
+  "tempo_primeira_resposta": "00:03:34",
+  "tempo_total_atendimento": "00:12:54",
+  "problema_relatado": "Dois computadores estão apresentando uma tela que diz 'outro usuário ou convidado' e não estão abrindo.",
+  "categoria": "Acesso a computadores"
+}
+{
+  "quem_solicitou_atendimento": "Cristina Oliveira Romanin",
+  "email_solicitante": "cristinaromanin@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-11",
+  "hora_primeira_mensagem": "11:31:18",
+  "tempo_primeira_resposta": "00:22:11",
+  "tempo_total_atendimento": "00:22:11",
+  "problema_relatado": "Problema de projeção na sala 15.",
+  "categoria": "Projeção"
+}
+{
+  "atendimentos": []
+}
+{
+  "quem_solicitou_atendimento": "Daniela Flores",
+  "email_solicitante": "danielaflores@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-18",
+  "hora_primeira_mensagem": "12:41:35",
+  "tempo_primeira_resposta": "00:01:27",
+  "tempo_total_atendimento": "00:04:19",
+  "problema_relatado": "Solicitação de ajuda para instalar uma impressora no computador dela e da colega Erica.",
+  "categoria": "Instalação de impressora"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Daniel Sonoda",
+      "email_solicitante": "dysonoda@pecege.com",
+      "quem_respondeu": "Mateus, Barbi",
+      "data_solicitacao": "2025-02-27",
+      "hora_primeira_mensagem": "13:43:22",
+      "tempo_primeira_resposta": "00:00:39",
+      "tempo_total_atendimento": "03:56:58",
+      "problema_relatado": "Daniel precisa de ajuda com o Scanner e depois menciona a necessidade de reduzir o tamanho do arquivo para enviar por e-mail.",
+      "categoria": "Scanner"
+    },
+    {
+      "quem_solicitou_atendimento": "Daniel Sonoda",
+      "email_solicitante": "dysonoda@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-06",
+      "hora_primeira_mensagem": "11:22:18",
+      "tempo_primeira_resposta": "00:22:24",
+      "tempo_total_atendimento": "00:54:54",
+      "problema_relatado": "A impressora de Daniel continua travada e ele solicita suporte.",
+      "categoria": "Impressora"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Elaine Cristina Farinha Castelani",
+  "email_solicitante": "elainecastelani@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-11",
+  "hora_primeira_mensagem": "11:29:13",
+  "tempo_primeira_resposta": "00:26",
+  "tempo_total_atendimento": "00:42",
+  "problema_relatado": "Elaine não consegue acessar o Bizneo, mesmo com e-mail e senha corretos.",
+  "categoria": "Acesso a sistema"
+}
+{
+  "quem_solicitou_atendimento": "Elaine Cristina Vieira",
+  "email_solicitante": "elainevieira@pecege.com",
+  "quem_respondeu": "Mateus, Jofre",
+  "data_solicitacao": "2025-03-10",
+  "hora_primeira_mensagem": "18:15:25",
+  "tempo_primeira_resposta": "00:12:54",
+  "tempo_total_atendimento": "00:37:23",
+  "problema_relatado": "Elaine está tentando adicionar e-mails da poli no seu e-mail, mas está enfrentando dificuldades.",
+  "categoria": "Problemas com e-mail"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Eliane Giuliani Menegatti",
+      "email_solicitante": "elianemenegatti@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-02-28",
+      "hora_primeira_mensagem": "19:40:21",
+      "tempo_primeira_resposta": "00:15:34",
+      "tempo_total_atendimento": "00:15:34",
+      "problema_relatado": "Problemas com a impressora do terceiro andar.",
+      "categoria": "Impressora"
+    },
+    {
+      "quem_solicitou_atendimento": "Eliane Giuliani Menegatti",
+      "email_solicitante": "elianemenegatti@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-07",
+      "hora_primeira_mensagem": "12:06:14",
+      "tempo_primeira_resposta": "00:02:18",
+      "tempo_total_atendimento": "00:08:41",
+      "problema_relatado": "O agendamento de reunião online no Outlook não envia mais o link de reunião.",
+      "categoria": "Outlook"
+    },
+    {
+      "quem_solicitou_atendimento": "Eliane Giuliani Menegatti",
+      "email_solicitante": "elianemenegatti@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-19",
+      "hora_primeira_mensagem": "12:52:11",
+      "tempo_primeira_resposta": "01:37:47",
+      "tempo_total_atendimento": "01:37:47",
+      "problema_relatado": "O agendamento de reunião no Outlook novamente não envia o link.",
+      "categoria": "Outlook"
+    },
+    {
+      "quem_solicitou_atendimento": "Eliane Giuliani Menegatti",
+      "email_solicitante": "elianemenegatti@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-20",
+      "hora_primeira_mensagem": "12:55:50",
+      "tempo_primeira_resposta": "00:06:24",
+      "tempo_total_atendimento": "00:06:24",
+      "problema_relatado": "Problemas ocorrendo algumas vezes no Excel.",
+      "categoria": "Excel"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Érika Dilio",
+  "email_solicitante": "erikadilio@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-18",
+  "hora_primeira_mensagem": "11:54:33",
+  "tempo_primeira_resposta": "00:01:05",
+  "tempo_total_atendimento": "00:02:28",
+  "problema_relatado": "Érika estava em dúvida sobre o que fazer em uma situação específica.",
+  "categoria": "Dúvida"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Eula Ester de Oliveira",
+      "email_solicitante": "eulaoliveira@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "12:04:29",
+      "tempo_primeira_resposta": "00:16:11",
+      "tempo_total_atendimento": "00:22:43",
+      "problema_relatado": "Cabo da internet não está funcionando.",
+      "categoria": "Internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Eula Ester de Oliveira",
+      "email_solicitante": "eulaoliveira@pecege.com",
+      "quem_respondeu": "Barbi",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "20:03:20",
+      "tempo_primeira_resposta": "00:00:00",
+      "tempo_total_atendimento": "00:22:40",
+      "problema_relatado": "Problema com a impressora no terceiro andar.",
+      "categoria": "Impressora"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Felipe Galesi Jaoude",
+      "email_solicitante": "felipejaoude@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-02-25",
+      "hora_primeira_mensagem": "12:17:07",
+      "tempo_primeira_resposta": "00:00:53",
+      "tempo_total_atendimento": "00:17:57",
+      "problema_relatado": "PC não conecta à internet por cabo, apenas via Wifi.",
+      "categoria": "Conexão de Internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Felipe Galesi Jaoude",
+      "email_solicitante": "felipejaoude@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-13",
+      "hora_primeira_mensagem": "13:22:18",
+      "tempo_primeira_resposta": "00:03:48",
+      "tempo_total_atendimento": "00:06:32",
+      "problema_relatado": "Problemas frequentes com conexão Wifi e por cabo.",
+      "categoria": "Conexão de Internet"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Felipe Gonçalves Ribeiro",
+      "email_solicitante": "feliperibeiro@pecege.com",
+      "quem_respondeu": "Clara",
+      "data_solicitacao": "2025-02-26",
+      "hora_primeira_mensagem": "12:44:57",
+      "tempo_primeira_resposta": "00:04:43",
+      "tempo_total_atendimento": "05:33:55",
+      "problema_relatado": "Felipe solicitou a criação de uma rede wifi para um evento e a correção da senha para minúsculas.",
+      "categoria": "Rede Wifi"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Fernanda Ribeiro Defavari",
+  "email_solicitante": "fernandadefavari@pecege.com",
+  "quem_respondeu": "Barbi",
+  "data_solicitacao": "2025-03-14",
+  "hora_primeira_mensagem": "16:27:28",
+  "tempo_primeira_resposta": "02:28",
+  "tempo_total_atendimento": "09:36",
+  "problema_relatado": "O Windows da solicitante está escuro e ela deseja deixá-lo claro, pois tem dificuldade para enxergar.",
+  "categoria": "Configuração de sistema"
+}
+{"quem_solicitou_atendimento":"Gabriele Souza Valadão","email_solicitante":"gabrielesouza@pecege.com","quem_respondeu":"Help Desk Pecege","data_solicitacao":"2025-03-18","hora_primeira_mensagem":"19:30:00","tempo_primeira_resposta":"00:00:00","tempo_total_atendimento":"00:48:15","problema_relatado":"Solicitação de acesso à VPN e informações sobre o uso.","categoria":"Acesso VPN"}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Gabriele Cavalletto Ziviani",
+      "email_solicitante": "gabrieleziviani@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-02-26",
+      "hora_primeira_mensagem": "12:43:13",
+      "tempo_primeira_resposta": "00:04:48",
+      "tempo_total_atendimento": "00:24:29",
+      "problema_relatado": "Mouse está travando na tela, dificultando o trabalho.",
+      "categoria": "Hardware"
+    },
+    {
+      "quem_solicitou_atendimento": "Gabriele Cavalletto Ziviani",
+      "email_solicitante": "gabrieleziviani@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-12",
+      "hora_primeira_mensagem": "16:07:27",
+      "tempo_primeira_resposta": "00:00:18",
+      "tempo_total_atendimento": "00:00:52",
+      "problema_relatado": "Solicitação da senha do Wi-Fi Pecege.",
+      "categoria": "Conectividade"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Gabriella Perico Illiano",
+  "email_solicitante": "gabriellailliano@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-18",
+  "hora_primeira_mensagem": "11:46:41",
+  "tempo_primeira_resposta": "00:00:48",
+  "tempo_total_atendimento": "00:16:31",
+  "problema_relatado": "A câmera está com erro e não funcionou mesmo após atualização do software.",
+  "categoria": "Erro de hardware"
+}
+{
+  "quem_solicitou_atendimento": "Gabriel Sturion de Oliveira",
+  "email_solicitante": "gabrieloliveira@pecege.com",
+  "quem_respondeu": "Barbi",
+  "data_solicitacao": "2025-03-18",
+  "hora_primeira_mensagem": "18:02:17",
+  "tempo_primeira_resposta": "00:00:37",
+  "tempo_total_atendimento": "00:15:43",
+  "problema_relatado": "Problemas de conexão com a internet, tanto via wifi quanto cabo, e conta bloqueada por tentativas erradas de login.",
+  "categoria": "Conexão de Internet"
+}
+{
+  "quem_solicitou_atendimento": "Giovane Cavalcante",
+  "email_solicitante": "giovanecavalcante@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-10",
+  "hora_primeira_mensagem": "12:55:28",
+  "tempo_primeira_resposta": "00:11:27",
+  "tempo_total_atendimento": "00:59:53",
+  "problema_relatado": "Giovane não estava conseguindo imprimir, a impressora ficava carregando e não imprimia.",
+  "categoria": "Impressão"
+}
+{
+  "quem_solicitou_atendimento": "Guilherme Bassa",
+  "email_solicitante": "guilhermebassa@pecege.com",
+  "quem_respondeu": "Jofre",
+  "data_solicitacao": "2025-02-24",
+  "hora_primeira_mensagem": "17:04:12",
+  "tempo_primeira_resposta": "5:16",
+  "tempo_total_atendimento": "7:12",
+  "problema_relatado": "O OpenVPN GUI parou de funcionar devido ao vencimento do certificado.",
+  "categoria": "VPN"
+}
+{
+  "quem_solicitou_atendimento": "Guilherme Luis Penzani",
+  "email_solicitante": "guilhermepenzani@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-13",
+  "hora_primeira_mensagem": "11:38:07",
+  "tempo_primeira_resposta": "00:00:00",
+  "tempo_total_atendimento": "00:03:43",
+  "problema_relatado": "Aula de gestão de pessoas não apareceu no Dropbox.",
+  "categoria": "Aulas"
+}
+{
+  "quem_solicitou_atendimento": "Guiomar Elisa Pardi",
+  "email_solicitante": "guiomarpardi@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-10",
+  "hora_primeira_mensagem": "15:14:37",
+  "tempo_primeira_resposta": "3:45",
+  "tempo_total_atendimento": "15:59",
+  "problema_relatado": "A impressora do terceiro andar está com problemas há algum tempo.",
+  "categoria": "Impressora"
+}
+{"atendimentos":[{"quem_solicitou_atendimento":"Gustavo de Moraes Santos","email_solicitante":"gustavosantos@pecege.com","quem_respondeu":"André","data_solicitacao":"2025-02-28","hora_primeira_mensagem":"11:53:35","tempo_primeira_resposta":"32:00","tempo_total_atendimento":"1:58:24","problema_relatado":"Gustavo relatou que o pessoal da Poli perdeu o login de uma conta do TikTok e que estava tentando ajudar na recuperação.","categoria":"Recuperação de conta"},{"quem_solicitou_atendimento":"Gustavo de Moraes Santos","email_solicitante":"gustavosantos@pecege.com","quem_respondeu":"André","data_solicitacao":"2025-03-13","hora_primeira_mensagem":"17:57:19","tempo_primeira_resposta":"0:21","tempo_total_atendimento":"0:05:41","problema_relatado":"Gustavo solicitou um cabo de internet grande para conectar seu computador, pois estava sentado longe do modem.","categoria":"Solicitação de equipamento"},{"quem_solicitou_atendimento":"Gustavo de Moraes Santos","email_solicitante":"gustavosantos@pecege.com","quem_respondeu":"Help Desk Pecege","data_solicitacao":"2025-03-14","hora_primeira_mensagem":"11:25:34","tempo_primeira_resposta":"0:01","tempo_total_atendimento":"0:07:56","problema_relatado":"Gustavo informou que o cabo de internet que conectou no computador do novo estagiário não estava funcionando corretamente.","categoria":"Problema de conexão"},{"quem_solicitou_atendimento":"Gustavo de Moraes Santos","email_solicitante":"gustavosantos@pecege.com","quem_respondeu":"André","data_solicitacao":"2025-03-24","hora_primeira_mensagem":"11:50:25","tempo_primeira_resposta":"0:05","tempo_total_atendimento":"0:41:35","problema_relatado":"Gustavo solicitou a compra de licenças premium do Power BI para dois colaboradores do marketing e do time de dados.","categoria":"Solicitação de licença"}]}
+{
+  "quem_solicitou_atendimento": "Helena Tosi di Donato",
+  "email_solicitante": "helenadonato@pecege.com",
+  "quem_respondeu": "Jofre",
+  "data_solicitacao": "2025-03-10",
+  "hora_primeira_mensagem": "16:48:07",
+  "tempo_primeira_resposta": "00:07:01",
+  "tempo_total_atendimento": "00:10:13",
+  "problema_relatado": "Tatiane Miller não consegue acessar a internet, tanto pelo wifi quanto pelo cabo, e a senha está dando incorreta.",
+  "categoria": "Acesso à Internet"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Hellen Claudia Martins Meireles",
+      "email_solicitante": "hellenmeireles@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-02-24",
+      "hora_primeira_mensagem": "15:20:11",
+      "tempo_primeira_resposta": "00:00:30",
+      "tempo_total_atendimento": "00:05:18",
+      "problema_relatado": "Erro ao enviar e-mail para querodados@pecege.com.",
+      "categoria": "Erro de e-mail"
+    },
+    {
+      "quem_solicitou_atendimento": "Hellen Claudia Martins Meireles",
+      "email_solicitante": "hellenmeireles@pecege.com",
+      "quem_respondeu": "Barbi",
+      "data_solicitacao": "2025-03-12",
+      "hora_primeira_mensagem": "17:57:13",
+      "tempo_primeira_resposta": "00:11:09",
+      "tempo_total_atendimento": "00:24:40",
+      "problema_relatado": "Dúvida sobre acesso ao Planner Plan 1 com o pacote Office.",
+      "categoria": "Dúvida sobre software"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Heloisa Quilles Fava",
+  "email_solicitante": "heloisafava@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-17",
+  "hora_primeira_mensagem": "11:24:00",
+  "tempo_primeira_resposta": "00:00:40",
+  "tempo_total_atendimento": "00:14:00",
+  "problema_relatado": "A Myrian da secretaria está sem internet no computador e não aparece nem o wi-fi.",
+  "categoria": "Conexão de internet"
+}
+{
+  "quem_solicitou_atendimento": "Isabela Romanha de Alcantara",
+  "email_solicitante": "isabelaalcantara@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-13",
+  "hora_primeira_mensagem": "17:51:13",
+  "tempo_primeira_resposta": "00:06:44",
+  "tempo_total_atendimento": "00:06:44",
+  "problema_relatado": "O computador trava ao tentar imprimir arquivos em PDF e Word, e não consegue abrir a aba de configurações de impressão.",
+  "categoria": "Impressão"
+}
+{"atendimentos":[{"quem_solicitou_atendimento":"Isabela Jordão Donderi","email_solicitante":"isabeladonderi@pecege.com","quem_respondeu":"Help Desk Pecege","data_solicitacao":"2025-03-12","hora_primeira_mensagem":"15:05:12","tempo_primeira_resposta":"00:08:16","tempo_total_atendimento":"01:36:37","problema_relatado":"A impressora não está instalada.","categoria":"Impressora"}]}
+{
+  "quem_solicitou_atendimento": "Isabela Fernanda Barbosa da Silva",
+  "email_solicitante": "isabelasilva@pecege.com",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-03-19",
+  "hora_primeira_mensagem": "11:37:13",
+  "tempo_primeira_resposta": "00:01:30",
+  "tempo_total_atendimento": "00:02:53",
+  "problema_relatado": "O cabo não está funcionando desde ontem.",
+  "categoria": "Problema de Conexão"
+}
+{
+  "quem_solicitou_atendimento": "Isabella Mensatto Baccaro",
+  "email_solicitante": "isabellabaccaro@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-11",
+  "hora_primeira_mensagem": "17:14:18",
+  "tempo_primeira_resposta": "00:00:14",
+  "tempo_total_atendimento": "00:00:21",
+  "problema_relatado": "Isabella precisa colocar o código de acesso no computador e teve dificuldades durante o onboarding.",
+  "categoria": "Acesso ao computador"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Isabella Daldin Carazzai",
+      "email_solicitante": "isabellacarazzai@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-02-27",
+      "hora_primeira_mensagem": "10:58:15",
+      "tempo_primeira_resposta": "00:00:34",
+      "tempo_total_atendimento": "00:04:47",
+      "problema_relatado": "A impressora Konica aparece como offline.",
+      "categoria": "Impressora"
+    },
+    {
+      "quem_solicitou_atendimento": "Isabella Daldin Carazzai",
+      "email_solicitante": "isabellacarazzai@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-21",
+      "hora_primeira_mensagem": "12:11:19",
+      "tempo_primeira_resposta": "00:01:40",
+      "tempo_total_atendimento": "00:36:47",
+      "problema_relatado": "Não consegue conectar no Wifi após a queda da internet.",
+      "categoria": "Conexão de Internet"
+    }
+  ]
+}
+{
+  "atendimentos": []
+}
+{
+  "atendimentos": []
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Jessica Rodrigues",
+      "email_solicitante": "jessicarodrigues@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-02-24",
+      "hora_primeira_mensagem": "13:40:43",
+      "tempo_primeira_resposta": "00:04:18",
+      "tempo_total_atendimento": "00:05:55",
+      "problema_relatado": "Jessica não consegue colocar pastas na área de trabalho.",
+      "categoria": "Área de trabalho"
+    },
+    {
+      "quem_solicitou_atendimento": "Jessica Rodrigues",
+      "email_solicitante": "jessicarodrigues@pecege.com",
+      "quem_respondeu": "Barbi",
+      "data_solicitacao": "2025-03-06",
+      "hora_primeira_mensagem": "16:06:47",
+      "tempo_primeira_resposta": "00:00:22",
+      "tempo_total_atendimento": "00:12:38",
+      "problema_relatado": "Jessica precisa recuperar o fechamento do curso de DB do computador da Isabelle.",
+      "categoria": "Recuperação de arquivos"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Jéssica Fabiane Zambello",
+  "email_solicitante": "jessicazambello@pecege.com",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-03-19",
+  "hora_primeira_mensagem": "17:32:47",
+  "tempo_primeira_resposta": "00:01:43",
+  "tempo_total_atendimento": "00:38:08",
+  "problema_relatado": "O computador do Luiz está com tela azul.",
+  "categoria": "Problema de hardware"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "João Pedro Pondian Gonçalves",
+      "email_solicitante": "joaogoncalves@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-14",
+      "hora_primeira_mensagem": "13:40:26",
+      "tempo_primeira_resposta": "00:01:47",
+      "tempo_total_atendimento": "00:03:46",
+      "problema_relatado": "João precisa criar um e-mail para uma nova marca do Pecege chamada 'Maped'.",
+      "categoria": "Criação de e-mail"
+    },
+    {
+      "quem_solicitou_atendimento": "João Pedro Pondian Gonçalves",
+      "email_solicitante": "joaogoncalves@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-20",
+      "hora_primeira_mensagem": "11:51:28",
+      "tempo_primeira_resposta": "00:07:44",
+      "tempo_total_atendimento": "00:17:38",
+      "problema_relatado": "O software Read.ai enviou um e-mail sem autorização, e João quer entender o que aconteceu.",
+      "categoria": "Problema com software"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "João Vitor de Oliveira Dos Santos",
+  "email_solicitante": "Joaooliveira@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-11",
+  "hora_primeira_mensagem": "12:06:45",
+  "tempo_primeira_resposta": "00:10:27",
+  "tempo_total_atendimento": "00:41:25",
+  "problema_relatado": "Problemas com o notebook após atualização do Windows, que levou à tela de correção do disco rígido.",
+  "categoria": "Problemas com Windows"
+}
+{
+  "quem_solicitou_atendimento": "João Gabriel Rodrigues das Neves",
+  "email_solicitante": "joaorodrigues@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-10",
+  "hora_primeira_mensagem": "11:25:45",
+  "tempo_primeira_resposta": "00:20",
+  "tempo_total_atendimento": "00:27",
+  "problema_relatado": "Disco C cheio, impedindo o funcionamento do Illustrator.",
+  "categoria": "Armazenamento"
+}
+{
+  "quem_solicitou_atendimento": "Jonathan Martins de Lima",
+  "email_solicitante": "jonathanmartins@pecege.com",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-03-10",
+  "hora_primeira_mensagem": "11:02:30",
+  "tempo_primeira_resposta": "00:01:24",
+  "tempo_total_atendimento": "00:12:16",
+  "problema_relatado": "Instabilidade na internet, com dificuldade de acessar sites e problemas de conexão.",
+  "categoria": "Conexão de Internet"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Joze Correa",
+      "email_solicitante": "jozecorrea@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-02-28",
+      "hora_primeira_mensagem": "16:01:03",
+      "tempo_primeira_resposta": "00:01:36",
+      "tempo_total_atendimento": "00:06:12",
+      "problema_relatado": "Joze não consegue acessar a conta do Power BI após ter trocado a senha.",
+      "categoria": "Acesso a conta"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Julhya Aguiar",
+  "email_solicitante": "julhyaaguiar@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-21",
+  "hora_primeira_mensagem": "13:19:25",
+  "tempo_primeira_resposta": "00:00:41",
+  "tempo_total_atendimento": "00:01:25",
+  "problema_relatado": "Solicitação da senha para conectar no Wi-Fi do Pecege.",
+  "categoria": "Conexão Wi-Fi"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Julia Montezelli",
+      "email_solicitante": "juliamontezelli@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "17:11:34",
+      "tempo_primeira_resposta": "00:02:51",
+      "tempo_total_atendimento": "00:11:28",
+      "problema_relatado": "A internet não está funcionando no computador dela e no da Gabi, nem pelo cabo nem pelo Wi-Fi.",
+      "categoria": "Conexão de Internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Julia Montezelli",
+      "email_solicitante": "juliamontezelli@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "18:21:05",
+      "tempo_primeira_resposta": "00:00:34",
+      "tempo_total_atendimento": "00:18:16",
+      "problema_relatado": "A conexão com a impressora não está funcionando.",
+      "categoria": "Impressão"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Juliana Oliveira",
+      "email_solicitante": "julianaoliveira@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-02-25",
+      "hora_primeira_mensagem": "19:07:42",
+      "tempo_primeira_resposta": "00:08:42",
+      "tempo_total_atendimento": "00:11:59",
+      "problema_relatado": "Juliana precisa remover um comentário que aparece na impressão de um documento.",
+      "categoria": "Impressão"
+    },
+    {
+      "quem_solicitou_atendimento": "Juliana Oliveira",
+      "email_solicitante": "julianaoliveira@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "13:34:30",
+      "tempo_primeira_resposta": "00:01:56",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Juliana precisa de ajuda para imprimir no tamanho A3, mas não tem acesso à impressora adequada.",
+      "categoria": "Impressão"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Juliana Rozao",
+  "email_solicitante": "julianarozao@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-02-24",
+  "hora_primeira_mensagem": "12:16:13",
+  "tempo_primeira_resposta": "00:03:20",
+  "tempo_total_atendimento": "00:03:20",
+  "problema_relatado": "Dificuldade em abrir um arquivo Excel devido a uma notificação relacionada ao nome do arquivo.",
+  "categoria": "Problema com arquivo Excel"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Leticia Nogueira",
+      "email_solicitante": "kamillagranato@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "16:17:27",
+      "tempo_primeira_resposta": "22:07",
+      "tempo_total_atendimento": "27:32",
+      "problema_relatado": "Leticia está sem acesso à internet, não consegue conectar via cabo nem wifi.",
+      "categoria": "Conexão de Internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Kamilla Matheucci Granato",
+      "email_solicitante": "kamillagranato@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-19",
+      "hora_primeira_mensagem": "17:21:14",
+      "tempo_primeira_resposta": "00:26",
+      "tempo_total_atendimento": "08:36",
+      "problema_relatado": "Kamilla não está conseguindo usar a internet via cabo no computador desde o dia anterior.",
+      "categoria": "Conexão de Internet"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Karina Corrêa Cillo",
+  "email_solicitante": "karinacillo@pecege.com",
+  "quem_respondeu": "André, Jofre",
+  "data_solicitacao": "2025-02-27",
+  "hora_primeira_mensagem": "13:07:45",
+  "tempo_primeira_resposta": "00:00:20",
+  "tempo_total_atendimento": "00:08:56",
+  "problema_relatado": "Karina precisa instalar uma impressora na sua máquina.",
+  "categoria": "Instalação de impressora"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Karina Ferreira Parussulo",
+      "email_solicitante": "karinaparussulo@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "12:55:21",
+      "tempo_primeira_resposta": "00:00:31",
+      "tempo_total_atendimento": "00:15:24",
+      "problema_relatado": "Karina precisa de ajuda para acessar um drive onde está um documento importante que não consegue abrir.",
+      "categoria": "Acesso a Drive"
+    },
+    {
+      "quem_solicitou_atendimento": "Karina Ferreira Parussulo",
+      "email_solicitante": "karinaparussulo@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "17:01:29",
+      "tempo_primeira_resposta": "00:08:36",
+      "tempo_total_atendimento": "00:15:57",
+      "problema_relatado": "Karina solicita acesso a pastas de documentos de 2021 a pedido do professor Shirota.",
+      "categoria": "Acesso a Drive"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Keyse",
+  "email_solicitante": "",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-03-11",
+  "hora_primeira_mensagem": "13:40:21",
+  "tempo_primeira_resposta": "00:00:00",
+  "tempo_total_atendimento": "00:00:14",
+  "problema_relatado": "Verificar se os freelas estão com o computador e se um carregador errado foi enviado.",
+  "categoria": "Equipamento"
+}
+{
+  "quem_solicitou_atendimento": "Lailla Helvira Silva Carvalho",
+  "email_solicitante": "laillacarvalho@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-02-26",
+  "hora_primeira_mensagem": "14:08:16",
+  "tempo_primeira_resposta": "00:05:28",
+  "tempo_total_atendimento": "00:23:56",
+  "problema_relatado": "A planilha não está atualizando as informações, mesmo parecendo sincronizada.",
+  "categoria": "Problemas com planilha"
+}
+{
+  "quem_solicitou_atendimento": "Larissa Teixeira Neves Alves",
+  "email_solicitante": "larissaalves@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-10",
+  "hora_primeira_mensagem": "11:19:54",
+  "tempo_primeira_resposta": "00:01:49",
+  "tempo_total_atendimento": "00:07:15",
+  "problema_relatado": "Larissa está sem acesso ao login no wi-fi Pecege pelo cabo e a senha não é reconhecida.",
+  "categoria": "Acesso à rede"
+}
+{
+  "atendimentos": []
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Laura Pavani Diehl",
+      "email_solicitante": "laurapavani@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "11:35:58",
+      "tempo_primeira_resposta": "0:06:14",
+      "tempo_total_atendimento": "0:52:36",
+      "problema_relatado": "A impressora do audiovisual não está respondendo e precisa imprimir arquivos.",
+      "categoria": "Impressora"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Laura Rubio Smaniotto",
+  "email_solicitante": "laurasmaniotto@pecege.com",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-03-20",
+  "hora_primeira_mensagem": "11:30:02",
+  "tempo_primeira_resposta": "00:00:27",
+  "tempo_total_atendimento": "00:04:43",
+  "problema_relatado": "Conexão com a internet muito ruim.",
+  "categoria": "Conexão de internet"
+}
+{
+  "atendimentos": []
+}
+{"quem_solicitou_atendimento":"Leonardo Furlan Braga","email_solicitante":"leonardobraga@pecege.com","quem_respondeu":"Help Desk Pecege","data_solicitacao":"2025-02-25","hora_primeira_mensagem":"17:16:02","tempo_primeira_resposta":"00:05:15","tempo_total_atendimento":"00:05:15","problema_relatado":"Leonardo precisa de uma caixa para levar um monitor da LG para casa.","categoria":"Solicitação de material"}
+{
+  "atendimentos": []
+}
+{
+  "quem_solicitou_atendimento": "Leticia Beinotti",
+  "email_solicitante": "leticiabeinotti@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-10",
+  "hora_primeira_mensagem": "13:03:05",
+  "tempo_primeira_resposta": "00:02:02",
+  "tempo_total_atendimento": "00:04:47",
+  "problema_relatado": "Problema na conexão das impressoras, especificamente com a impressora Konica.",
+  "categoria": "Impressoras"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Leticia Giusti",
+      "email_solicitante": "leticiagiusti@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-06",
+      "hora_primeira_mensagem": "11:36:24",
+      "tempo_primeira_resposta": "3:38",
+      "tempo_total_atendimento": "5:46",
+      "problema_relatado": "Leticia precisa de ajuda com o cabo da internet e um alicate para organizá-lo.",
+      "categoria": "Cabo de internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Leticia Giusti",
+      "email_solicitante": "leticiagiusti@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "13:29:30",
+      "tempo_primeira_resposta": "0:30",
+      "tempo_total_atendimento": "2:12",
+      "problema_relatado": "Leticia está com problema para conectar o cabo de rede de internet, só aparece o Wi-Fi.",
+      "categoria": "Conexão de internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Leticia Giusti",
+      "email_solicitante": "leticiagiusti@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-21",
+      "hora_primeira_mensagem": "16:57:07",
+      "tempo_primeira_resposta": "0:37",
+      "tempo_total_atendimento": "1:11",
+      "problema_relatado": "Leticia está tendo dificuldade em abrir o Excel, precisando reiniciar o computador várias vezes.",
+      "categoria": "Problema com software"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Letícia Santin",
+  "email_solicitante": "leticiasantin@pecege.com",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-03-06",
+  "hora_primeira_mensagem": "18:05:24",
+  "tempo_primeira_resposta": "00:00:27",
+  "tempo_total_atendimento": "00:03:01",
+  "problema_relatado": "Letícia não consegue conectar à internet com o cabo após mudar de mesa e está enfrentando problemas com o wifi.",
+  "categoria": "Conexão de Internet"
+}
+{
+  "atendimentos": []
+}
+{
+  "quem_solicitou_atendimento": "Lia Castro",
+  "email_solicitante": "liacastro@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-13",
+  "hora_primeira_mensagem": "12:00:24",
+  "tempo_primeira_resposta": "00:04:12",
+  "tempo_total_atendimento": "00:19:27",
+  "problema_relatado": "Dificuldade para conectar no wifi do Pecege devido à solicitação de senha.",
+  "categoria": "Conexão Wifi"
+}
+{
+  "quem_solicitou_atendimento": "Lilian Beatriz de Sousa",
+  "email_solicitante": "liliansousa@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-24",
+  "hora_primeira_mensagem": "11:28:06",
+  "tempo_primeira_resposta": "00:00:33",
+  "tempo_total_atendimento": "00:44:39",
+  "problema_relatado": "Cabo azul da mesa não está funcionando.",
+  "categoria": "Equipamento"
+}
+{
+  "quem_solicitou_atendimento": "Livia Nastaro Fassiroli",
+  "email_solicitante": "liviafassiroli@pecege.com",
+  "quem_respondeu": "Clara",
+  "data_solicitacao": "2025-02-26",
+  "hora_primeira_mensagem": "12:45:08",
+  "tempo_primeira_resposta": "00:01:32",
+  "tempo_total_atendimento": "00:38:58",
+  "problema_relatado": "Atualização do Windows não está sendo concluída e continua aparecendo aviso de atualização pendente.",
+  "categoria": "Atualização de Software"
+}
+{"atendimentos":[{"quem_solicitou_atendimento":"Lorena Bortolazzo Cazele","email_solicitante":"lorenacazele@pecege.com","quem_respondeu":"André","data_solicitacao":"2025-03-07","hora_primeira_mensagem":"14:01:12","tempo_primeira_resposta":"00:03:31","tempo_total_atendimento":"00:59:38","problema_relatado":"O SharePoint não está atualizando.","categoria":"SharePoint"},{"quem_solicitou_atendimento":"Lorena Bortolazzo Cazele","email_solicitante":"lorenacazele@pecege.com","quem_respondeu":"Jofre","data_solicitacao":"2025-03-10","hora_primeira_mensagem":"13:09:11","tempo_primeira_resposta":"00:07:57","tempo_total_atendimento":"01:51:36","problema_relatado":"O computador parou de sincronizar e não aparece os status.","categoria":"Sincronização"},{"quem_solicitou_atendimento":"Lorena Bortolazzo Cazele","email_solicitante":"lorenacazele@pecege.com","quem_respondeu":"Help Desk Pecege","data_solicitacao":"2025-03-10","hora_primeira_mensagem":"13:45:50","tempo_primeira_resposta":"00:00:00","tempo_total_atendimento":"00:26:25","problema_relatado":"O OneDrive parou de funcionar novamente e não consigo compartilhar a pasta.","categoria":"OneDrive"}]}
+{
+  "quem_solicitou_atendimento": "Lorena Maniero Silva",
+  "email_solicitante": "lorenamaniero@pecege.com",
+  "quem_respondeu": "Jofre",
+  "data_solicitacao": "2025-02-24",
+  "hora_primeira_mensagem": "17:32:30",
+  "tempo_primeira_resposta": "00:09:32",
+  "tempo_total_atendimento": "00:42:06",
+  "problema_relatado": "Lorena não sabe para onde foi o documento escaneado na Konica.",
+  "categoria": "Documentos"
+}
+{
+  "quem_solicitou_atendimento": "Lorena Pizzócaro Menconi",
+  "email_solicitante": "lorenamenconi@pecege.com",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-03-06",
+  "hora_primeira_mensagem": "12:11:22",
+  "tempo_primeira_resposta": "00:01:32",
+  "tempo_total_atendimento": "00:54:54",
+  "problema_relatado": "Lorena não consegue conectar seu computador à impressora de etiquetas e depois relata que a impressora grande não está imprimindo.",
+  "categoria": "Conexão e Impressão"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Luana dos Santos Bonifácio",
+      "email_solicitante": "luanabonifacio@pecege.com",
+      "quem_respondeu": "André, Clara",
+      "data_solicitacao": "2025-02-26",
+      "hora_primeira_mensagem": "12:14:20",
+      "tempo_primeira_resposta": "00:02:41",
+      "tempo_total_atendimento": "00:36:44",
+      "problema_relatado": "Solicitação para trocar o número de acesso do e-mail.",
+      "categoria": "Troca de acesso"
+    },
+    {
+      "quem_solicitou_atendimento": "Luana dos Santos Bonifácio",
+      "email_solicitante": "luanabonifacio@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-13",
+      "hora_primeira_mensagem": "12:08:51",
+      "tempo_primeira_resposta": "00:02:23",
+      "tempo_total_atendimento": "00:10:19",
+      "problema_relatado": "Dificuldade para acessar o sistema Apolo pelo computador.",
+      "categoria": "Acesso ao sistema"
+    },
+    {
+      "quem_solicitou_atendimento": "Luana dos Santos Bonifácio",
+      "email_solicitante": "luanabonifacio@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-14",
+      "hora_primeira_mensagem": "11:00:30",
+      "tempo_primeira_resposta": "00:01:15",
+      "tempo_total_atendimento": "00:19:59",
+      "problema_relatado": "Problema com a impressora instalada no computador.",
+      "categoria": "Impressora"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Luan Henrique Lopes Ramalho",
+  "email_solicitante": "luanramalho@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-20",
+  "hora_primeira_mensagem": "11:26:20",
+  "tempo_primeira_resposta": "00:03:23",
+  "tempo_total_atendimento": "00:07:19",
+  "problema_relatado": "O bot da cantina está com um bug e não está mostrando o almoço de amanhã.",
+  "categoria": "Problema com bot"
+}
+{
+  "atendimentos": []
+}
+{
+  "atendimentos": []
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Luiz Eduardo Giovanelli",
+      "email_solicitante": "luizgiovanelli@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-18",
+      "hora_primeira_mensagem": "11:25:13",
+      "tempo_primeira_resposta": "00:05:22",
+      "tempo_total_atendimento": "00:12:10",
+      "problema_relatado": "Luiz está sem internet e wifi no computador.",
+      "categoria": "Conexão de Internet"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Magda Leite da Silva",
+  "email_solicitante": "magdasilva@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-19",
+  "hora_primeira_mensagem": "13:53:45",
+  "tempo_primeira_resposta": "00:00:17",
+  "tempo_total_atendimento": "00:08:03",
+  "problema_relatado": "O notebook da Magda não estava acessando a internet com o cabo.",
+  "categoria": "Conexão de Internet"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Manuela Frias Alcarde",
+      "email_solicitante": "manuelaalcarde@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-18",
+      "hora_primeira_mensagem": "17:43:16",
+      "tempo_primeira_resposta": "00:00:44",
+      "tempo_total_atendimento": "02:14:43",
+      "problema_relatado": "Solicitou acesso ao One Drive e ajuda para conectar o computador à fonte de Wi-Fi.",
+      "categoria": "Acesso e Conexão"
+    },
+    {
+      "quem_solicitou_atendimento": "Manuela Frias Alcarde",
+      "email_solicitante": "manuelaalcarde@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-19",
+      "hora_primeira_mensagem": "17:41:23",
+      "tempo_primeira_resposta": "00:00:30",
+      "tempo_total_atendimento": "00:29:30",
+      "problema_relatado": "Solicitou um hub e perguntou como fazer o pedido.",
+      "categoria": "Equipamento"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Manuela Mendes de Mattos",
+      "email_solicitante": "manuelamattos@pecege.com",
+      "quem_respondeu": "Jofre",
+      "data_solicitacao": "2025-03-13",
+      "hora_primeira_mensagem": "15:48:59",
+      "tempo_primeira_resposta": "19:42",
+      "tempo_total_atendimento": "20:00",
+      "problema_relatado": "Manuela pediu ajuda para ver os últimos salvamentos de sua planilha.",
+      "categoria": "Planilha"
+    },
+    {
+      "quem_solicitou_atendimento": "Manuela Mendes de Mattos",
+      "email_solicitante": "manuelamattos@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-19",
+      "hora_primeira_mensagem": "15:05:40",
+      "tempo_primeira_resposta": "00:38",
+      "tempo_total_atendimento": "02:57",
+      "problema_relatado": "Manuela tinha uma dúvida sobre o acesso dos participantes a uma planilha no Outlook.",
+      "categoria": "Outlook"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Marcela Ferrato dos Santos Leite Moreira",
+      "email_solicitante": "marcelamoreira@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-02-25",
+      "hora_primeira_mensagem": "13:29:34",
+      "tempo_primeira_resposta": "00:00:00",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Apagou o WhatsApp do celular e do computador, perdendo todos os arquivos.",
+      "categoria": "Aplicativo"
+    },
+    {
+      "quem_solicitou_atendimento": "Marcela Ferrato dos Santos Leite Moreira",
+      "email_solicitante": "marcelamoreira@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-06",
+      "hora_primeira_mensagem": "10:06:06",
+      "tempo_primeira_resposta": "00:00:00",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Precisa de ajuda com a impressora para um evento interno.",
+      "categoria": "Impressora"
+    },
+    {
+      "quem_solicitou_atendimento": "Marcela Ferrato dos Santos Leite Moreira",
+      "email_solicitante": "marcelamoreira@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-12",
+      "hora_primeira_mensagem": "13:43:40",
+      "tempo_primeira_resposta": "00:00:07",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Computador da colega nova sem internet.",
+      "categoria": "Conexão"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Marco Aurelio Ribeiro de Souza Junior",
+  "email_solicitante": "marcojunior@pecege.com",
+  "quem_respondeu": "Barbi",
+  "data_solicitacao": "2025-03-06",
+  "hora_primeira_mensagem": "17:10:06",
+  "tempo_primeira_resposta": "00:00:52",
+  "tempo_total_atendimento": "00:12:43",
+  "problema_relatado": "Cabo de rede não está funcionando.",
+  "categoria": "Rede"
+}
+{
+  "quem_solicitou_atendimento": "Maria Aparecida Nogueira Serigatto Braghetta",
+  "email_solicitante": "mariabraghetta@pecege.com",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-02-25",
+  "hora_primeira_mensagem": "12:04:11",
+  "tempo_primeira_resposta": "00:00:22",
+  "tempo_total_atendimento": "00:20:52",
+  "problema_relatado": "Dificuldade em baixar a conta convenios@ciaamplus.com, a senha não está sendo aceita.",
+  "categoria": "Acesso a conta"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Maria Cecilia",
+      "email_solicitante": "mariacecilia@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-02-25",
+      "hora_primeira_mensagem": "19:39:01",
+      "tempo_primeira_resposta": "00:02:21",
+      "tempo_total_atendimento": "00:06:43",
+      "problema_relatado": "Dificuldade para imprimir um documento devido ao servidor estar offline.",
+      "categoria": "Impressão"
+    },
+    {
+      "quem_solicitou_atendimento": "Maria Cecilia",
+      "email_solicitante": "mariacecilia@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-06",
+      "hora_primeira_mensagem": "16:07:31",
+      "tempo_primeira_resposta": "00:14:02",
+      "tempo_total_atendimento": "00:20:29",
+      "problema_relatado": "Problema de sincronização do computador com o SharePoint.",
+      "categoria": "Sincronização"
+    }
+  ]
+}
+{"quem_solicitou_atendimento":"Maria Cristina de Souza Mello","email_solicitante":"mariamello@pecege.com","quem_respondeu":"Clara","data_solicitacao":"2025-03-06","hora_primeira_mensagem":"16:44:34","tempo_primeira_resposta":"00:03:25","tempo_total_atendimento":"01:39:21","problema_relatado":"Música teste tocando no notebook e pasta de downloads travando.","categoria":"Problemas de som e desempenho"}
+{
+  "quem_solicitou_atendimento": "Mariana Medeiros",
+  "email_solicitante": "marianamedeiros@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-02-28",
+  "hora_primeira_mensagem": "16:17:40",
+  "tempo_primeira_resposta": "00:00:29",
+  "tempo_total_atendimento": "01:17:59",
+  "problema_relatado": "A internet no 3º andar está lenta, afetando diversos serviços.",
+  "categoria": "Conexão de Internet"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Mariana Rissatto Tonin",
+      "email_solicitante": "marianatonin@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-07",
+      "hora_primeira_mensagem": "11:32:24",
+      "tempo_primeira_resposta": "00:02:38",
+      "tempo_total_atendimento": "00:03:35",
+      "problema_relatado": "Problema com o celular que não está relacionado ao Pecege.",
+      "categoria": "Problema de celular"
+    },
+    {
+      "quem_solicitou_atendimento": "Mariana Rissatto Tonin",
+      "email_solicitante": "marianatonin@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-12",
+      "hora_primeira_mensagem": "16:17:02",
+      "tempo_primeira_resposta": "00:02:20",
+      "tempo_total_atendimento": "00:35:41",
+      "problema_relatado": "Dificuldade na atualização da impressora.",
+      "categoria": "Problema de impressora"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Maria Lucia Rittozzi Nogueira",
+      "email_solicitante": "marianogueira@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-02-24",
+      "hora_primeira_mensagem": "15:21:51",
+      "tempo_primeira_resposta": "00:00:09",
+      "tempo_total_atendimento": "00:16:49",
+      "problema_relatado": "Erro ao tentar usar a impressora.",
+      "categoria": "Impressora"
+    },
+    {
+      "quem_solicitou_atendimento": "Maria Lucia Rittozzi Nogueira",
+      "email_solicitante": "marianogueira@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-06",
+      "hora_primeira_mensagem": "11:25:38",
+      "tempo_primeira_resposta": "00:11:49",
+      "tempo_total_atendimento": "00:17:41",
+      "problema_relatado": "Necessidade de um cabo de internet para o notebook.",
+      "categoria": "Internet"
+    },
+    {
+      "quem_solicitou_atendimento": "Maria Lucia Rittozzi Nogueira",
+      "email_solicitante": "marianogueira@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-14",
+      "hora_primeira_mensagem": "12:51:33",
+      "tempo_primeira_resposta": "00:00:34",
+      "tempo_total_atendimento": "00:16:18",
+      "problema_relatado": "Suporte com a atualização da impressora.",
+      "categoria": "Impressora"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Maria Fernanda Alvatti Sartori",
+  "email_solicitante": "mariasartori@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-07",
+  "hora_primeira_mensagem": "18:31:01",
+  "tempo_primeira_resposta": "00:01:07",
+  "tempo_total_atendimento": "00:05:53",
+  "problema_relatado": "O computador está travando, possivelmente devido a um problema de memória RAM.",
+  "categoria": "Desempenho do PC"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Marielle Bonafe Burin",
+      "email_solicitante": "marielleburin@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-02-24",
+      "hora_primeira_mensagem": "11:32:42",
+      "tempo_primeira_resposta": "00:07:31",
+      "tempo_total_atendimento": "00:25:24",
+      "problema_relatado": "Marielle não estava conseguindo imprimir e não sabia se o problema era com o notebook ou com a impressora.",
+      "categoria": "Impressão"
+    },
+    {
+      "quem_solicitou_atendimento": "Marielle Bonafe Burin",
+      "email_solicitante": "marielleburin@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-12",
+      "hora_primeira_mensagem": "11:10:19",
+      "tempo_primeira_resposta": "00:01:49",
+      "tempo_total_atendimento": "00:01:49",
+      "problema_relatado": "Marielle precisa de ajuda para imprimir dois documentos, pois a impressora está apresentando erro.",
+      "categoria": "Impressão"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Marina Godoi Cardoso",
+  "email_solicitante": "marinacardoso@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-24",
+  "hora_primeira_mensagem": "11:33:49",
+  "tempo_primeira_resposta": "16:11",
+  "tempo_total_atendimento": "36:11",
+  "problema_relatado": "O computador está pedindo atualização quase diariamente.",
+  "categoria": "Atualização de software"
+}
+{
+  "atendimentos": []
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Matheus Moda Carcanholo",
+      "email_solicitante": "matheuscarcanholo@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-18",
+      "hora_primeira_mensagem": "11:09:15",
+      "tempo_primeira_resposta": "00:00:13",
+      "tempo_total_atendimento": "05:14:23",
+      "problema_relatado": "Cabo de rede não está funcionando, desconecta frequentemente.",
+      "categoria": "Conexão de rede"
+    },
+    {
+      "quem_solicitou_atendimento": "Matheus Moda Carcanholo",
+      "email_solicitante": "matheuscarcanholo@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-19",
+      "hora_primeira_mensagem": "11:53:43",
+      "tempo_primeira_resposta": "00:00:12",
+      "tempo_total_atendimento": "00:21:09",
+      "problema_relatado": "Internet via cabo para de funcionar frequentemente.",
+      "categoria": "Conexão de rede"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Matheus Nogareda Gois",
+      "email_solicitante": "matheusgois@pecege.com",
+      "quem_respondeu": "Clara",
+      "data_solicitacao": "2025-03-20",
+      "hora_primeira_mensagem": "13:54:18",
+      "tempo_primeira_resposta": "00:04:25",
+      "tempo_total_atendimento": "03:03:01",
+      "problema_relatado": "Matheus está tendo problemas para descompactar algumas pastas.",
+      "categoria": "Descompactação de arquivos"
+    },
+    {
+      "quem_solicitou_atendimento": "Matheus Nogareda Gois",
+      "email_solicitante": "matheusgois@pecege.com",
+      "quem_respondeu": "Clara",
+      "data_solicitacao": "2025-03-20",
+      "hora_primeira_mensagem": "14:19:46",
+      "tempo_primeira_resposta": "00:21:19",
+      "tempo_total_atendimento": "00:38:36",
+      "problema_relatado": "Matheus relata que outra pasta está apresentando o mesmo erro de descompactação.",
+      "categoria": "Descompactação de arquivos"
+    }
+  ]
+}
+{"atendimentos":[{"quem_solicitou_atendimento":"Matheus Renato Ricci","email_solicitante":"matheusricci@pecege.com","quem_respondeu":"Help Desk Pecege","data_solicitacao":"2025-02-24","hora_primeira_mensagem":"20:17:34","tempo_primeira_resposta":"1:15:59","tempo_total_atendimento":"1:02:21","problema_relatado":"Problemas com a licença do DataGrip, não conseguindo ativar.","categoria":"Licença de software"},{"quem_solicitou_atendimento":"Matheus Renato Ricci","email_solicitante":"matheusricci@pecege.com","quem_respondeu":"Help Desk Pecege","data_solicitacao":"2025-03-12","hora_primeira_mensagem":"21:27:31","tempo_primeira_resposta":"0:16:18","tempo_total_atendimento":"0:03:54","problema_relatado":"Sem acesso a uma view no banco de dados do IB, solicitando liberação de acesso.","categoria":"Acesso a banco de dados"}]}
+{
+  "atendimentos": []
+}
+{
+  "quem_solicitou_atendimento": "Melissa Ferreira Rota",
+  "email_solicitante": "melissarota@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-07",
+  "hora_primeira_mensagem": "13:22:23",
+  "tempo_primeira_resposta": "00:01:45",
+  "tempo_total_atendimento": "00:02:51",
+  "problema_relatado": "Solicitação para trocar o teclado.",
+  "categoria": "Troca de equipamento"
+}
+{
+  "quem_solicitou_atendimento": "Miriã Daniela Grecco de Campos",
+  "email_solicitante": "miriacampos@pecege.com",
+  "quem_respondeu": ["Jofre", "Barbi"],
+  "data_solicitacao": "2025-03-10",
+  "hora_primeira_mensagem": "18:32:24",
+  "tempo_primeira_resposta": "00:02:36",
+  "tempo_total_atendimento": "00:13:15",
+  "problema_relatado": "Miriã não estava conseguindo resetar sua senha da academia Pecege.",
+  "categoria": "Reset de senha"
+}
+{
+  "atendimentos": []
+}
+{
+  "quem_solicitou_atendimento": "Naim Acosta",
+  "email_solicitante": "naimacosta@pecege.com",
+  "quem_respondeu": "Jofre",
+  "data_solicitacao": "2025-03-11",
+  "hora_primeira_mensagem": "13:31:34",
+  "tempo_primeira_resposta": "00:01:11",
+  "tempo_total_atendimento": "00:05:10",
+  "problema_relatado": "Problemas na impressora do terceiro andar.",
+  "categoria": "Impressora"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Natália Kurebayashi Velloso",
+      "email_solicitante": "nataliavelloso@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "15:51:00",
+      "tempo_primeira_resposta": "00:00:36",
+      "tempo_total_atendimento": "00:08:18",
+      "problema_relatado": "Dificuldade para imprimir, várias pessoas estão com o mesmo problema.",
+      "categoria": "Impressão"
+    },
+    {
+      "quem_solicitou_atendimento": "Natália Kurebayashi Velloso",
+      "email_solicitante": "nataliavelloso@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-20",
+      "hora_primeira_mensagem": "13:00:13",
+      "tempo_primeira_resposta": "00:02:39",
+      "tempo_total_atendimento": "00:27:47",
+      "problema_relatado": "Pasta não está conectada com o OneDrive.",
+      "categoria": "OneDrive"
+    },
+    {
+      "quem_solicitou_atendimento": "Natália Kurebayashi Velloso",
+      "email_solicitante": "nataliavelloso@pecege.com",
+      "quem_respondeu": "Barbi",
+      "data_solicitacao": "2025-03-20",
+      "hora_primeira_mensagem": "15:57:14",
+      "tempo_primeira_resposta": "00:04:47",
+      "tempo_total_atendimento": "00:09:49",
+      "problema_relatado": "Tentativa de abrir um arquivo que não está acessível, erro ao tentar abrir.",
+      "categoria": "Acesso a Arquivo"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Nelson Franco",
+  "email_solicitante": "nelson@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-07",
+  "hora_primeira_mensagem": "16:42:10",
+  "tempo_primeira_resposta": "00:02:47",
+  "tempo_total_atendimento": "00:02:47",
+  "problema_relatado": "Nelson precisa mapear a impressora no seu notebook.",
+  "categoria": "Impressão"
+}
+{
+  "quem_solicitou_atendimento": "Paula Cristina de Andrade Macedo Coelho",
+  "email_solicitante": "paulacoelho@pecege.com",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-03-18",
+  "hora_primeira_mensagem": "12:51:22",
+  "tempo_primeira_resposta": "00:00:48",
+  "tempo_total_atendimento": "01:07:43",
+  "problema_relatado": "Paula solicitou acesso à caixa de e-mails monografiaescolar@pecege.com para pesquisar informações enviadas a uma aluna.",
+  "categoria": "Acesso a e-mail"
+}
+{
+  "quem_solicitou_atendimento": "Pedro Henrique de Godoi Balego",
+  "email_solicitante": "pedrobalego@pecege.com",
+  "quem_respondeu": "Clara",
+  "data_solicitacao": "2025-02-27",
+  "hora_primeira_mensagem": "17:10:32",
+  "tempo_primeira_resposta": "00:00:39",
+  "tempo_total_atendimento": "00:11:48",
+  "problema_relatado": "Windows desativado, possível expiração da licença.",
+  "categoria": "Ativação de Windows"
+}
+{
+  "atendimentos": []
+}
+{
+  "quem_solicitou_atendimento": "Priscila Rodrigues do Prado Belloti",
+  "email_solicitante": "priscilabelloti@pecege.com",
+  "quem_respondeu": "André",
+  "data_solicitacao": "2025-03-20",
+  "hora_primeira_mensagem": "12:15:02",
+  "tempo_primeira_resposta": "00:00:25",
+  "tempo_total_atendimento": "00:06:52",
+  "problema_relatado": "A câmera parou de funcionar.",
+  "categoria": "Hardware"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Priscila Fortes",
+      "email_solicitante": "priscilafortes@pecege.com",
+      "quem_respondeu": "Barbi",
+      "data_solicitacao": "2025-02-28",
+      "hora_primeira_mensagem": "18:07:56",
+      "tempo_primeira_resposta": "0:02:44",
+      "tempo_total_atendimento": "0:05:24",
+      "problema_relatado": "Priscila está com problemas no som do computador.",
+      "categoria": "Problema de áudio"
+    },
+    {
+      "quem_solicitou_atendimento": "Priscila Fortes",
+      "email_solicitante": "priscilafortes@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-21",
+      "hora_primeira_mensagem": "12:20:26",
+      "tempo_primeira_resposta": "0:02:18",
+      "tempo_total_atendimento": "0:27:23",
+      "problema_relatado": "Priscila não consegue conectar à internet e pede a senha do Wi-Fi.",
+      "categoria": "Problema de conexão"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Rafaella Folegoto Claudio",
+      "email_solicitante": "rafaellaclaudio@pecege.com",
+      "quem_respondeu": "Jofre",
+      "data_solicitacao": "2025-02-27",
+      "hora_primeira_mensagem": "18:57:29",
+      "tempo_primeira_resposta": "00:00:22",
+      "tempo_total_atendimento": "00:03:42",
+      "problema_relatado": "Notebook pede atualização todos os dias, mesmo após atualizar.",
+      "categoria": "Atualização de software"
+    },
+    {
+      "quem_solicitou_atendimento": "Rafaella Folegoto Claudio",
+      "email_solicitante": "rafaellaclaudio@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-12",
+      "hora_primeira_mensagem": "18:00:45",
+      "tempo_primeira_resposta": "00:11:02",
+      "tempo_total_atendimento": "00:55:54",
+      "problema_relatado": "Dificuldade em acessar conta do RH devido a não recebimento de código do Authenticator.",
+      "categoria": "Acesso a conta"
+    }
+  ]
+}
+{
+  "atendimentos": []
+}
+{"atendimentos":[{"quem_solicitou_atendimento":"Renata Corazolla","email_solicitante":"renata@pecege.com","quem_respondeu":"Jofre","data_solicitacao":"2025-02-25","hora_primeira_mensagem":"20:21:20","tempo_primeira_resposta":"00:02:38","tempo_total_atendimento":"00:02:38","problema_relatado":"A impressora estava imprimindo a cor verde como amarela.","categoria":"Impressora"},{"quem_solicitou_atendimento":"Renata Corazolla","email_solicitante":"renata@pecege.com","quem_respondeu":"André","data_solicitacao":"2025-02-27","hora_primeira_mensagem":"11:42:03","tempo_primeira_resposta":"00:01:38","tempo_total_atendimento":"00:01:38","problema_relatado":"A impressora não estava funcionando e não imprimia nada.","categoria":"Impressora"},{"quem_solicitou_atendimento":"Renata Corazolla","email_solicitante":"renata@pecege.com","quem_respondeu":"Jofre","data_solicitacao":"2025-03-07","hora_primeira_mensagem":"10:34:13","tempo_primeira_resposta":"00:02:01","tempo_total_atendimento":"00:09:37","problema_relatado":"Não estava conseguindo imprimir na impressora Canon 3B.","categoria":"Impressora"},{"quem_solicitou_atendimento":"Renata Corazolla","email_solicitante":"renata@pecege.com","quem_respondeu":"André","data_solicitacao":"2025-03-10","hora_primeira_mensagem":"14:55:46","tempo_primeira_resposta":"00:00:48","tempo_total_atendimento":"00:01:38","problema_relatado":"Não estava conseguindo imprimir novamente.","categoria":"Impressora"},{"quem_solicitou_atendimento":"Renata Corazolla","email_solicitante":"renata@pecege.com","quem_respondeu":"Barbi","data_solicitacao":"2025-03-12","hora_primeira_mensagem":"16:48:35","tempo_primeira_resposta":"00:03:16","tempo_total_atendimento":"00:10:50","problema_relatado":"A nova integrante da equipe não estava conseguindo acessar o calendário e as pastas.","categoria":"Acesso a sistema"},{"quem_solicitou_atendimento":"Renata Corazolla","email_solicitante":"renata@pecege.com","quem_respondeu":"Mateus","data_solicitacao":"2025-03-17","hora_primeira_mensagem":"20:00:54","tempo_primeira_resposta":"00:00:28","tempo_total_atendimento":"00:14:00","problema_relatado":"A impressora não estava funcionando e não estava imprimindo.","categoria":"Impressora"}]}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Renata de Gaspari Valdejão Almeida",
+      "email_solicitante": "renataalmeida@pecege.com",
+      "quem_respondeu": "André",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "11:57:47",
+      "tempo_primeira_resposta": "01:20:47",
+      "tempo_total_atendimento": "07:57:48",
+      "problema_relatado": "Problema na impressora da Editora.",
+      "categoria": "Impressora"
+    },
+    {
+      "quem_solicitou_atendimento": "Renata de Gaspari Valdejão Almeida",
+      "email_solicitante": "renataalmeida@pecege.com",
+      "quem_respondeu": "Jofre",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "19:52:35",
+      "tempo_primeira_resposta": "00:01:58",
+      "tempo_total_atendimento": "00:03:00",
+      "problema_relatado": "O problema da impressora da Editora voltou.",
+      "categoria": "Impressora"
+    }
+  ]
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Ricardo Kazuo Tanaka",
+      "email_solicitante": "ricardotanaka@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-02-24",
+      "hora_primeira_mensagem": "19:30:09",
+      "tempo_primeira_resposta": "00:00:22",
+      "tempo_total_atendimento": "00:27:39",
+      "problema_relatado": "Notebook não liga após acabar a bateria e apresenta uma tela de erro.",
+      "categoria": "Problema de login"
+    },
+    {
+      "quem_solicitou_atendimento": "Ricardo Kazuo Tanaka",
+      "email_solicitante": "ricardotanaka@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-02-26",
+      "hora_primeira_mensagem": "14:23:43",
+      "tempo_primeira_resposta": "00:00:08",
+      "tempo_total_atendimento": "00:48:25",
+      "problema_relatado": "Solicitação de configurações para nova ferramenta de assessoria de imprensa.",
+      "categoria": "Configuração de sistema"
+    }
+  ]
+}
+
+{
+  "atendimentos": []
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Prof. Ricardo Shirota",
+      "email_solicitante": "rshirota@pecege.com",
+      "quem_respondeu": "Clara",
+      "data_solicitacao": "2025-02-28",
+      "hora_primeira_mensagem": "11:19:46",
+      "tempo_primeira_resposta": "00:00:14",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Solicitação para desinstalar o McAfee do computador.",
+      "categoria": "Desinstalação de software"
+    },
+    {
+      "quem_solicitou_atendimento": "Prof. Ricardo Shirota",
+      "email_solicitante": "rshirota@pecege.com",
+      "quem_respondeu": "Sandro",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "11:41:27",
+      "tempo_primeira_resposta": "00:00:00",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "O McAfee ainda gera 'pop-ups' e pergunta se tem como eliminar.",
+      "categoria": "Problema com software"
+    },
+    {
+      "quem_solicitou_atendimento": "Prof. Ricardo Shirota",
+      "email_solicitante": "rshirota@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-13",
+      "hora_primeira_mensagem": "17:27:14",
+      "tempo_primeira_resposta": "00:00:18",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Notebook está 'meio estranho' e pergunta se alguém pode verificar se não foi infectado.",
+      "categoria": "Verificação de segurança"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Samara Rosane da Silva",
+  "email_solicitante": "samarasilva@pecege.com",
+  "quem_respondeu": "Clara",
+  "data_solicitacao": "2025-02-26",
+  "hora_primeira_mensagem": "17:05:25",
+  "tempo_primeira_resposta": "00:00:45",
+  "tempo_total_atendimento": "00:09:19",
+  "problema_relatado": "Cabo da internet não está conectando e o wifi oscila.",
+  "categoria": "Conexão de internet"
+}
+{
+  "atendimentos": []
+}
+{"quem_solicitou_atendimento":"Sérgio Paulo Junior Valerio de Freitas","email_solicitante":"sergiofreitas@pecege.com","quem_respondeu":"Barbi","data_solicitacao":"2025-03-17","hora_primeira_mensagem":"17:17:25","tempo_primeira_resposta":"00:02:14","tempo_total_atendimento":"01:10:32","problema_relatado":"Dificuldade em acessar aplicativos do Office 365 com um e-mail específico.","categoria":"Acesso a aplicativos"}
+{
+  "quem_solicitou_atendimento": "Silvana Duarte Cavicchioli",
+  "email_solicitante": "silvanacavicchioli@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-02-25",
+  "hora_primeira_mensagem": "14:39:49",
+  "tempo_primeira_resposta": "00:04:14",
+  "tempo_total_atendimento": "00:34:55",
+  "problema_relatado": "A impressora Ricoh está com status não disponível e a nova impressora Konica não está aparecendo.",
+  "categoria": "Impressão"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Simone Maria Cruz Oliveira",
+      "email_solicitante": "simoneoliveira@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-06",
+      "hora_primeira_mensagem": "11:06:11",
+      "tempo_primeira_resposta": "00:01:25",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Solicitação de instalação de cabos no terceiro andar.",
+      "categoria": "Instalação"
+    },
+    {
+      "quem_solicitou_atendimento": "Simone Maria Cruz Oliveira",
+      "email_solicitante": "simoneoliveira@pecege.com",
+      "quem_respondeu": "Jofre",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "13:54:52",
+      "tempo_primeira_resposta": "00:00:08",
+      "tempo_total_atendimento": "00:00:00",
+      "problema_relatado": "Problema de conexão de internet.",
+      "categoria": "Conexão"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Stefano Maniero",
+  "email_solicitante": "stefanomaniero@pecege.com",
+  "quem_respondeu": "Barbi",
+  "data_solicitacao": "2025-03-21",
+  "hora_primeira_mensagem": "18:53:29",
+  "tempo_primeira_resposta": "0:00:11",
+  "tempo_total_atendimento": "0:00:42",
+  "problema_relatado": "Stefano não conseguiu logar no Wi-Fi e pediu a senha.",
+  "categoria": "Acesso à rede"
+}
+{
+  "quem_solicitou_atendimento": "Tamara Reis",
+  "email_solicitante": "tamarareis@pecege.com",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-03-18",
+  "hora_primeira_mensagem": "11:41:08",
+  "tempo_primeira_resposta": "00:00:24",
+  "tempo_total_atendimento": "00:08:28",
+  "problema_relatado": "Tamara está tendo dificuldades para logar no Zoom, recebendo uma mensagem que precisa aguardar o host.",
+  "categoria": "Zoom"
+}
+{
+  "quem_solicitou_atendimento": "Thaís da Silva Charles",
+  "email_solicitante": "thaischarles@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-21",
+  "hora_primeira_mensagem": "15:52:17",
+  "tempo_primeira_resposta": "00:03:30",
+  "tempo_total_atendimento": "00:50:41",
+  "problema_relatado": "Thaís não consegue utilizar a impressora do 3º andar, lado B, pois ela não aparece para impressão.",
+  "categoria": "Impressora"
+}
+{
+  "quem_solicitou_atendimento": "Thaissa Neves Reis",
+  "email_solicitante": "thaissareis@pecege.com",
+  "quem_respondeu": "André, Barbi",
+  "data_solicitacao": "2025-03-20",
+  "hora_primeira_mensagem": "13:22:01",
+  "tempo_primeira_resposta": "05:24",
+  "tempo_total_atendimento": "05:26:54",
+  "problema_relatado": "Thaissa não consegue imprimir nas impressoras, o computador trava ao abrir o arquivo para impressão.",
+  "categoria": "Impressão"
+}
+{
+  "quem_solicitou_atendimento": "Thales Barbosa",
+  "email_solicitante": "thalesbarbosa@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-07",
+  "hora_primeira_mensagem": "18:29:23",
+  "tempo_primeira_resposta": "46:14",
+  "tempo_total_atendimento": "50:35",
+  "problema_relatado": "Thales perguntou se é possível alterar o e-mail para defesas e manter o histórico.",
+  "categoria": "Alteração de e-mail"
+}
+{
+  "quem_solicitou_atendimento": "Thiago Novaes",
+  "email_solicitante": "thiagonovaes@pecege.com",
+  "quem_respondeu": "Barbi",
+  "data_solicitacao": "2025-03-19",
+  "hora_primeira_mensagem": "16:10:24",
+  "tempo_primeira_resposta": "00:00:14",
+  "tempo_total_atendimento": "00:03:59",
+  "problema_relatado": "Laptop da Janaína está ligado, mas com a tela apagada.",
+  "categoria": "Problema de hardware"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Vanessa Claudino Mariano",
+      "email_solicitante": "vanessamariano@pecege.com",
+      "quem_respondeu": "Barbi",
+      "data_solicitacao": "2025-03-11",
+      "hora_primeira_mensagem": "17:36:08",
+      "tempo_primeira_resposta": "00:00:11",
+      "tempo_total_atendimento": "00:03:57",
+      "problema_relatado": "O wifi do Pecege não está aparecendo para logar.",
+      "categoria": "Conexão Wifi"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Vanessa Cristina Rizzi",
+  "email_solicitante": "vanessarizzi@pecege.com",
+  "quem_respondeu": "Jofre, João",
+  "data_solicitacao": "2025-03-10",
+  "hora_primeira_mensagem": "14:31:20",
+  "tempo_primeira_resposta": "00:00:43",
+  "tempo_total_atendimento": "00:02:52",
+  "problema_relatado": "O Outlook não está funcionando, embora a conexão Wi-Fi esteja ativa.",
+  "categoria": "Problema de conexão Outlook"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Viviane Silva Barros",
+      "email_solicitante": "vivianebarros@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-02-25",
+      "hora_primeira_mensagem": "11:01:53",
+      "tempo_primeira_resposta": "00:09:18",
+      "tempo_total_atendimento": "00:11:07",
+      "problema_relatado": "Solicitação de cabo de rede para a sala 22.",
+      "categoria": "Infraestrutura"
+    },
+    {
+      "quem_solicitou_atendimento": "Viviane Silva Barros",
+      "email_solicitante": "vivianebarros@pecege.com",
+      "quem_respondeu": "Barbi",
+      "data_solicitacao": "2025-03-12",
+      "hora_primeira_mensagem": "17:21:42",
+      "tempo_primeira_resposta": "00:00:41",
+      "tempo_total_atendimento": "00:02:07",
+      "problema_relatado": "Problemas com a internet cabeada que não está reconhecendo.",
+      "categoria": "Conectividade"
+    }
+  ]
+}
+{
+  "quem_solicitou_atendimento": "Vivian Carolina Espassa",
+  "email_solicitante": "vivianespassa@pecege.com",
+  "quem_respondeu": "Help Desk Pecege",
+  "data_solicitacao": "2025-03-19",
+  "hora_primeira_mensagem": "12:34:04",
+  "tempo_primeira_resposta": "00:01:55",
+  "tempo_total_atendimento": "00:28:28",
+  "problema_relatado": "Dificuldade em abrir um arquivo do SharePoint, com uma mensagem de erro aparecendo.",
+  "categoria": "Problema com SharePoint"
+}
+{
+  "quem_solicitou_atendimento": "Wesllei Souza",
+  "email_solicitante": "weslleisouza@pecege.com",
+  "quem_respondeu": "Mateus",
+  "data_solicitacao": "2025-02-25",
+  "hora_primeira_mensagem": "11:11:31",
+  "tempo_primeira_resposta": "00:00:24",
+  "tempo_total_atendimento": "00:00:48",
+  "problema_relatado": "A internet cabeada não está funcionando no PC desktop e não há como conectar no Wi-Fi.",
+  "categoria": "Conexão de Internet"
+}
+{
+  "atendimentos": [
+    {
+      "quem_solicitou_atendimento": "Wilson Moscardi Basqueroto",
+      "email_solicitante": "wilsonbasqueroto@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-02-28",
+      "hora_primeira_mensagem": "17:05:47",
+      "tempo_primeira_resposta": "20:44",
+      "tempo_total_atendimento": "12:11:36",
+      "problema_relatado": "Scanner não termina a digitalização.",
+      "categoria": "Scanner"
+    },
+    {
+      "quem_solicitou_atendimento": "Wilson Moscardi Basqueroto",
+      "email_solicitante": "wilsonbasqueroto@pecege.com",
+      "quem_respondeu": "Mateus",
+      "data_solicitacao": "2025-03-10",
+      "hora_primeira_mensagem": "16:01:12",
+      "tempo_primeira_resposta": "3:11",
+      "tempo_total_atendimento": "0:17:03",
+      "problema_relatado": "Impressoras estão offline.",
+      "categoria": "Impressão"
+    },
+    {
+      "quem_solicitou_atendimento": "Wilson Moscardi Basqueroto",
+      "email_solicitante": "wilsonbasqueroto@pecege.com",
+      "quem_respondeu": "Jofre",
+      "data_solicitacao": "2025-03-13",
+      "hora_primeira_mensagem": "17:28:48",
+      "tempo_primeira_resposta": "2:10",
+      "tempo_total_atendimento": "0:10:08",
+      "problema_relatado": "Problema ao adicionar e-mail no Outlook, aparece número de telefone desconhecido.",
+      "categoria": "E-mail"
+    },
+    {
+      "quem_solicitou_atendimento": "Wilson Moscardi Basqueroto",
+      "email_solicitante": "wilsonbasqueroto@pecege.com",
+      "quem_respondeu": "Jofre",
+      "data_solicitacao": "2025-03-20",
+      "hora_primeira_mensagem": "16:26:24",
+      "tempo_primeira_resposta": "0:01:30",
+      "tempo_total_atendimento": "0:02:18",
+      "problema_relatado": "Dúvida sobre sincronização de pasta compartilhada.",
+      "categoria": "Sincronização"
+    },
+    {
+      "quem_solicitou_atendimento": "Wilson Moscardi Basqueroto",
+      "email_solicitante": "wilsonbasqueroto@pecege.com",
+      "quem_respondeu": "Help Desk Pecege",
+      "data_solicitacao": "2025-03-21",
+      "hora_primeira_mensagem": "16:03:54",
+      "tempo_primeira_resposta": "0:11:38",
+      "tempo_total_atendimento": "0:30:02",
+      "problema_relatado": "Arquivo corrompido ao tentar abrir no Windows.",
+      "categoria": "Arquivo"
+    },
+    {
+      "quem_solicitou_atendimento": "Wilson Moscardi Basqueroto",
+      "email_solicitante": "wilsonbasqueroto@pecege.com",
+      "quem_respondeu": "Jofre",
+      "data_solicitacao": "2025-03-21",
+      "hora_primeira_mensagem": "21:24:56",
+      "tempo_primeira_resposta": "0:11:24",
+      "tempo_total_atendimento": "0:00:00",
+      "problema_relatado": "Solicitação para imprimir lista de presença.",
+      "categoria": "Impressão"
+    }
+  ]
+}

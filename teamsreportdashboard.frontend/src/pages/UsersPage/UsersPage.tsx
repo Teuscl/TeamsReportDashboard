@@ -122,20 +122,7 @@ const UsersPage: React.FC = () => {
       enableSorting: false,
       enableHiding: false,
     },
-    { accessorKey: 'name', header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="px"
-        >
-          Nome
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    }, 
-
-    },
+    { accessorKey: 'name', header: 'Nome' },
     { accessorKey: 'email', header: 'Email' },
     {
       accessorKey: 'role',
