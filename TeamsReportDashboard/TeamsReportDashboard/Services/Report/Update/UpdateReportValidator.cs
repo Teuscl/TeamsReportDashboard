@@ -7,17 +7,8 @@ public class UpdateReportValidator : AbstractValidator<UpdateReportDto>
     public UpdateReportValidator()
     {
         // Para RequesterName: se fornecido (não nulo), não pode ser vazio e deve respeitar o tamanho máximo.
-        RuleFor(x => x.RequesterName)
-            .NotEmpty().WithMessage("O nome do solicitante não pode ser vazio se fornecido para atualização.")
-            .MaximumLength(55).WithMessage("O nome do solicitante deve ter no máximo 55 caracteres.")
-            .When(x => x.RequesterName != null); // Aplica APENAS se RequesterName for fornecido
-
-        // Para RequesterEmail: se fornecido, deve ser um email válido e respeitar o tamanho.
-        RuleFor(x => x.RequesterEmail)
-            .NotEmpty().WithMessage("O email do solicitante não pode ser vazio se fornecido para atualização.")
-            .EmailAddress().WithMessage("O email do solicitante deve ser um endereço válido.")
-            .MaximumLength(100).WithMessage("O email do solicitante deve ter no máximo 100 caracteres.")
-            .When(x => x.RequesterEmail != null);
+        RuleFor(x => x.RequesterId)
+            .NotEmpty().WithMessage("O solicitante é obrigatório.");
 
         // Para TechnicianName: se fornecido (não nulo), não pode ser vazio e deve respeitar o tamanho máximo.
         // Isso permite que o cliente envie `null` para TechnicianName para limpá-lo, se a entidade permitir.

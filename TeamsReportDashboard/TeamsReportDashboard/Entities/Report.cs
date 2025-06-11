@@ -5,8 +5,12 @@ namespace TeamsReportDashboard.Backend.Entities;
 
 public class Report : EntityBase
 {
-    [Required] [MaxLength(55)] public string RequesterName { get; set; } = string.Empty;
-    [Required] [MaxLength(100)] public string RequesterEmail { get; set; } = string.Empty;
+    // [Required] [MaxLength(55)] public string RequesterName { get; set; } = string.Empty;
+    // [Required] [MaxLength(100)] public string RequesterEmail { get; set; } = string.Empty;
+    
+    [Required]
+    public int RequesterId { get; set; } // Chave estrangeira para a entidade Requester
+    public virtual Requester Requester { get; set; } = null!; // Propriedade de navegação
     [MaxLength(50)] public string? TechnicianName { get; set; } = string.Empty;
     public DateTime RequestDate { get; set; }
     [Required] [MaxLength(255)] public string ReportedProblem { get; set; } = string.Empty;

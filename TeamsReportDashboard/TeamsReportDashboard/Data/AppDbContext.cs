@@ -2,7 +2,7 @@
 using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Entities;
 
-namespace TeamsReportDashboard.Data;
+namespace TeamsReportDashboard.Backend.Data;
 
 public class AppDbContext : DbContext
 {
@@ -17,8 +17,28 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
+        modelBuilder.Entity<Requester>()
+            .HasIndex(r => r.Email)
+            .IsUnique();
+
+        // Relação: Department -> Requester (Um Departamento tem muitos Solicitantes)
+        modelBuilder.Entity<Department>()
+            .HasMany(d => d.Requesters)
+            .WithOne(r => r.Department)
+            .HasForeignKey(r => r.DepartmentId)
+            .OnDelete(DeleteBehavior.SetNull); // Se um depto for deletado, o depto do funcionário vira null
+
+        // Relação: Report -> Requester (Um Relatório tem um Solicitante)
+        modelBuilder.Entity<Report>()
+            .HasOne(r => r.Requester)
+            .WithMany() // Um solicitante pode ter muitos relatórios
+            .HasForeignKey(r => r.RequesterId)
+            .OnDelete(DeleteBehavior.Restrict); // Impede que um solicitante seja deletado se ele tiver relatórios associados
+
     }
 
     public DbSet<User> Users { get; set; }
     public DbSet<Report> Reports { get; set; }
+    public DbSet<Department> Departments { get; set; } 
+    public DbSet<Requester> Requesters { get; set; }   
 }

@@ -4,6 +4,7 @@ using TeamsReportDashboard.Entities;
 using TeamsReportDashboard.Interfaces;
 using System.Collections.Generic; // Para List
 using System.Threading.Tasks;
+using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Entities; // Para Task
 
 namespace TeamsReportDashboard.Repositories;

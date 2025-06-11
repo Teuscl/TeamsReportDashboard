@@ -4,6 +4,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Models.Configuration;
 using TeamsReportDashboard.Backend.Models.ReportDto;
 using TeamsReportDashboard.Backend.Models.UserDto;

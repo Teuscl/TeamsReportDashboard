@@ -2,8 +2,7 @@
 
 public class UpdateReportDto 
 {
-    public string? RequesterName { get; set; }
-    public string? RequesterEmail { get; set; }
+    public int RequesterId { get; set; }
     public string? TechnicianName { get; set; } 
     public DateTime? RequestDate { get; set; }
     public string? ReportedProblem { get; set; }

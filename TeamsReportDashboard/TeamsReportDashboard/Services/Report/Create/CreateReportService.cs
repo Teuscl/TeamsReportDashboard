@@ -25,8 +25,7 @@ public class CreateReportService : ICreateReportService
        
        var report = new Entities.Report()
        {
-           RequesterEmail = createReportDto.RequesterEmail,
-           RequesterName = createReportDto.RequesterName,
+           RequesterId = createReportDto.RequesterId,
            ReportedProblem = createReportDto.ReportedProblem,
            Category = createReportDto.Category,
            TechnicianName = createReportDto.TechnicianName,
@@ -53,5 +52,8 @@ public class CreateReportService : ICreateReportService
             throw new ErrorOnValidationException(errors);
         }
     }
+    
+    
+    
     
 }
