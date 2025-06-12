@@ -8,8 +8,8 @@ namespace TeamsReportDashboard.Interfaces;
 public interface IReportRepository
 {
     Task<List<Report>> GetAllAsync();
-    Task<Report> GetReportAsync(int id);
-    Task<Report> CreateReportAsync(Report report);
-    Task<bool> UpdateReportAsync(Report report);
-    Task<bool> DeleteReportAsync(int id);
+    Task<Report?> GetReportAsync(int id);
+    Task CreateReportAsync(Report report); // Assinatura corrigida
+    void UpdateReport(Report report);      // Assinatura corrigida
+    Task DeleteReportAsync(int id);        // Assinatura corrigida
 }

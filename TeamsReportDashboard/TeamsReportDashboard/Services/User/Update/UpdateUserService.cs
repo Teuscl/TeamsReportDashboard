@@ -2,13 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Models.UserDto;
-using TeamsReportDashboard.Backend.Services.User.Update;
-using TeamsReportDashboard.Data;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
-using TeamsReportDashboard.Models.Dto;
 
-namespace TeamsReportDashboard.Services.User.Update;
+namespace TeamsReportDashboard.Backend.Services.User.Update;
 
 public class UpdateUserService : IUpdateUserService
 {

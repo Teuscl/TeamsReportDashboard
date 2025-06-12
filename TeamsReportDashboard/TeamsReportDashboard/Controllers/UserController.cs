@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Backend.Services.User.ChangeMyPassword;
@@ -7,13 +6,11 @@ using TeamsReportDashboard.Backend.Services.User.ResetPassword;
 using TeamsReportDashboard.Backend.Services.User.Update;
 using TeamsReportDashboard.Entities;
 using TeamsReportDashboard.Models.Dto;
-using TeamsReportDashboard.Services.User.ChangePassword;
 using TeamsReportDashboard.Services.User.Create;
 using TeamsReportDashboard.Services.User.Delete;
 using TeamsReportDashboard.Services.User.Read;
-using TeamsReportDashboard.Services.User.Update;
 
-namespace TeamsReportDashboard.Controllers;
+namespace TeamsReportDashboard.Backend.Controllers;
 [Route("[controller]")]
 [ApiController]
 public class UserController : Controller

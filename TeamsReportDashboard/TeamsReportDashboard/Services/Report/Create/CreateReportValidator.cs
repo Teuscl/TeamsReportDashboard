@@ -7,9 +7,18 @@ public class CreateReportValidator : AbstractValidator<CreateReportDto>
 {
     public CreateReportValidator()
     {
-        RuleFor(x => x.RequesterId)
-            .NotEmpty().WithMessage("O solicitante é obrigatório.");
-        
+        RuleFor(x => x.RequesterName)
+            .NotEmpty().WithMessage("O nome do solicitante é obrigatório.")
+            .MaximumLength(55).WithMessage("O nome do solicitante deve ter no máximo 55 caracteres.");
+
+        RuleFor(x => x.RequesterEmail)
+            .NotEmpty().WithMessage("O email do solicitante é obrigatório.")
+            .EmailAddress().WithMessage("O email do solicitante deve ser um endereço válido.")
+            .MaximumLength(100).WithMessage("O email do solicitante deve ter no máximo 100 caracteres.");
+
+        // Se TechnicianName for obrigatório no DTO também:
+        // RuleFor(x => x.TechnicianName)
+        //     .NotEmpty().WithMessage("O nome do técnico é obrigatório.");
 
         RuleFor(x => x.TechnicianName)
             .MaximumLength(50).When(x => !string.IsNullOrEmpty(x.TechnicianName))

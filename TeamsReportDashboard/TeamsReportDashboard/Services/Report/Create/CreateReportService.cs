@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Runtime.InteropServices.JavaScript;
+using FluentValidation;
 using TeamsReportDashboard.Backend.Models.ReportDto;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
@@ -22,10 +23,24 @@ public class CreateReportService : ICreateReportService
     public async Task<CreateReportDto> Execute(CreateReportDto createReportDto)
     {
        await Validate(createReportDto);
+
+       var requester = await _unitOfWork.RequesterRepository.GetByEmailAsync(createReportDto.RequesterEmail);
+       if (requester == null)
+       {
+           requester = new Entities.Requester()
+           {
+               Name = createReportDto.RequesterName,
+               Email = createReportDto.RequesterEmail,
+               CreatedAt = DateTime.Now,
+           };
+           // Adicionamos ao repositório para ser salvo depois
+           await _unitOfWork.RequesterRepository.CreateRequesterAsync(requester);
+       }
+       
        
        var report = new Entities.Report()
        {
-           RequesterId = createReportDto.RequesterId,
+           RequesterId = requester.Id,
            ReportedProblem = createReportDto.ReportedProblem,
            Category = createReportDto.Category,
            TechnicianName = createReportDto.TechnicianName,
@@ -52,8 +67,5 @@ public class CreateReportService : ICreateReportService
             throw new ErrorOnValidationException(errors);
         }
     }
-    
-    
-    
     
 }

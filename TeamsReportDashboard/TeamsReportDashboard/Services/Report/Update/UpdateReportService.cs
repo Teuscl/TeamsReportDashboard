@@ -36,7 +36,8 @@ public class UpdateReportService : IUpdateReportService // Certifique-se que est
         _mapper.Map(updateReportDto, report);
         report.UpdatedAt = DateTime.UtcNow;
 
-        await _unitOfWork.ReportRepository.UpdateReportAsync(report); // Ou _unitOfWork.CommitAsync(); dependendo da sua implementação
+        _unitOfWork.ReportRepository.UpdateReport(report);
+        await _unitOfWork.CommitAsync(); // Ou _unitOfWork.CommitAsync(); dependendo da sua implementação
     }
 
     // Renomeado para maior clareza e corrigido para retornar o Report

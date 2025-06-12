@@ -54,5 +54,4 @@ public class CreateUserService : ICreateUserService
             throw new ErrorOnValidationException(errors);
         }
     }
-    
 }

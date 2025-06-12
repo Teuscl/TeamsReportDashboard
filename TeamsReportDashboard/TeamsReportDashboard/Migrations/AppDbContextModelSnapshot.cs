@@ -3,21 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeamsReportDashboard.Backend.Data;
-using TeamsReportDashboard.Data;
 
 #nullable disable
 
 namespace TeamsReportDashboard.Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250611115502_Removing unique index on email sender")]
-    partial class Removinguniqueindexonemailsender
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,6 +21,30 @@ namespace TeamsReportDashboard.Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
+                });
 
             modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.Report", b =>
                 {
@@ -56,15 +76,8 @@ namespace TeamsReportDashboard.Backend.Migrations
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RequesterEmail")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("RequesterName")
-                        .IsRequired()
-                        .HasMaxLength(55)
-                        .HasColumnType("nvarchar(55)");
+                    b.Property<int>("RequesterId")
+                        .HasColumnType("int");
 
                     b.Property<string>("TechnicianName")
                         .HasMaxLength(50)
@@ -75,7 +88,46 @@ namespace TeamsReportDashboard.Backend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RequesterId");
+
                     b.ToTable("Reports");
+                });
+
+            modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.Requester", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Requesters");
                 });
 
             modelBuilder.Entity("TeamsReportDashboard.Entities.User", b =>
@@ -131,6 +183,32 @@ namespace TeamsReportDashboard.Backend.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.Report", b =>
+                {
+                    b.HasOne("TeamsReportDashboard.Backend.Entities.Requester", "Requester")
+                        .WithMany()
+                        .HasForeignKey("RequesterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Requester");
+                });
+
+            modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.Requester", b =>
+                {
+                    b.HasOne("TeamsReportDashboard.Backend.Entities.Department", "Department")
+                        .WithMany("Requesters")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.Department", b =>
+                {
+                    b.Navigation("Requesters");
                 });
 #pragma warning restore 612, 618
         }

@@ -5,23 +5,25 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using TeamsReportDashboard.Backend.Data;
+using TeamsReportDashboard.Backend.Interfaces;
 using TeamsReportDashboard.Backend.Models.Configuration;
 using TeamsReportDashboard.Backend.Models.ReportDto;
 using TeamsReportDashboard.Backend.Models.UserDto;
+using TeamsReportDashboard.Backend.Repositories;
 using TeamsReportDashboard.Backend.Services;
 using TeamsReportDashboard.Backend.Services.Report.Create;
 using TeamsReportDashboard.Backend.Services.Report.Read;
 using TeamsReportDashboard.Backend.Services.Report.Update;
+using TeamsReportDashboard.Backend.Services.Requester.Read;
 using TeamsReportDashboard.Backend.Services.User.ChangeMyPassword;
 using TeamsReportDashboard.Backend.Services.User.ForgotPassword;
 using TeamsReportDashboard.Backend.Services.User.ResetForgottenPassword;
 using TeamsReportDashboard.Backend.Services.User.ResetPassword;
 using TeamsReportDashboard.Backend.Services.User.Update;
-using TeamsReportDashboard.Data;
+
 using TeamsReportDashboard.Filters;
 using TeamsReportDashboard.Interfaces;
 using TeamsReportDashboard.Models.Dto;
-using TeamsReportDashboard.Repositories;
 using TeamsReportDashboard.Services;
 using TeamsReportDashboard.Services.User.ChangePassword;
 using TeamsReportDashboard.Services.User.Create;
@@ -106,6 +108,7 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IRequesterRepository, RequesterRepository>();
 
 builder.Services.AddScoped<ICreateUserService, CreateUserService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
@@ -117,11 +120,12 @@ builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
 builder.Services.AddScoped<IForgotPasswordService, ForgotPasswordService>();
 builder.Services.AddScoped<IResetForgottenPasswordService, ResetForgottenPasswordService>();
 
-
 builder.Services.AddScoped<ICreateReportService, CreateReportService>();
 builder.Services.AddScoped<IUpdateReportService, UpdateReportService>();
 builder.Services.AddScoped<IGetReportService, GetReportService>();
 builder.Services.AddScoped<IDeleteReportService, DeleteReportService>();
+
+builder.Services.AddScoped<IGetRequestersService, GetRequestersService>();
 
 
 var app = builder.Build();
