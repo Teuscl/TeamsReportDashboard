@@ -43,8 +43,7 @@ namespace TeamsReportDashboard.Backend.Controllers
             var reports = await service.GetAll();
             return Ok(reports);
         }
-
-        // GET: /Report/{id}
+       
         [HttpGet("{id}")]
         //[Authorize] // Descomente e ajuste a autorização
         public async Task<IActionResult> GetReportById(
@@ -60,7 +59,7 @@ namespace TeamsReportDashboard.Backend.Controllers
             return Ok(report);
         }
 
-        // PATCH: /Report/{id}
+        
         [HttpPatch("{id}")]
         //[Authorize(Roles = "SeuRoleDeUpdate")] // Descomente e ajuste a autorização
         public async Task<IActionResult> UpdateReport(
@@ -78,7 +77,7 @@ namespace TeamsReportDashboard.Backend.Controllers
             return NoContent(); // Padrão para atualizações bem-sucedidas sem conteúdo de retorno
         }
 
-        // DELETE: /Report/{id}
+        
         [HttpDelete("{id}")]
         //[Authorize(Roles = "SeuRoleDeDelete")] // Descomente e ajuste a autorização
         public async Task<IActionResult> DeleteReport(

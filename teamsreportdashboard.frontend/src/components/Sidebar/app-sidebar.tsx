@@ -1,5 +1,5 @@
 // src/components/layout/app-sidebar.tsx (ou o caminho correto)
-import { Home, FileText, Users } from "lucide-react";
+import { Home, FileText, Users, Building } from "lucide-react";
 import { Link } from "react-router-dom"; // 👈 Importar Link para navegação SPA
 import "../../index.css"; // Verifique se este caminho está correto ou se é necessário
 import { NavUser } from "./nav-user";
@@ -46,14 +46,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   let finalItems: MenuItemType[] = [...baseItems];
 
-  // Adiciona o item "Usuários" apenas se o usuário estiver carregado, autenticado e for Master
-  // A verificação !isLoading garante que só avaliamos user.role quando 'user' já foi definido pelo AuthContext
-  if (!isLoading && user && user.role === RoleEnum.Master) {
-    finalItems.push({
-      title: "Usuários",
-      url: "/users", // Rota para a página de gerenciamento de usuários
-      icon: Users,
-    });
+   // 👇 2. Lógica atualizada para múltiplos perfis e menus
+  if (!isLoading && user) {
+    // Itens para Admin e Master
+    if (user.role === RoleEnum.Admin || user.role === RoleEnum.Master) {
+      finalItems.push({
+        title: "Departamentos",
+        url: "/departments",
+        icon: Building, // Usando o novo ícone
+      });
+    }
+
+    // Itens exclusivos para Master
+    if (user.role === RoleEnum.Master) {
+      finalItems.push({
+        title: "Usuários",
+        url: "/users",
+        icon: Users,
+      });
+    }
   }
 
   return (

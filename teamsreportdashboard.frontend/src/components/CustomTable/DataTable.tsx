@@ -95,10 +95,10 @@ export function DataTable<TData, TValue>({
                               className="px-2 py-1"
                             >
                                 {flexRender(header.column.columnDef.header, header.getContext())}
-                                <ArrowUpDown className="ml-2 h-4 w-4" />
+                                <ArrowUpDown  />
                             </Button>
                           ) : (
-                            <div className="px-2 py-1">
+                            <div >
                                 {flexRender(header.column.columnDef.header, header.getContext())}
                             </div>
                           )

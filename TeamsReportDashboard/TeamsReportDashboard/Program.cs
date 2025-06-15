@@ -7,10 +7,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Interfaces;
 using TeamsReportDashboard.Backend.Models.Configuration;
+using TeamsReportDashboard.Backend.Models.DepartmentDto;
 using TeamsReportDashboard.Backend.Models.ReportDto;
 using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Backend.Repositories;
 using TeamsReportDashboard.Backend.Services;
+using TeamsReportDashboard.Backend.Services.Department.Create;
+using TeamsReportDashboard.Backend.Services.Department.Delete;
+using TeamsReportDashboard.Backend.Services.Department.Read;
+using TeamsReportDashboard.Backend.Services.Department.Update;
 using TeamsReportDashboard.Backend.Services.Report.Create;
 using TeamsReportDashboard.Backend.Services.Report.Read;
 using TeamsReportDashboard.Backend.Services.Report.Update;
@@ -50,7 +55,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowLocalhost",
         builder =>
         {
-            builder.WithOrigins("http://localhost:60415")
+            builder.WithOrigins("http://localhost:60414")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
@@ -101,6 +106,9 @@ builder.Services.AddScoped<IValidator<CreateReportDto>, CreateReportValidator>()
 builder.Services.AddScoped<IValidator<UpdateReportDto>, UpdateReportValidator>();
 builder.Services.AddScoped<IValidator<ResetPasswordDto>, ResetPasswordValidator>();
 builder.Services.AddScoped<IValidator<ForgotPasswordDto>, ForgotPasswordValidator>();
+builder.Services.AddScoped<IValidator<CreateDepartmentDto>, CreateDepartmentValidator>();
+builder.Services.AddScoped<IValidator<UpdateDepartmentDto>, UpdateDepartmentValidator>();
+
 builder.Services.AddScoped<IUnitOfWork,  UnitOfWork>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 
@@ -109,6 +117,8 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IRequesterRepository, RequesterRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+
 
 builder.Services.AddScoped<ICreateUserService, CreateUserService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
@@ -126,6 +136,11 @@ builder.Services.AddScoped<IGetReportService, GetReportService>();
 builder.Services.AddScoped<IDeleteReportService, DeleteReportService>();
 
 builder.Services.AddScoped<IGetRequestersService, GetRequestersService>();
+
+builder.Services.AddScoped<IGetDepartmentsService, GetDepartmentsService>();
+builder.Services.AddScoped<ICreateDepartmentService, CreateDepartmentService>();
+builder.Services.AddScoped<IDeleteDepartmentService, DeleteDepartmentService>();
+builder.Services.AddScoped<IUpdateDepartmentService, UpdateDepartmentService>();
 
 
 var app = builder.Build();

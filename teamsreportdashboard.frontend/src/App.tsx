@@ -15,6 +15,7 @@ import ProtectedRoute from "./Routes/ProtectedRoute";
 import PasswordChangedSuccessPage from "./pages/PasswordChangedSuccessPage/PasswordChangedSuccessPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
+import DepartmentsPage from "./pages/DepartmentsPage/DepartmentsPage";
 function App() {
   return (
     <AuthProvider>
@@ -40,7 +41,8 @@ function App() {
               <Route path="/reports" element={<ReportsPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/change-my-password" element={<ChangeMyPasswordPage />} /> 
-              <Route path="/users" element={<UsersPage />} />''
+              <Route path="/users" element={<UsersPage />} />
+              <Route path="/departments" element={<DepartmentsPage />} />"
             </Route>
           </Route>
           

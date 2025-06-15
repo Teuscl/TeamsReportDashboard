@@ -90,45 +90,57 @@ const ReportsPage: React.FC = () => {
     fetchReports(); // Recarrega a lista da tabela após criar ou editar
   };
 
-  const columns: ColumnDef<Report>[] = [
-    // Removi a coluna de checkbox de seleção para simplificar, adicione de volta se precisar.    
-    { accessorKey: 'requesterName', header: 'Solicitante' },
-    { accessorKey: 'requesterEmail', header: 'Email Solicitante'},
+   const columns: ColumnDef<Report>[] = [
+    { 
+      accessorKey: 'requesterName', 
+      header: 'Solicitante' // Ordenável por padrão
+    },
+    { 
+      accessorKey: 'requesterEmail', 
+      header: 'Email Solicitante',
+      enableSorting: false, // Desativado
+    },
     { 
       accessorKey: 'technicianName', 
       header: 'Técnico', 
+      enableSorting: false, // Desativado
       cell: ({ row }) => row.original.technicianName || <span className="text-xs text-muted-foreground">N/A</span> 
     },
     { 
       accessorKey: 'requestDate', 
-      header: 'Data Solicitação',
+      header: 'Data Solicitação', // Ordenável por padrão
       cell: ({ row }) => {
         try {
-          // Formata a data e hora. Se precisar apenas da data: 'dd/MM/yyyy'
           return format(new Date(row.original.requestDate), 'dd/MM/yyyy');
         } catch {
-          return row.original.requestDate; // Fallback se a data for inválida
+          return row.original.requestDate;
         }
       }
     },
     { 
       accessorKey: 'reportedProblem', 
       header: 'Problema Relatado', 
-      // Permite quebra de linha e limita a largura para melhor visualização
+      enableSorting: false, // Desativado
       cell: ({row}) => (
-        <div 
-          className="max-w-xs whitespace-normal break-words text" 
-          title={row.original.reportedProblem}
-        >
+        <div className="max-w-xs whitespace-normal break-words" title={row.original.reportedProblem}>
           {row.original.reportedProblem}
         </div>
       )
     },
-    { accessorKey: 'category', header: 'Categoria' }, // Ex: "Hardware", "Software", etc.
-    { accessorKey: 'firstResponseTime', header: 'Tpo. 1ª Resp.' }, // Ex: "00:15:30"    
+    { 
+      accessorKey: 'category', 
+      header: 'Categoria',
+      enableSorting: false, // Desativado
+    },
+    { 
+      accessorKey: 'firstResponseTime', 
+      header: 'Tpo. 1ª Resp.',
+      enableSorting: false, // Desativado
+    },
     {
       id: "actions",
       header: () => <div className="text-right">Ações</div>,
+      enableSorting: false, // Ações nunca devem ser ordenáveis
       cell: ({ row }) => {
         const reportRowData = row.original;
         return (
@@ -143,9 +155,7 @@ const ReportsPage: React.FC = () => {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Ações</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleOpenEditModal(reportRowData)}>
-                  Editar
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleOpenEditModal(reportRowData)}>Editar</DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => handleDelete(reportRowData.id)} 
                   className="text-destructive focus:text-destructive focus:bg-destructive/10"

@@ -4,7 +4,7 @@ namespace TeamsReportDashboard.Backend.Services.Requester.Read;
 
 public class GetRequestersService : IGetRequestersService
 {
-    private IUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
 
     public GetRequestersService(IUnitOfWork unitOfWork)
     {

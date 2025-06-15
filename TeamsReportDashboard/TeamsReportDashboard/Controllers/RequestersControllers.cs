@@ -7,8 +7,6 @@ using TeamsReportDashboard.Interfaces;
 [ApiController]
 public class RequestersController : Controller
 {
-    
-    
     [HttpGet]
     //[Authorize]
     public async Task<ActionResult<IEnumerable<Requester>>>GetAll(

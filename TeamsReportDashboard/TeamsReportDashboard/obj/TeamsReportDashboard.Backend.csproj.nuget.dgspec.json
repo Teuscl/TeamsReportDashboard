@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj": {}
+    "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj": {}
   },
   "projects": {
-    "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj": {
+    "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj",
+        "projectUniqueName": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj",
         "projectName": "TeamsReportDashboard.Backend",
-        "projectPath": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj",
-        "packagesPath": "C:\\Users\\MateusCarvalhoLucas\\.nuget\\packages\\",
-        "outputPath": "G:\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\obj\\",
+        "projectPath": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard.Backend.csproj",
+        "packagesPath": "C:\\Users\\Mateus\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Mateus\\Desktop\\Projects\\TeamsReportDashboard\\TeamsReportDashboard\\TeamsReportDashboard\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\MateusCarvalhoLucas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Mateus\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -44,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -112,7 +112,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "c:\\program files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

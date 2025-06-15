@@ -78,7 +78,7 @@ const UsersPage: React.FC = () => {
   };
 
   const handleOpenCreateModal = () => {
-    setUserForModal(null); // Nenhum usuário para editar, é criação
+    setUserForModal(null); 
     setModalMode('create');
   };
 
@@ -86,19 +86,18 @@ const UsersPage: React.FC = () => {
     setUserForModal(userToEdit);
     setModalMode('edit');
   };
-   const handleOpenResetPasswordModal = (userToReset: User) => { // 👈 Nova função
+   const handleOpenResetPasswordModal = (userToReset: User) => { 
     setUserToResetPassword(userToReset);
     setIsResetPasswordModalOpen(true);
   };
 
-  const closeResetPasswordModal = () => { // 👈 Nova função
+  const closeResetPasswordModal = () => { 
     setIsResetPasswordModalOpen(false);
     setUserToResetPassword(null);
   };
 
-  const handlePasswordResetSuccess = () => { // 👈 Nova função
-    // A senha foi alterada, não há necessidade de recarregar a lista de usuários por isso.
-    // Apenas fechamos o modal. O toast de sucesso já é mostrado dentro do modal.
+  const handlePasswordResetSuccess = () => { 
+    
     closeResetPasswordModal();
   };
 
@@ -114,6 +113,8 @@ const UsersPage: React.FC = () => {
     fetchUsers(); // Recarrega a lista de usuários
   };
 
+  // Em: src/pages/Users/UsersPage.tsx
+
   const columns: ColumnDef<User>[] = [
     {
       id: "select",
@@ -122,48 +123,58 @@ const UsersPage: React.FC = () => {
       enableSorting: false,
       enableHiding: false,
     },
-    { accessorKey: 'name', header: 'Nome' },
-    { accessorKey: 'email', header: 'Email' },
+    { 
+      accessorKey: 'name', 
+      header: 'Nome' // Correto: Apenas texto. DataTable adiciona o botão.
+    },
+    { 
+      accessorKey: 'email', 
+      header: 'Email' // Correto: Apenas texto.
+    },
     {
       accessorKey: 'role',
       header: 'Função',
+      enableSorting: false, // Desativamos a ordenação aqui
       cell: ({ row }) => {
-        // Assumindo que row.original.role é do tipo RoleEnum (numérico)
-        // como definido na interface User global e retornado por getUsers()
-        return <div>{getRoleLabel(row.original.role)}</div>; // 👈 Usando getRoleLabel
+        return <div>{getRoleLabel(row.original.role)}</div>;
       },
     },
     {
       accessorKey: 'isActive',
       header: 'Status',
+      enableSorting: false, // Desativamos a ordenação aqui
       cell: ({ row }) => <div>{row.original.isActive ? 'Ativo' : 'Inativo'}</div>,
     },
     {
       id: "actions",
+      header: () => <div className="text-right">Ações</div>, // Adicionamos um header para alinhar
+      enableSorting: false, // Ações nunca devem ser ordenáveis
       cell: ({ row }) => {
         const userRowData = row.original;
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0"><span className="sr-only">Open menu</span><MoreHorizontal className="h-4 w-4" /></Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Ações</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleOpenEditModal(userRowData)}>Editar</DropdownMenuItem>
-              <DropdownMenuItem 
-                onClick={() => handleDelete(userRowData.id)}
-                disabled={currentUser?.id === userRowData.id}
-                className={currentUser?.id === userRowData.id ? "text-muted-foreground cursor-not-allowed" : "cursor-pointer"}
-              >
-                Excluir
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleOpenResetPasswordModal(userRowData)}> 
-                Resetar Senha
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="text-right"> {/* Adicionado para garantir o alinhamento */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0"><span className="sr-only">Open menu</span><MoreHorizontal className="h-4 w-4" /></Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleOpenEditModal(userRowData)}>Editar</DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => handleDelete(userRowData.id)}
+                  disabled={currentUser?.id === userRowData.id}
+                  className={currentUser?.id === userRowData.id ? "text-muted-foreground cursor-not-allowed" : "cursor-pointer"}
+                >
+                  Excluir
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleOpenResetPasswordModal(userRowData)}> 
+                  Resetar Senha
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         );
       }
     },
