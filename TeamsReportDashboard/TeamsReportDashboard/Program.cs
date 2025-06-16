@@ -19,7 +19,10 @@ using TeamsReportDashboard.Backend.Services.Department.Update;
 using TeamsReportDashboard.Backend.Services.Report.Create;
 using TeamsReportDashboard.Backend.Services.Report.Read;
 using TeamsReportDashboard.Backend.Services.Report.Update;
+using TeamsReportDashboard.Backend.Services.Requester.Create;
+using TeamsReportDashboard.Backend.Services.Requester.Delete;
 using TeamsReportDashboard.Backend.Services.Requester.Read;
+using TeamsReportDashboard.Backend.Services.Requester.Update;
 using TeamsReportDashboard.Backend.Services.User.ChangeMyPassword;
 using TeamsReportDashboard.Backend.Services.User.ForgotPassword;
 using TeamsReportDashboard.Backend.Services.User.ResetForgottenPassword;
@@ -141,6 +144,11 @@ builder.Services.AddScoped<IGetDepartmentsService, GetDepartmentsService>();
 builder.Services.AddScoped<ICreateDepartmentService, CreateDepartmentService>();
 builder.Services.AddScoped<IDeleteDepartmentService, DeleteDepartmentService>();
 builder.Services.AddScoped<IUpdateDepartmentService, UpdateDepartmentService>();
+
+builder.Services.AddScoped<IGetRequestersService, GetRequestersService>();
+builder.Services.AddScoped<ICreateRequesterService, CreateRequesterService>();
+builder.Services.AddScoped<IUpdateRequesterService, UpdateRequesterService>();
+builder.Services.AddScoped<IDeleteRequesterService, DeleteRequesterService>();
 
 
 var app = builder.Build();
