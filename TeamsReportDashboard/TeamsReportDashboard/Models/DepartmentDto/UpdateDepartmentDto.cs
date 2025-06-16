@@ -2,5 +2,5 @@
 
 public class UpdateDepartmentDto
 {
-    public string NewDepartmentName { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 }

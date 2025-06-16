@@ -14,6 +14,7 @@ import { getDepartments, deleteDepartment } from '@/services/departmentService';
 import { Department } from '@/types/Department'; // Importando o tipo do arquivo de tipos
 import { toast } from 'sonner';
 import { Checkbox } from "@/components/ui/checkbox";
+import { DepartmentFormModal } from '@/components/DepartmentFormModal';
 
 
 
@@ -25,6 +26,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 const DepartmentsPage: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
+  const [modalMode, setModalMode] = useState<'create' | 'edit' | null>(null);
+  const [departmentForModal, setDepartmentForModal] = useState<Department | null>(null);
 
   const fetchDepartments = useCallback(async () => {
     setDataLoading(true);
@@ -43,17 +46,59 @@ const DepartmentsPage: React.FC = () => {
     fetchDepartments();
   }, [fetchDepartments]);
 
-  const handleDelete = async (id: number) => {
-    const confirmed = window.confirm("Tem certeza que deseja excluir este departamento? Todos os solicitantes associados terão seu departamento definido como nulo.");
-    if (!confirmed) return;
+   const handleDelete = (id: number, departmentName: string) => {
+    toast("Você tem certeza?", {
+      description: `Esta ação irá excluir permanentemente o departamento "${departmentName}". Os funcionários associados não serão excluídos, mas terão seu departamento definido como nulo.`,
+      position: "top-center",
+      className: "flex flex-col justify-center items-center",
+      
+        
+      // Botão de Ação Principal (Excluir)
+      action: {
+        label: "Confirmar Exclusão",        
+        onClick: async () => {
+          // A lógica de exclusão agora vive dentro do onClick do botão do toast
+          try {
+            await deleteDepartment(id);
+            toast.success("Departamento removido com sucesso.");
+            fetchDepartments(); // Recarrega a lista para refletir a exclusão
+          } catch (error: any) {
+            toast.error(`Erro ao excluir departamento: ${error?.response?.data?.message || 'Erro desconhecido.'}`);
+          }
+        },
+      },
+      // Botão de Cancelar
+      cancel: {
+        label: "Cancelar",
+        onClick: () => {          
+        },
+      },     
+      
+      duration: Infinity, 
+    });
+  };
 
-    try {
-      await deleteDepartment(id);
-      fetchDepartments();
-      toast.success("Departamento removido com sucesso.");
-    } catch (error: any) {
-      toast.error(`Erro ao excluir departamento: ${error?.response?.data?.message || 'Erro desconhecido.'}`);
-    }
+   const handleOpenCreateModal = () => {
+    setDepartmentForModal(null);
+    setModalMode('create');
+  };
+
+  const handleOpenEditModal = (departmentToEdit: Department) => {
+    setDepartmentForModal(departmentToEdit);
+    setModalMode('edit');
+  };
+
+  const closeModal = () => {
+    setModalMode(null);
+    setDepartmentForModal(null);
+  };
+   const handleSaveSuccess = () => {
+    const successMessage = modalMode === 'create' 
+      ? "Departamento criado com sucesso!" 
+      : "Departamento atualizado com sucesso!";
+    toast.success(successMessage);
+    fetchDepartments();
+    closeModal();
   };
 
  // Em: src/pages/DepartmentsPage/DepartmentsPage.tsx
@@ -88,8 +133,11 @@ const DepartmentsPage: React.FC = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => alert(`Editar ${department.name}`)}>Editar</DropdownMenuItem>
-                <DropdownMenuItem className="text-red-600 focus:text-red-700" onClick={() => handleDelete(department.id)}>
+                <DropdownMenuItem onClick={() => handleOpenEditModal(department)}>Editar</DropdownMenuItem>
+                <DropdownMenuItem 
+                  className="text-red-600 focus:text-red-700" 
+                  onClick={() => handleDelete(department.id, department.name)} // Passe o id e o nome
+                >
                   Excluir
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -109,7 +157,7 @@ const DepartmentsPage: React.FC = () => {
     <div className='container mx-auto py-10 px-4 md:px-0'>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl md:text-3xl font-bold">Gerenciamento de Departamentos</h1>
-        <Button onClick={() => alert('Abrir modal de criação')}>
+        <Button onClick={handleOpenCreateModal}>
           Criar Departamento
         </Button>
       </div>
@@ -119,6 +167,15 @@ const DepartmentsPage: React.FC = () => {
         filterColumnId="name"
         filterPlaceholder="Filtrar por nome do departamento..."        
       />
+      {modalMode && (
+        <DepartmentFormModal
+          isOpen={!!modalMode}
+          onClose={closeModal}
+          onSaveSuccess={handleSaveSuccess}
+          mode={modalMode}
+          departmentToEdit={departmentForModal}
+        />
+      )}
     </div>
   );
 };

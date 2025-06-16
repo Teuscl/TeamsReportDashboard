@@ -30,7 +30,7 @@ public class UpdateDepartmentService : IUpdateDepartmentService
         }
 
         // 3. Atualizar as propriedades
-        department.Name = departmentDto.NewDepartmentName;
+        department.Name = departmentDto.Name;
         department.UpdatedAt = DateTime.Now;
 
         _unitOfWork.DepartmentRepository.UpdateDepartment(department);

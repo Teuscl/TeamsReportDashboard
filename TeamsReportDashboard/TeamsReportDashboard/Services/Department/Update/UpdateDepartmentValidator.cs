@@ -7,6 +7,6 @@ public class UpdateDepartmentValidator : AbstractValidator<UpdateDepartmentDto>
 {
     public UpdateDepartmentValidator()
     {
-        RuleFor(x => x.NewDepartmentName).MaximumLength(30).NotEmpty().WithMessage("Department name cannot be empty");
+        RuleFor(x => x.Name).MaximumLength(30).NotEmpty().WithMessage("Department name cannot be empty");
     }
 }
