@@ -15,17 +15,23 @@ public class RequesterRepository : IRequesterRepository
     }
         
     public async Task<List<Requester>> GetAllAsync() => 
-        await _context.Requesters.AsNoTracking().ToListAsync();
+        await _context.Requesters
+            .Include(r => r.Department) // 👈 ADICIONADO AQUI
+            .AsNoTracking()
+            .ToListAsync();
 
     public async Task<Requester?> GetRequesterAsync(int id) => 
-        await _context.Requesters.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
+        await _context.Requesters
+            .Include(r => r.Department) // 👈 E ADICIONADO AQUI
+            .AsNoTracking()
+            .FirstOrDefaultAsync(r => r.Id == id);
 
     public async Task CreateRequesterAsync(Requester requester) => 
         await _context.Requesters.AddAsync(requester);
 
     public void UpdateRequester(Requester requester)
     {
-        if(requester == null) throw new ArgumentNullException(nameof(requester));
+        if (requester == null) throw new ArgumentNullException(nameof(requester));
         _context.Requesters.Update(requester);
     }
 

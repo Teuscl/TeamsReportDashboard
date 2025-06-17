@@ -27,7 +27,8 @@ public class UpdateRequesterService : IUpdateRequesterService
         requester.Email = dto.Email;
         requester.DepartmentId = dto.DepartmentId;
         requester.UpdatedAt = DateTime.Now;
-
+        
+        _unitOfWork.RequesterRepository.UpdateRequester(requester);
         await _unitOfWork.CommitAsync();
     }
     

@@ -219,7 +219,6 @@ const UsersPage: React.FC = () => {
           onSaveSuccess={handleSaveSuccess}
         />
       )}
-
       <AdminResetPasswordModal
           userToReset={userToResetPassword}
           isOpen={isResetPasswordModalOpen}

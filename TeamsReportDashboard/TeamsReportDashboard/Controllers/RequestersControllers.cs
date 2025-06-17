@@ -14,14 +14,14 @@ public class RequestersController : Controller
 {
     [HttpGet]
     //[Authorize]
-    public async Task<ActionResult<IEnumerable<Requester>>> GetAll(
+    public async Task<ActionResult<IEnumerable<RequesterDto>>> GetAll(
         [FromServices] IGetRequestersService service)
     {
         return Ok(await service.GetAll());
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Requester>> GetById([FromServices] IGetRequestersService service, int id)
+    public async Task<ActionResult<RequesterDto>> GetById([FromServices] IGetRequestersService service, int id)
     {
         // Busca o requester no serviço
         var requester = await service.Get(id);

@@ -16,6 +16,7 @@ import PasswordChangedSuccessPage from "./pages/PasswordChangedSuccessPage/Passw
 import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import DepartmentsPage from "./pages/DepartmentsPage/DepartmentsPage";
+import RequestersPage from "./pages/RequestersPage/RequestersPage";
 function App() {
   return (
     <AuthProvider>
@@ -42,7 +43,8 @@ function App() {
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/change-my-password" element={<ChangeMyPasswordPage />} /> 
               <Route path="/users" element={<UsersPage />} />
-              <Route path="/departments" element={<DepartmentsPage />} />"
+              <Route path="/departments" element={<DepartmentsPage />} />
+              <Route path="/requesters" element={<RequestersPage />} />
             </Route>
           </Route>
           

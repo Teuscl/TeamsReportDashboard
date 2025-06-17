@@ -54,7 +54,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: "Departamentos",
         url: "/departments",
         icon: Building, // Usando o novo ícone
-      });
+      },
+      {
+        title: "Solicitantes",
+        url: "/requesters",
+        icon: Users, // Usando o ícone de usuários
+      }
+    );
     }
 
     // Itens exclusivos para Master

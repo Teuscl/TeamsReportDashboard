@@ -16,13 +16,6 @@ import { toast } from 'sonner';
 import { Checkbox } from "@/components/ui/checkbox";
 import { DepartmentFormModal } from '@/components/DepartmentFormModal';
 
-
-
-
-//TERMINAR DE IMPLEMENTAR A PÁGINA DE DEPARTAMENTOS
-//RESTA TERMINAR O UPDATE E O DELETE
-//CRIAR A PAGINA DE FUNCIONARIOS AMANHA, VALIDAR LOGICA DE INSERCAO DE ATENDIMENTO
-
 const DepartmentsPage: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
