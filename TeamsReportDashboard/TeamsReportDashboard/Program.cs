@@ -9,6 +9,7 @@ using TeamsReportDashboard.Backend.Interfaces;
 using TeamsReportDashboard.Backend.Models.Configuration;
 using TeamsReportDashboard.Backend.Models.DepartmentDto;
 using TeamsReportDashboard.Backend.Models.ReportDto;
+using TeamsReportDashboard.Backend.Models.Requester;
 using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Backend.Repositories;
 using TeamsReportDashboard.Backend.Services;
@@ -111,6 +112,8 @@ builder.Services.AddScoped<IValidator<ResetPasswordDto>, ResetPasswordValidator>
 builder.Services.AddScoped<IValidator<ForgotPasswordDto>, ForgotPasswordValidator>();
 builder.Services.AddScoped<IValidator<CreateDepartmentDto>, CreateDepartmentValidator>();
 builder.Services.AddScoped<IValidator<UpdateDepartmentDto>, UpdateDepartmentValidator>();
+builder.Services.AddScoped<IValidator<CreateRequesterDto>, CreateRequesterValidator >();
+builder.Services.AddScoped<IValidator<UpdateRequesterDto>, UpdateRequesterValidator>();
 
 builder.Services.AddScoped<IUnitOfWork,  UnitOfWork>();
 builder.Services.AddTransient<IEmailService, EmailService>();

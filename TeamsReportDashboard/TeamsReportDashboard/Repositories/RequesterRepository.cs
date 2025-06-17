@@ -41,9 +41,16 @@ public class RequesterRepository : IRequesterRepository
     public async Task<bool> ExistsAsync(int id) => 
         await _context.Requesters.AnyAsync(r => r.Id == id);
 
+    
     public async Task<Requester?> GetByEmailAsync(string email)
     {
+        // A forma antiga e não traduzível:
+        // return await _context.Requesters
+        //     .FirstOrDefaultAsync(r => String.Equals(r.Email, email, StringComparison.InvariantCultureIgnoreCase));
+
+        // 👇 A FORMA CORRETA E TRADUZÍVEL 👇
+        // Converte tanto o email do banco quanto o email do parâmetro para maiúsculas antes de comparar.
         return await _context.Requesters
-            .FirstOrDefaultAsync(r => String.Equals(r.Email, email, StringComparison.InvariantCultureIgnoreCase));
+            .FirstOrDefaultAsync(r => r.Email.ToUpper() == email.ToUpper());
     }
 }

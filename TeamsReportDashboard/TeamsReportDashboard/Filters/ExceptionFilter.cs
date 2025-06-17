@@ -28,7 +28,7 @@ public class ExceptionFilter : IExceptionFilter
         context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
         context.Result = new ObjectResult(new
         {
-            errors = new List<string> { "An unknown error has occurred." }
+            errors = new List<string> { "An unknown error has occurred. {}" }
         });
     }
 }

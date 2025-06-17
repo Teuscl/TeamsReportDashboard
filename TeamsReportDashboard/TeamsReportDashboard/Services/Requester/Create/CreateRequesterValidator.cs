@@ -3,9 +3,9 @@ using TeamsReportDashboard.Backend.Models.Requester;
 
 namespace TeamsReportDashboard.Backend.Services.Requester.Create;
 
-public class CreateRequestValidator : AbstractValidator<CreateRequesterDto>
+public class CreateRequesterValidator : AbstractValidator<CreateRequesterDto>
 {
-    public CreateRequestValidator()
+    public CreateRequesterValidator()
     {
         RuleFor(requester => requester.Email)
             .NotEmpty()
