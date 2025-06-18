@@ -59,4 +59,5 @@ public class RequesterRepository : IRequesterRepository
         return await _context.Requesters
             .FirstOrDefaultAsync(r => r.Email.ToUpper() == email.ToUpper());
     }
+    
 }

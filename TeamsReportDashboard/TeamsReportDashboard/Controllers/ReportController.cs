@@ -34,23 +34,19 @@ namespace TeamsReportDashboard.Backend.Controllers
             return Ok();
         }
 
-        // GET: /Report
         [HttpGet]
-        //[Authorize] // Descomente e ajuste a autorização
-        public async Task<ActionResult<IEnumerable<Report>>> GetAllReports(
+        public async Task<ActionResult<IEnumerable<ReportDto>>> GetAllReports( // 👈 Retorna DTO
             [FromServices] IGetReportService service)
         {
             var reports = await service.GetAll();
             return Ok(reports);
         }
-       
+
         [HttpGet("{id}")]
-        //[Authorize] // Descomente e ajuste a autorização
-        public async Task<IActionResult> GetReportById(
+        public async Task<ActionResult<ReportDto>> GetReportById( // 👈 Retorna DTO
             [FromServices] IGetReportService service,
             int id)
         {
-            // Supondo que o serviço retorna a entidade Report ou null se não encontrar
             var report = await service.Get(id);
             if (report == null)
             {

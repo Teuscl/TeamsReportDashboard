@@ -12,7 +12,8 @@ export interface Report {
   firstResponseTime: string; // Formato "HH:MM:SS" ou string ISO 8601 Duration "PTnHnM S"
   averageHandlingTime: string; // Mesmo formato que firstResponseTime
   createdAt?: string; // Adicionado de EntityBase (opcional no frontend se não usado)
-  updatedAt?: string; // Adicionado de EntityBase (opcional no frontend se não usado)
+  updatedAt?: string;
+   // Adicionado de EntityBase (opcional no frontend se não usado)
 }
 
 // Payload para criar um Report (espelha CreateReportDto)

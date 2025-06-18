@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { Report } from '@/types/Report'; // Sua interface Report
 import { format } from 'date-fns'; // Para formatar datas
+import { Checkbox } from '@/components/ui/checkbox';
 // Se você tiver uma proteção de rota específica para quem pode ver esta página,
 // o AuthContext pode ser usado para verificações adicionais,
 // mas a proteção principal deve vir do componente de Rota em App.tsx.
@@ -91,20 +92,12 @@ const ReportsPage: React.FC = () => {
   };
 
    const columns: ColumnDef<Report>[] = [
-    { 
-      accessorKey: 'requesterName', 
-      header: 'Solicitante' // Ordenável por padrão
-    },
-    { 
-      accessorKey: 'requesterEmail', 
-      header: 'Email Solicitante',
-      enableSorting: false, // Desativado
-    },
-    { 
-      accessorKey: 'technicianName', 
-      header: 'Técnico', 
-      enableSorting: false, // Desativado
-      cell: ({ row }) => row.original.technicianName || <span className="text-xs text-muted-foreground">N/A</span> 
+    {
+      id: "select",
+      header: ({ table }) => ( <Checkbox checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")} onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)} aria-label="Select all" /> ),
+      cell: ({ row }) => ( <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" /> ),
+      enableSorting: false,
+      enableHiding: false,
     },
     { 
       accessorKey: 'requestDate', 
@@ -117,6 +110,23 @@ const ReportsPage: React.FC = () => {
         }
       }
     },
+    { 
+      accessorKey: 'requesterName', 
+      header: 'Solicitante' // Ordenável por padrão
+      
+    },
+    { 
+      accessorKey: 'requesterEmail', 
+      header: 'Email Solicitante',
+      enableSorting: false, // Desativado
+    },
+    { 
+      accessorKey: 'technicianName', 
+      header: 'Técnico', 
+      enableSorting: false, // Desativado
+      cell: ({ row }) => row.original.technicianName || <span className="text-xs text-muted-foreground">N/A</span> 
+    },
+    
     { 
       accessorKey: 'reportedProblem', 
       header: 'Problema Relatado', 
