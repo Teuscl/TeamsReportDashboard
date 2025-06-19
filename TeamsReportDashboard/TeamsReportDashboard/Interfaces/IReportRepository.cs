@@ -1,5 +1,6 @@
 ﻿using TeamsReportDashboard.Entities;
-using System.Collections.Generic; // Para List
+using System.Collections.Generic;
+using System.Linq.Expressions; // Para List
 using System.Threading.Tasks;
 using TeamsReportDashboard.Backend.Entities; // Para Task
 
@@ -12,4 +13,8 @@ public interface IReportRepository
     Task CreateReportAsync(Report report); // Assinatura corrigida
     void UpdateReport(Report report);      // Assinatura corrigida
     Task DeleteReportAsync(int id);        // Assinatura corrigida
+    
+    Task<int> CountAsync(Expression<Func<Report, bool>> predicate); 
+    
+    IQueryable<Report> GetAll(); 
 }

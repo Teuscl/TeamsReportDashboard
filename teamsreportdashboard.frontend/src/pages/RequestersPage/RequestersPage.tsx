@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, SortingState, SortingFn } from '@tanstack/react-table';
 import { DataTable } from '@/components/CustomTable/DataTable';
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -35,9 +35,13 @@ const RequestersPage: React.FC = () => {
  }, [fetchRequesters]);
 
  const handleDelete = (requester: RequesterDto) => {
+
+  
     toast(`Tem certeza que deseja excluir "${requester.name}"?`, {
       description: "Esta ação não pode ser desfeita. Relatórios associados a este solicitante podem impedir a exclusão.",
       duration: Infinity,
+      position: "top-center",
+      className: "flex flex-col justify-center items-center",  
       action: {
         label: "Confirmar Exclusão",
         onClick: async () => {
@@ -50,10 +54,10 @@ const RequestersPage: React.FC = () => {
           }
         },
       },
-      // 👇 A CORREÇÃO É AQUI 👇
+      
       cancel: {
         label: "Cancelar",
-        onClick: () => {}, // Adicione esta função vazia
+        onClick: () => {}, 
       },
       classNames: { actionButton: 'bg-destructive text-destructive-foreground' },
     });
@@ -81,6 +85,22 @@ const RequestersPage: React.FC = () => {
    closeModal();
    fetchRequesters();
  };
+ const initialSortConfig: SortingState = [
+     {
+       id: 'name', // A chave da coluna que você quer ordenar
+       desc: false,        // 'true' para ordenar da mais recente para a mais antiga
+     }
+   ];
+
+
+  const localeSort: SortingFn<RequesterDto> = (rowA, rowB, columnId) => {
+  const valA = rowA.getValue(columnId) as string;
+  const valB = rowB.getValue(columnId) as string;
+  
+  // Usamos localeCompare com o local 'pt-BR'
+  // A opção sensitivity: 'base' trata 'e' e 'é' como o mesmo caractere base para ordenação.
+  return valA.localeCompare(valB, 'pt-BR', { sensitivity: 'base' });
+  ;
 
  const columns: ColumnDef<RequesterDto>[] = [
    {
@@ -90,7 +110,7 @@ const RequestersPage: React.FC = () => {
       enableSorting: false,
       enableHiding: false,
     },
-   { accessorKey: 'name', header: 'Nome', enableSorting: false},
+   { accessorKey: 'name', header: 'Nome', enableSorting: true},
    { accessorKey: 'email', header: 'Email', enableSorting: false },
    {
      accessorKey: 'departmentName',
@@ -138,6 +158,7 @@ const RequestersPage: React.FC = () => {
        data={requesters}
        filterColumnId="name"
        filterPlaceholder="Filtrar por nome..."
+       initialSorting={initialSortConfig}
      />
      {isModalOpen && (
        <RequesterFormModal

@@ -35,6 +35,7 @@ public class CreateReportService : ICreateReportService
            };
            // Adicionamos ao repositório para ser salvo depois
            await _unitOfWork.RequesterRepository.CreateRequesterAsync(requester);
+           await _unitOfWork.CommitAsync(); // 🔴 NECESSÁRIO para popular o requester.Id
        }
        
        

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Interfaces;
@@ -23,6 +24,11 @@ public class ReportRepository : IReportRepository
             .AsNoTracking()
             .ToListAsync();
 
+    public IQueryable<Report> GetAll()
+    {
+        // Apenas retorna a "planta" da consulta, sem executá-la.
+        return _context.Reports.AsNoTracking();
+    }
     public async Task<Report?> GetReportAsync(int id) =>
         await _context.Reports
             .Include(r => r.Requester)
@@ -48,5 +54,10 @@ public class ReportRepository : IReportRepository
         {
             _context.Reports.Remove(report);
         }
+    }
+    
+    public async Task<int> CountAsync(Expression<Func<Report, bool>> predicate)
+    {
+        return await _context.Reports.CountAsync(predicate);
     }
 }

@@ -23,22 +23,24 @@ interface ReportFormData {
   requestDate: string;    // Formato yyyy-MM-ddTHH:MM
   reportedProblem: string;
   firstResponseTime: string; // Formato HH:MM:SS
-  averageHandlingTime: string; // Formato HH:MM:SS
+  averageHandlingTime: string;
+  category: string // Formato HH:MM:SS
 }
 
 // Schema Zod para validar os dados do formulário
 const reportFormSchema = z.object({
-  requesterName: z.string().min(1, "Nome do solicitante é obrigatório.").max(55, "Máximo de 55 caracteres."),
-  requesterEmail: z.string().min(1, "Email é obrigatório.").email("Email inválido.").max(100, "Máximo de 100 caracteres."),
-  technicianName: z.string().max(50, "Máximo de 50 caracteres."), // Permite string vazia. Trataremos no submit.
-  requestDate: z.string().min(1, "Data da solicitação é obrigatória."),
-  reportedProblem: z.string().min(1, "Problema relatado é obrigatório.").max(255, "Máximo de 255 caracteres."),
+  requesterName: z.string().min(1, "Nome do solicitante é obrigatório.").max(55),
+  requesterEmail: z.string().min(1).email().max(100),
+  technicianName: z.string().max(50),
+  requestDate: z.string().min(1),
+  reportedProblem: z.string().min(1).max(255),
   firstResponseTime: z.string()
-    .min(1, "Tempo da Primeira Resposta é obrigatório (HH:MM:SS).")
+    .min(1)
     .regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, { message: "Tempo 1ª Resp. inválido (HH:MM:SS)." }),
   averageHandlingTime: z.string()
-    .min(1, "Tempo Médio de Atendimento é obrigatório (HH:MM:SS).")
+    .min(1)
     .regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, { message: "Tempo Médio Atend. inválido (HH:MM:SS)." }),
+  category: z.string().min(1, "Categoria é obrigatória.").max(50, "Máximo de 50 caracteres."), // <- novo
 });
 
 interface ReportFormModalProps {
@@ -74,6 +76,7 @@ const DEFAULT_FORM_VALUES: ReportFormData = {
   reportedProblem: '',
   firstResponseTime: '00:00:00',
   averageHandlingTime: '00:00:00',
+  category: '', // <- novo
 };
 
 export const ReportFormModal: React.FC<ReportFormModalProps> = ({
@@ -166,6 +169,7 @@ export const ReportFormModal: React.FC<ReportFormModalProps> = ({
           reportedProblem: data.reportedProblem,
           firstResponseTime: data.firstResponseTime,
           averageHandlingTime: data.averageHandlingTime,
+          category: data.category
         };
         await createReport(createPayload);
         toast.success("Relatório criado com sucesso!");
@@ -236,6 +240,11 @@ export const ReportFormModal: React.FC<ReportFormModalProps> = ({
             <Textarea id="reportedProblem" {...register("reportedProblem")} disabled={isSubmitting} rows={3}/>
             {errors.reportedProblem && <p className="text-xs text-red-500 mt-1">{errors.reportedProblem.message}</p>}
           </div>
+          <div className="space-y-1">
+            <Label htmlFor="category">Categoria</Label>
+            <Input id="category" {...register("category")} disabled={isSubmitting} />
+            {errors.category && <p className="text-xs text-red-500 mt-1">{errors.category.message}</p>}
+        </div>
 
           {/* Tempos de Resposta e Atendimento */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

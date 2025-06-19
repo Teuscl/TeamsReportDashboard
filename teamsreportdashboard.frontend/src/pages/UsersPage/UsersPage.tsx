@@ -57,25 +57,52 @@ const UsersPage: React.FC = () => {
     }
   }, [authIsLoading, currentUser, fetchUsers]); // Adicionado currentUser e fetchUsers como dependências
 
-  const handleDelete = async (id: number) => {
+   const handleDelete = (id: number) => {
     if (!currentUser) return;
     if (id === currentUser.id) {
       toast.warning("Você não pode excluir a si mesmo.");
       return;
     }
-    const confirmed = window.confirm("Você tem certeza que deseja excluir este usuário?");
-    if (!confirmed) return;
 
-    try {
-      await deleteUser(id);
-      // Atualiza o estado local removendo o usuário ou recarrega a lista
-      setUsers(prev => prev.filter(user => user.id !== id));
-      toast.success("O usuário foi removido com sucesso.");
-    } catch (error: any) {
-      const message = error?.response?.data?.message || "Erro ao excluir o usuário.";
-      toast.error(`Erro ao excluir usuário: ${message}`);
-    }
-  };
+    toast.custom((t) => (
+      <div className="bg-white dark:bg-zinc-950 p-4 rounded-md shadow-lg w-[380px] border border-white-500">
+        <h3 className="text-lg font-semibold mb-2">Tem certeza que deseja excluir este usuário?</h3>
+        <p className="text-sm text-muted-foreground mb-4">
+          Esta ação não pode ser desfeita. Todos os dados associados a este usuário serão perdidos.
+        </p>
+        <div className="flex justify-end gap-2">
+          <Button
+            variant="ghost"
+            onClick={() => toast.dismiss(t)}
+          >
+            Cancelar
+          </Button>
+          <Button
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            onClick={async () => {
+              try {
+                await deleteUser(id);
+                setUsers(prev => prev.filter(user => user.id !== id));
+                toast.success("O usuário foi removido com sucesso.");
+              } catch (error: any) {
+                const message = error?.response?.data?.message || "Erro ao excluir o usuário.";
+                toast.error(`Erro ao excluir usuário: ${message}`);
+              } finally {
+                toast.dismiss(t);
+              }
+            }}
+          >
+            Confirmar Exclusão
+          </Button>
+        </div>
+      </div>
+    ), {
+      position: "top-center",
+      duration: Infinity
+    });
+    };
+
+
 
   const handleOpenCreateModal = () => {
     setUserForModal(null); 

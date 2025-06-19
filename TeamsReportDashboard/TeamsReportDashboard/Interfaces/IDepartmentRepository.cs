@@ -8,5 +8,8 @@ public interface IDepartmentRepository
     Task<Department?> GetDepartmentAsync(int id);
     Task CreateDepartmentAsync(Department department); 
     void UpdateDepartment(Department department);      
-    Task DeleteDepartmentAsync(int id);        
+    Task DeleteDepartmentAsync(int id);     
+    
+    Task<int> CountAsync();
+
 }

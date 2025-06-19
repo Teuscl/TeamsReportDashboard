@@ -43,8 +43,7 @@ const DepartmentsPage: React.FC = () => {
     toast("Você tem certeza?", {
       description: `Esta ação irá excluir permanentemente o departamento "${departmentName}". Os funcionários associados não serão excluídos, mas terão seu departamento definido como nulo.`,
       position: "top-center",
-      className: "flex flex-col justify-center items-center",
-      
+      className: "flex flex-row justify-center items-center",  
         
       // Botão de Ação Principal (Excluir)
       action: {

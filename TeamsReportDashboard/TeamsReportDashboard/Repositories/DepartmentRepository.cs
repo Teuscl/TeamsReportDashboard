@@ -13,6 +13,10 @@ public class DepartmentRepository : IDepartmentRepository
     {
         _context = context;
     }
+    public async Task<int> CountAsync()
+    {
+        return await _context.Requesters.CountAsync();
+    }
 
     public async Task<List<Department>> GetAllAsync() => await _context.Departments.ToListAsync();
    

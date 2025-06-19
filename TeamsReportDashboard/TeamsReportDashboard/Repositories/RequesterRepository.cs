@@ -60,4 +60,9 @@ public class RequesterRepository : IRequesterRepository
             .FirstOrDefaultAsync(r => r.Email.ToUpper() == email.ToUpper());
     }
     
+    public async Task<int> CountAsync()
+    {
+        return await _context.Requesters.CountAsync();
+    }
+    
 }

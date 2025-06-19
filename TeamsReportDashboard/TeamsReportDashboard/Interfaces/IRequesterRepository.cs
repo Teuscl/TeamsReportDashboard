@@ -9,7 +9,7 @@ public interface IRequesterRepository
     Task CreateRequesterAsync(Requester requester);
     void UpdateRequester(Requester requester); // Assinatura corrigida
     Task DeleteRequesterAsync(int id);         // Assinatura corrigida
-    Task<bool> ExistsAsync(int id);             // Adicionado
-    
+    Task<bool> ExistsAsync(int id);            // Adicionado
     Task<Requester?> GetByEmailAsync(string email);
+    Task<int> CountAsync();
 }
