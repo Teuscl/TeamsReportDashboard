@@ -17,4 +17,7 @@ public interface IReportRepository
     Task<int> CountAsync(Expression<Func<Report, bool>> predicate); 
     
     IQueryable<Report> GetAll(); 
+    
+    Task<bool> HasReportsForRequesterAsync(int requesterId);
+
 }

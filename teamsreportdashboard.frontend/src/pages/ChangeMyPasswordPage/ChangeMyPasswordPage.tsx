@@ -89,7 +89,7 @@ const ChangeMyPasswordPage: React.FC = () => {
 
   return (
     // JSX do formulário como na resposta #40 (sem a tela de sucesso embutida aqui)
-    <div className="flex min-h-[calc(100vh-var(--header-height,80px))] w-full items-center justify-center p-4 md:p-6 bg-muted/40">
+    <div className='flex items-center justify-center min-h-screen p-4'>
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="text-center space-y-1">
           <CardTitle className="text-2xl font-bold">Alterar Minha Senha</CardTitle>
@@ -122,6 +122,8 @@ const ChangeMyPasswordPage: React.FC = () => {
         </CardContent>
       </Card>
     </div>
+      
+        
   );
 };
 

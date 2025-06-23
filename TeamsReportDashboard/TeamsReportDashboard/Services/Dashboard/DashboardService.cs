@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TeamsReportDashboard.Backend.Models.Dashboard;
 using TeamsReportDashboard.Interfaces;
+using System.Globalization;
+using System.Linq.Expressions;
 
 namespace TeamsReportDashboard.Backend.Services.Dashboard;
 
-public class DashboardService
+public class DashboardService : IDashboardService
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -15,34 +17,79 @@ public class DashboardService
 
     public async Task<DashboardDto> GetDashboardDataAsync()
     {
-        var now = DateTime.Now;
-        var firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
-        var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+        var now = DateTime.UtcNow;
 
-        // Cálculos dos KPIs (Exemplos)
-        var totalAtendimentos = await _unitOfWork.ReportRepository.CountAsync(r => r.RequestDate >= firstDayOfMonth && r.RequestDate <= lastDayOfMonth);
+        // --- KPIs ---
+        var firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
+        var totalAtendimentosMes = await _unitOfWork.ReportRepository.CountAsync(r => r.RequestDate >= firstDayOfMonth);
         var totalDepartamentos = await _unitOfWork.DepartmentRepository.CountAsync();
         var totalSolicitantes = await _unitOfWork.RequesterRepository.CountAsync();
+        
+        // ... (Cálculo do Tempo Médio de Resposta continua igual) ...
+        string tempoMedioFormatado = "00:00:00"; // Valor padrão
+        var reportsWithResponseTimeQuery = _unitOfWork.ReportRepository.GetAll().Where(r => r.FirstResponseTime > TimeSpan.Zero);
+        if (await reportsWithResponseTimeQuery.AnyAsync())
+        {
+            var allSecondsList = await reportsWithResponseTimeQuery.Select(r => r.FirstResponseTime.TotalSeconds).ToListAsync();
+            var averageSeconds = allSecondsList.Average();
+            var averageTimeSpan = TimeSpan.FromSeconds(averageSeconds);
+            tempoMedioFormatado = $"{(int)averageTimeSpan.TotalHours:00}:{averageTimeSpan.Minutes:00}:{averageTimeSpan.Seconds:00}";
+        }
 
-        // Cálculos para Gráficos (Exemplos)
-        var problemasPorCategoria = await _unitOfWork.ReportRepository
-            .GetAll() // Supondo que GetAll retorne IQueryable<Report>
-            .GroupBy(r => r.Category)
+
+        // --- DADOS PARA GRÁFICOS ---
+        
+        // Gráfico 1: Atendimentos por Técnico (antigo "por Equipe")
+        var atendimentosPorTecnico = await _unitOfWork.ReportRepository
+            .GetAll()
+            .Where(r => !string.IsNullOrEmpty(r.TechnicianName))
+            .GroupBy(r => r.TechnicianName)
             .Select(g => new ChartData { Name = g.Key, Total = g.Count() })
+            .OrderByDescending(cd => cd.Total)
+            // .Take(5) foi removido para enviar a lista completa
             .ToListAsync();
 
-        // Você adicionaria as outras lógicas de agregação aqui (por mês, por equipe, etc.)
+        // Gráfico 2: Atendimentos por Departamento
+        var atendimentosPorDepartamento = await _unitOfWork.ReportRepository
+            .GetAll()
+            .Include(r => r.Requester)
+            .ThenInclude(req => req.Department)
+            .Where(r => r.Requester != null && r.Requester.Department != null)
+            .GroupBy(r => r.Requester.Department.Name)
+            .Select(g => new ChartData { Name = g.Key, Total = g.Count() })
+            .OrderByDescending(cd => cd.Total)
+            // .Take(5) foi removido
+            .ToListAsync();
+            
+        // Gráfico 3: Problemas por Categoria
+        var problemasPorCategoria = await _unitOfWork.ReportRepository
+            .GetAll()
+            .Where(r => !string.IsNullOrEmpty(r.Category))
+            .GroupBy(r => r.Category)
+            .Select(g => new ChartData { Name = g.Key, Total = g.Count() })
+            .OrderByDescending(cd => cd.Total)
+            // .Take(5) foi removido
+            .ToListAsync();
 
-        var dashboardData = new DashboardDto
+        
+        // Gráfico 4: Atendimentos nos últimos 12 meses
+        var twelveMonthsAgo = now.AddMonths(-11);
+        var startOfPeriod = new DateTime(twelveMonthsAgo.Year, twelveMonthsAgo.Month, 1);
+        var atendimentosMensais = await _unitOfWork.ReportRepository.GetAll().Where(r => r.RequestDate >= startOfPeriod).GroupBy(r => new { r.RequestDate.Year, r.RequestDate.Month }).Select(g => new { g.Key.Year, g.Key.Month, Total = g.Count() }).OrderBy(x => x.Year).ThenBy(x => x.Month).ToListAsync();
+        var atendimentosPorMesFormatado = new List<ChartData>();
+        for (int i = 0; i < 12; i++){ var monthDate = startOfPeriod.AddMonths(i); var monthData = atendimentosMensais.FirstOrDefault(m => m.Year == monthDate.Year && m.Month == monthDate.Month); atendimentosPorMesFormatado.Add(new ChartData { Name = monthDate.ToString("MMM/yy", new CultureInfo("pt-BR")), Total = monthData?.Total ?? 0 }); }
+
+        // Montagem final do DTO
+        var dashboardData = new DashboardDto()
         {
-            TotalAtendimentosMes = totalAtendimentos,
-            TempoMedioPrimeiraResposta = "00:10:30", // Este cálculo pode ser complexo, mantendo fixo por enquanto
+            TotalAtendimentosMes = totalAtendimentosMes,
+            TempoMedioPrimeiraResposta = tempoMedioFormatado,
             TotalDepartamentos = totalDepartamentos,
             TotalSolicitantes = totalSolicitantes,
             ProblemasPorCategoria = problemasPorCategoria,
-            // Preencha os outros dados de gráfico aqui
-            AtendimentosPorMes = new List<ChartData>(), // Preencher com lógica real
-            AtendimentosPorEquipe = new List<ChartData>(), // Preencher com lógica real
+            AtendimentosPorTecnico = atendimentosPorTecnico, // Propriedade renomeada
+            AtendimentosPorDepartamento = atendimentosPorDepartamento, // Nova propriedade
+            AtendimentosPorMes = atendimentosPorMesFormatado,
         };
 
         return dashboardData;

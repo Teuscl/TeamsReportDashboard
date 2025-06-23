@@ -60,4 +60,10 @@ public class ReportRepository : IReportRepository
     {
         return await _context.Reports.CountAsync(predicate);
     }
+    
+    
+    public async Task<bool> HasReportsForRequesterAsync(int requesterId)
+    {
+        return await _context.Reports.AnyAsync(r => r.RequesterId == requesterId);
+    }
 }

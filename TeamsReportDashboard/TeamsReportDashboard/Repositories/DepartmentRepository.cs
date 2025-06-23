@@ -15,7 +15,8 @@ public class DepartmentRepository : IDepartmentRepository
     }
     public async Task<int> CountAsync()
     {
-        return await _context.Requesters.CountAsync();
+        
+        return await _context.Departments.CountAsync(); 
     }
 
     public async Task<List<Department>> GetAllAsync() => await _context.Departments.ToListAsync();

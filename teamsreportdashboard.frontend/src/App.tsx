@@ -22,6 +22,7 @@ import Layout from "@/components/Layout/Layout"; // 👈 1. CORREÇÃO: Importe 
 import ProtectedRoute from "@/Routes/ProtectedRoute";
 import RoleProtectedRoute from "@/Routes/RoleProtectedRoutes";
 import { RoleEnum } from "@/utils/role";
+import ImportsPage from "./pages/ImportsPage/ImportsPage";
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
               <Route element={<RoleProtectedRoute allowedRoles={[RoleEnum.Admin, RoleEnum.Master]} />}>
                 <Route path="/departments" element={<DepartmentsPage />} />
                 <Route path="/requesters" element={<RequestersPage />} />
+                <Route path="/imports" element={<ImportsPage />} />
               </Route>
 
               {/* Rota apenas para Master */}

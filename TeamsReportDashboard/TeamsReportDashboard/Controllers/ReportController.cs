@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using TeamsReportDashboard.Backend.Entities; // Para a entidade Report
 using TeamsReportDashboard.Backend.Models.ReportDto; // Para CreateReportDto e UpdateReportDto
 using TeamsReportDashboard.Backend.Services.Report.Read;
@@ -18,7 +19,7 @@ namespace TeamsReportDashboard.Backend.Controllers
     {
         // POST: /Report
         [HttpPost]
-        //[Authorize(Roles = "SeuRoleDeCriacao")] // Descomente e ajuste a autorização conforme necessário
+        [Authorize(Roles = "Admin, Master")]
         public async Task<IActionResult> CreateReport(
             [FromServices] ICreateReportService service,
             [FromBody] CreateReportDto createReportDto)
@@ -27,15 +28,13 @@ namespace TeamsReportDashboard.Backend.Controllers
             {
                 return BadRequest(ModelState);
             }
-            // Supondo que o serviço Execute retorna a entidade Report criada ou um ReportDto
             var report = await service.Execute(createReportDto);
-            // Se o serviço retornar a entidade completa, você pode querer mapeá-la para um DTO de resposta aqui
-            // Por agora, retornaremos o que o serviço der, ou podemos usar CreatedAtAction
             return Ok();
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReportDto>>> GetAllReports( // 👈 Retorna DTO
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<ReportDto>>> GetAllReports( 
             [FromServices] IGetReportService service)
         {
             var reports = await service.GetAll();
@@ -43,7 +42,8 @@ namespace TeamsReportDashboard.Backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReportDto>> GetReportById( // 👈 Retorna DTO
+        [Authorize]
+        public async Task<ActionResult<ReportDto>> GetReportById( 
             [FromServices] IGetReportService service,
             int id)
         {
@@ -57,7 +57,7 @@ namespace TeamsReportDashboard.Backend.Controllers
 
         
         [HttpPatch("{id}")]
-        //[Authorize(Roles = "SeuRoleDeUpdate")] // Descomente e ajuste a autorização
+        [Authorize(Roles = "Admin, Master")]
         public async Task<IActionResult> UpdateReport(
             [FromServices] TeamsReportDashboard.Backend.Services.Report.Update.IUpdateReportService service, // Usando o namespace completo para clareza
             int id,
@@ -75,7 +75,7 @@ namespace TeamsReportDashboard.Backend.Controllers
 
         
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "SeuRoleDeDelete")] // Descomente e ajuste a autorização
+        [Authorize(Roles = "Admin, Master")]
         public async Task<IActionResult> DeleteReport(
             [FromServices] IDeleteReportService service,
             int id)

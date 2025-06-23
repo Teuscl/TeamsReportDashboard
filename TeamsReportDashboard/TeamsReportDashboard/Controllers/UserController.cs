@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Backend.Services.User.ChangeMyPassword;
@@ -16,7 +17,7 @@ namespace TeamsReportDashboard.Backend.Controllers;
 public class UserController : Controller
 {
     [HttpPost]
-    //[Authorize(Roles = "Admin, Master")]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Create(
         [FromServices]ICreateUserService service,
         [FromBody] CreateUserDto createUserDto)
@@ -26,7 +27,8 @@ public class UserController : Controller
     }
 
     [HttpPut]
-    ///[Authorize(Roles = "Admin, Master")]
+    [Authorize(Roles = "Admin, Master")]
+    
     public async Task<IActionResult> Update(
         [FromServices]IUpdateUserService service,
         [FromBody] UpdateUserDto updateUserDto)
@@ -36,7 +38,7 @@ public class UserController : Controller
     }
     
     [HttpDelete]
-    //[Authorize(Roles = "Admin, Master")]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Delete(
         [FromServices]IDeleteUserService service,
         int id)
@@ -51,7 +53,7 @@ public class UserController : Controller
     }
 
     [HttpGet]
-    //[Authorize]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<ActionResult<IEnumerable<User>>>GetAll(
         [FromServices]IGetUsersService service)
     {
@@ -81,7 +83,7 @@ public class UserController : Controller
     
     
     [HttpPut("change-password")] 
-    //[Authorize(Roles = "Admin, Master")] // Você precisará garantir que esta rota seja protegida para Masters
+    [Authorize(Roles = "Admin, Master")] // Você precisará garantir que esta rota seja protegida para Masters
     public async Task<IActionResult> ChangePassword(
         [FromServices] IResetPasswordService service, 
         [FromBody] ResetPasswordDto resetPasswordDto,   

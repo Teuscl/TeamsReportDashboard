@@ -11,7 +11,9 @@ public class DashboardDto
     // Dados para Gráficos
     public List<ChartData> AtendimentosPorMes { get; set; } = new();
     public List<ChartData> ProblemasPorCategoria { get; set; } = new();
-    public List<ChartData> AtendimentosPorEquipe { get; set; } = new();
+    
+    public List<ChartData> AtendimentosPorTecnico { get; set; } = new(); // Renomeado
+    public List<ChartData> AtendimentosPorDepartamento { get; set; } = new(); // Novo
 }
 
 

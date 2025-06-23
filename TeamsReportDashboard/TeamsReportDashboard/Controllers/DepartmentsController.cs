@@ -15,7 +15,7 @@ namespace TeamsReportDashboard.Backend.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-//[Authorize(Roles = "Admin,Master")] // Protege todos os endpoints deste controller
+[Authorize(Roles = "Admin,Master")] // Protege todos os endpoints deste controller
 public class DepartmentsController : ControllerBase
 {
     [HttpGet]

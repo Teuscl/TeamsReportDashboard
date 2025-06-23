@@ -13,10 +13,12 @@ using TeamsReportDashboard.Backend.Models.Requester;
 using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Backend.Repositories;
 using TeamsReportDashboard.Backend.Services;
+using TeamsReportDashboard.Backend.Services.Dashboard;
 using TeamsReportDashboard.Backend.Services.Department.Create;
 using TeamsReportDashboard.Backend.Services.Department.Delete;
 using TeamsReportDashboard.Backend.Services.Department.Read;
 using TeamsReportDashboard.Backend.Services.Department.Update;
+using TeamsReportDashboard.Backend.Services.ProcessCompletedJob;
 using TeamsReportDashboard.Backend.Services.Report.Create;
 using TeamsReportDashboard.Backend.Services.Report.Read;
 using TeamsReportDashboard.Backend.Services.Report.Update;
@@ -97,6 +99,13 @@ builder.Services.AddAuthorization();
     
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Adicione estes no seu Program.cs
+builder.Services.AddHttpClient("PythonAnalysisService", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["PythonApi:BaseUrl"]);
+});
+
+builder.Services.AddHostedService<PythonJobStatusChecker>();
 
 // Injeção de dependências
 builder.Services.AddScoped<ITokenService, TokenService>();  // Adiciona o TokenService
@@ -125,6 +134,7 @@ builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IRequesterRepository, RequesterRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
+builder.Services.AddScoped<IReportProcessorService, ReportProcessorService>();
 
 builder.Services.AddScoped<ICreateUserService, CreateUserService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
@@ -152,6 +162,8 @@ builder.Services.AddScoped<IGetRequestersService, GetRequestersService>();
 builder.Services.AddScoped<ICreateRequesterService, CreateRequesterService>();
 builder.Services.AddScoped<IUpdateRequesterService, UpdateRequesterService>();
 builder.Services.AddScoped<IDeleteRequesterService, DeleteRequesterService>();
+
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 
 var app = builder.Build();

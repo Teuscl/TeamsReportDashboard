@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Backend.Models.Requester;
 using TeamsReportDashboard.Backend.Services.Requester.Create;
@@ -13,7 +14,7 @@ namespace TeamsReportDashboard.Backend.Controllers;
 public class RequestersController : Controller
 {
     [HttpGet]
-    //[Authorize]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<ActionResult<IEnumerable<RequesterDto>>> GetAll(
         [FromServices] IGetRequestersService service)
     {
@@ -21,6 +22,7 @@ public class RequestersController : Controller
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<ActionResult<RequesterDto>> GetById([FromServices] IGetRequestersService service, int id)
     {
         // Busca o requester no serviço
@@ -37,6 +39,7 @@ public class RequestersController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<ActionResult<CreateRequesterDto>> Create(
         [FromServices] ICreateRequesterService service,
         [FromBody] CreateRequesterDto createDto)
@@ -49,6 +52,7 @@ public class RequestersController : Controller
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Update(
         [FromServices] IUpdateRequesterService service,
         int id,
@@ -62,6 +66,7 @@ public class RequestersController : Controller
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Delete(
         [FromServices] IDeleteRequesterService service,
         int id)
