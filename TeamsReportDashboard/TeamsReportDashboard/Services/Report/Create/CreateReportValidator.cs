@@ -39,10 +39,10 @@ public class CreateReportValidator : AbstractValidator<CreateReportDto>
 
         RuleFor(x => x.FirstResponseTime)
             .NotEmpty().WithMessage("O tempo da primeira resposta é obrigatório.")
-            .GreaterThan(TimeSpan.Zero).WithMessage("O tempo da primeira resposta deve ser um valor positivo."); // Sugestão
+            .GreaterThanOrEqualTo(TimeSpan.Zero).WithMessage("O tempo da primeira resposta deve ser um valor positivo."); // Sugestão
 
         RuleFor(x => x.AverageHandlingTime)
             .NotEmpty().WithMessage("O tempo médio de atendimento é obrigatório.")
-            .GreaterThan(TimeSpan.Zero).WithMessage("O tempo médio de atendimento deve ser um valor positivo."); // Sugestão
+            .GreaterThanOrEqualTo(TimeSpan.Zero).WithMessage("O tempo médio de atendimento deve ser um valor positivo."); // Sugestão
     }
 }

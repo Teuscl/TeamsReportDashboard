@@ -1,7 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿// Local: TeamsReportDashboard.Backend/Models/ReportDto/AtendimentoDtos.cs
+
+using System.Text.Json.Serialization;
 
 namespace TeamsReportDashboard.Backend.Models.ReportDto 
 {
+    // Representa cada atendimento individual
     public class AtendimentoDto
     {
         [JsonPropertyName("quem_solicitou_atendimento")]
@@ -26,15 +29,17 @@ namespace TeamsReportDashboard.Backend.Models.ReportDto
         public string Categoria { get; set; }
 
         [JsonPropertyName("tempo_primeira_resposta")]
-        public string TempoPrimeiraResposta { get; set; } // String "HH:mm:ss"
+        public string TempoPrimeiraResposta { get; set; }
 
+        // CORREÇÃO CRÍTICA: Alterado de 'string' para 'long' para receber o número do JSON
         [JsonPropertyName("tempo_total_atendimento")]
-        public string TempoTotalAtendimento { get; set; } // String "HH:mm:ss"
+        public long TempoTotalAtendimento { get; set; }
     }
 
+    // Representa o contêiner que tem a lista de atendimentos
     public class AtendimentoContainerDto
     {
         [JsonPropertyName("atendimentos")]
-        public List<AtendimentoDto> Atendimentos { get; set; }
+        public List<AtendimentoDto> Atendimentos { get; set; } = new();
     }
 }

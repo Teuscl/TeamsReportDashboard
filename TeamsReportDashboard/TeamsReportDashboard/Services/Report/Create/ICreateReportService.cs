@@ -1,7 +1,6 @@
 ﻿using TeamsReportDashboard.Backend.Models.ReportDto;
-using TeamsReportDashboard.Models.Dto;
 
-namespace TeamsReportDashboard.Services.User.Create;
+namespace TeamsReportDashboard.Backend.Services.Report.Create;
 
 public interface ICreateReportService
 {

@@ -51,3 +51,8 @@ export const getJobStatus = async (jobId: string): Promise<AnalysisJob> => {
   const response = await axios.get(`/analysis/status/${jobId}`);
   return response.data;
 };
+
+export const reprocessAnalysisJob = async (jobId: string): Promise<{ message: string }> => {
+  const response = await axios.post(`/analysis/reprocess/${jobId}`);
+  return response.data;
+};

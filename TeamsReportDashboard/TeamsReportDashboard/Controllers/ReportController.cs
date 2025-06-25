@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using TeamsReportDashboard.Backend.Entities; // Para a entidade Report
-using TeamsReportDashboard.Backend.Models.ReportDto; // Para CreateReportDto e UpdateReportDto
+using TeamsReportDashboard.Backend.Models.ReportDto;
+using TeamsReportDashboard.Backend.Services.Report.Create; // Para CreateReportDto e UpdateReportDto
 using TeamsReportDashboard.Backend.Services.Report.Read;
 using TeamsReportDashboard.Services.User.Create;
 using TeamsReportDashboard.Services.User.Delete; // Supondo que suas interfaces de serviço de Report estejam aqui
