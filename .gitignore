@@ -22,3 +22,6 @@
 
 # Cache files
 *.cache
+
+**/obj/
+**/bin/

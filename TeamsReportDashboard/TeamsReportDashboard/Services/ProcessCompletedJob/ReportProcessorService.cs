@@ -96,6 +96,18 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
                         AverageHandlingTime = handlingTime 
                     };
                     
+                    Console.WriteLine("===== Relatório de Atendimento =====");
+                    Console.WriteLine($"Solicitante: {createReportDto.RequesterName}");
+                    Console.WriteLine($"Email do Solicitante: {createReportDto.RequesterEmail}");
+                    Console.WriteLine($"Técnico Responsável: {createReportDto.TechnicianName}");
+                    Console.WriteLine($"Problema Reportado: {createReportDto.ReportedProblem}");
+                    Console.WriteLine($"Categoria: {createReportDto.Category}");
+                    Console.WriteLine($"Data da Solicitação: {createReportDto.RequestDate}");
+                    Console.WriteLine($"Tempo para Primeira Resposta: {createReportDto.FirstResponseTime}");
+                    Console.WriteLine($"Tempo Médio de Atendimento: {createReportDto.AverageHandlingTime}");
+                    Console.WriteLine("====================================");
+
+                    
                     // A chamada para o serviço de criação não muda
                     await _createReportService.Execute(createReportDto);
                     successCount++;
