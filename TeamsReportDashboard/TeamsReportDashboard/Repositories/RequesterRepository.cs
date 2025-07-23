@@ -16,13 +16,14 @@ public class RequesterRepository : IRequesterRepository
         
     public async Task<List<Requester>> GetAllAsync() => 
         await _context.Requesters
-            .Include(r => r.Department) // 👈 ADICIONADO AQUI
+            .Include(r => r.Department)
+            .OrderBy(r => r.Name)
             .AsNoTracking()
             .ToListAsync();
 
     public async Task<Requester?> GetRequesterAsync(int id) => 
         await _context.Requesters
-            .Include(r => r.Department) // 👈 E ADICIONADO AQUI
+            .Include(r => r.Department) 
             .AsNoTracking()
             .FirstOrDefaultAsync(r => r.Id == id);
 

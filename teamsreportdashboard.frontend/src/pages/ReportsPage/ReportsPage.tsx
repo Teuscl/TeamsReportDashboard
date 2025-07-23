@@ -1,4 +1,4 @@
-// src/pages/ReportsPage/ReportsPage.tsx (CÓDIGO CORRIGIDO)
+// src/pages/ReportsPage/ReportsPage.tsx
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { ColumnDef, SortingState } from '@tanstack/react-table';
 import { DateRange } from 'react-day-picker';
@@ -29,8 +29,8 @@ import { useNavigate } from 'react-router-dom';
 const ReportsPage: React.FC = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const { user: currentUser, isLoading: authIsLoading } = useAuth();
-  const navigate = useNavigate(); // 2. Inicialize o hook
-  
+  const navigate = useNavigate();
+
   const [modalMode, setModalMode] = useState<'create' | 'edit' | null>(null);
   const [reportForModal, setReportForModal] = useState<Report | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
@@ -56,29 +56,22 @@ const ReportsPage: React.FC = () => {
 
   useEffect(() => {
     if (authIsLoading) {
-      return; 
+      return;
     }
     fetchReports();
   }, [authIsLoading, fetchReports]);
 
-  // Obter listas únicas para os filtros
+  // Deriva listas únicas para os filtros
   const uniqueTechnicians = useMemo(() => {
     const technicians = reports
       .map(report => report.technicianName)
-      .filter((name): name is string => Boolean(name))
-      .filter((value, index, self) => self.indexOf(value) === index);
-    return technicians.sort();
+      .filter((name): name is string => Boolean(name));
+    return Array.from(new Set(technicians)).sort();
   }, [reports]);
 
-  const uniqueCategories = useMemo(() => {
-    const categories = reports
-      .map(report => report.category)
-      .filter((category): category is string => Boolean(category))
-      .filter((value, index, self) => self.indexOf(value) === index);
-    return categories.sort();
-  }, [reports]);
+  const uniqueCategories = useMemo(() => Array.from(new Set(reports.map(r => r.category).filter(Boolean))).sort(), [reports]);
 
-  // Filtrar os dados baseado nos filtros selecionados
+  // Filtra os dados da tabela
   const filteredReports = useMemo(() => {
     return reports.filter(report => {
       if (selectedTechnician !== 'all' && report.technicianName !== selectedTechnician) {
@@ -87,19 +80,16 @@ const ReportsPage: React.FC = () => {
       if (selectedCategory !== 'all' && report.category !== selectedCategory) {
         return false;
       }
-      if (dateRange?.from || dateRange?.to) {
+      if (dateRange?.from) {
         try {
           const reportDate = parseISO(report.requestDate);
           if (dateRange.from && dateRange.to) {
             return isWithinInterval(reportDate, { start: dateRange.from, end: dateRange.to });
           } else if (dateRange.from) {
             return reportDate >= dateRange.from;
-          } else if (dateRange.to) {
-            return reportDate <= dateRange.to;
           }
         } catch (error) {
           console.warn('Erro ao filtrar por data:', error);
-          return true;
         }
       }
       return true;
@@ -109,7 +99,7 @@ const ReportsPage: React.FC = () => {
   const handleDelete = async (id: number) => {
     const originalReports = [...reports];
     toast.custom((t) => (
-      <div className="bg-white dark:bg-zinc-950 p-4 rounded-md shadow-lg w-[380px] border border-white-500">
+      <div className="bg-white dark:bg-zinc-950 p-4 rounded-md shadow-lg w-[380px] border border-input">
         <h3 className="text-lg font-semibold mb-2">Tem certeza que deseja excluir este relatório?</h3>
         <p className="text-sm text-muted-foreground mb-4">
           Esta ação não pode ser desfeita. Todos os dados associados a este relatório serão perdidos.
@@ -128,8 +118,8 @@ const ReportsPage: React.FC = () => {
                 toast.success("Relatório removido com sucesso.");
               } catch (error: any) {
                 setReports(originalReports);
-                const message = error?.response?.data?.message || "Erro ao excluir relatório.";
-                toast.error(`Erro ao excluir relatório: ${message}`);
+                const message = error?.response?.data?.message || "Erro ao excluir o relatório.";
+                toast.error(`Falha ao excluir: ${message}`);
               }
             }}
           >
@@ -142,27 +132,7 @@ const ReportsPage: React.FC = () => {
       duration: Infinity
     });
   };
-
-  // Funções para limpar filtros
-  const clearTechnicianFilter = () => setSelectedTechnician('all');
-  const clearCategoryFilter = () => setSelectedCategory('all');
-  const clearDateRangeFilter = () => setDateRange({ from: undefined, to: undefined });
   
-  const clearAllFilters = () => {
-    setSelectedTechnician('all');
-    setSelectedCategory('all');
-    setDateRange({ from: undefined, to: undefined });
-  };
-
-  const hasActiveFilters = selectedTechnician !== 'all' || selectedCategory !== 'all' || dateRange?.from || dateRange?.to;
-
-  const initialSortConfig: SortingState = [
-    {
-      id: 'requestDate',
-      desc: true,
-    }
-  ];
-
   const handleOpenCreateModal = () => {
     setReportForModal(null);
     setModalMode('create');
@@ -180,71 +150,60 @@ const ReportsPage: React.FC = () => {
 
   const handleSaveSuccess = () => {
     fetchReports();
+    closeModal();
   };
-  
-  // ALTERAÇÃO 1: Construção dinâmica das colunas
+
   const columns = useMemo<ColumnDef<Report>[]>(() => {
     const baseColumns: ColumnDef<Report>[] = [
       {
         id: "select",
-        header: ({ table }) => ( <Checkbox checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")} onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)} aria-label="Select all" /> ),
-        cell: ({ row }) => ( <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" /> ),
+        header: ({ table }) => (<Checkbox checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")} onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)} aria-label="Selecionar todos" />),
+        cell: ({ row }) => (<Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Selecionar linha" />),
         enableSorting: false,
         enableHiding: false,
       },
-      { accessorKey: 'requestDate', header: 'Data Solicitação', cell: ({ row }) => { try { return format(new Date(row.original.requestDate), 'dd/MM/yyyy'); } catch { return row.original.requestDate; } } },
+      { accessorKey: 'requestDate', header: 'Data Solicitação', cell: ({ row }) => format(parseISO(row.original.requestDate), 'dd/MM/yyyy') },
       { accessorKey: 'requesterName', header: 'Solicitante' },
-      { accessorKey: 'requesterEmail', header: 'Email Solicitante', enableSorting: false },
-      { accessorKey: 'technicianName', header: 'Técnico', enableSorting: false, cell: ({ row }) => row.original.technicianName || <span className="text-xs text-muted-foreground">N/A</span> },
-      { accessorKey: 'reportedProblem', header: 'Problema Relatado', enableSorting: false, cell: ({row}) => ( <div className="max-w-xs whitespace-normal break-words" title={row.original.reportedProblem}> {row.original.reportedProblem} </div> ) },
-      { accessorKey: 'category', header: 'Categoria', enableSorting: false },
-      { accessorKey: 'firstResponseTime', header: 'Tpo. 1ª Resp.', enableSorting: false },
+      { accessorKey: 'technicianName', header: 'Técnico', cell: ({ row }) => row.original.technicianName || <span className="text-xs text-muted-foreground">N/A</span> },
+      { accessorKey: 'category', header: 'Categoria' },
+      { accessorKey: 'firstResponseTime', header: 'Tpo. 1ª Resp.' },
     ];
 
-    // Se o usuário não for 'viewer', adiciona a coluna de ações
     if (currentUser && currentUser.role !== 2) {
-      const actionsColumn: ColumnDef<Report> = {
-        id: "actions",
-        header: () => <div className="text-right">Ações</div>,
-        enableSorting: false,
-        cell: ({ row }) => {
-          const reportRowData = row.original;
-          return (
-            <div className="text-right">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-8 w-8 p-0">
-                    <span className="sr-only">Abrir menu</span>
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => handleOpenEditModal(reportRowData)}>Editar</DropdownMenuItem>
-                  <DropdownMenuItem 
-                    onClick={() => handleDelete(reportRowData.id)} 
-                    className="text-destructive focus:text-destructive focus:bg-destructive/10"
-                  >
-                    Excluir
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          );
-        }
-      };
-      return [...baseColumns, actionsColumn];
+        const actionsColumn: ColumnDef<Report> = {
+            id: "actions",
+            header: () => <div className="text-right">Ações</div>,
+            cell: ({ row }) => {
+                const report = row.original;
+                return (
+                    <div className="text-right">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                    <span className="sr-only">Abrir menu</span>
+                                    <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                                <DropdownMenuItem onClick={() => handleOpenEditModal(report)}>Editar</DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => handleDelete(report.id)} className="text-destructive focus:text-destructive">
+                                    Excluir
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                );
+            }
+        };
+        return [...baseColumns, actionsColumn];
     }
 
     return baseColumns;
-  }, [currentUser]); // Recalcula as colunas se o usuário mudar
+  }, [currentUser]);
 
-  if (authIsLoading) {
-    return <div className="container mx-auto py-10 text-center">Carregando...</div>;
-  }
-
-  if (dataLoading && reports.length === 0) { 
+  if (authIsLoading || (dataLoading && reports.length === 0)) {
     return <div className="container mx-auto py-10 text-center">Carregando relatórios...</div>;
   }
 
@@ -253,127 +212,69 @@ const ReportsPage: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl md:text-3xl font-bold">Gerenciamento de Relatórios</h1>
         <div className="flex gap-2">
-    {/* 3. Adicione o novo botão de importação */}
-      <Button variant="outline" onClick={() => navigate('/imports')}>
-        <Upload className="mr-2 h-4 w-4" />
-        Importar para análise
-      </Button>
-
-        {currentUser && currentUser.role !== 2 && (
-          <Button onClick={handleOpenCreateModal}>
-            Criar Relatório
+          <Button variant="outline" onClick={() => navigate('/imports')}>
+            <Upload className="mr-2 h-4 w-4" />
+            Importar para Análise
           </Button>
-        )}
-        </div>
-        
-        
-
-      </div>
-
-      {/* Área de Filtros */}
-      <div className="mb-6 p-4 border rounded-lg bg-muted/50">
-        <div className="flex flex-wrap gap-4 items-end">
-          {/* Filtro por Técnico */}
-          <div className="min-w-[200px]">
-            <label className="text-sm font-medium mb-2 block">Técnico</label>
-            <Select value={selectedTechnician} onValueChange={setSelectedTechnician}>
-              <SelectTrigger>
-                <SelectValue placeholder="Todos os técnicos" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os técnicos</SelectItem>
-                {uniqueTechnicians.map(technician => (
-                  <SelectItem key={technician} value={technician}>
-                    {technician}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Filtro por Categoria */}
-          <div className="min-w-[200px]">
-            <label className="text-sm font-medium mb-2 block">Categoria</label>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger>
-                <SelectValue placeholder="Todas as categorias" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas as categorias</SelectItem>
-                {uniqueCategories.map(category => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Filtro por Range de Data */}
-          <div className="min-w-[250px]">
-            <label className="text-sm font-medium mb-2 block">Período</label>
-            <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-start text-left font-normal">
-                  <Calendar className="mr-2 h-4 w-4" />
-                  {dateRange?.from ? ( dateRange.to ? ( `${format(dateRange.from, "dd/MM/yyyy")} - ${format(dateRange.to, "dd/MM/yyyy")}` ) : ( `A partir de ${format(dateRange.from, "dd/MM/yyyy")}` ) ) : ( "Selecionar período" )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <CalendarComponent
-                  initialFocus
-                  mode="range"
-                  defaultMonth={dateRange?.from}
-                  selected={dateRange}
-                  onSelect={(range) => {
-                    setDateRange(range);
-                    if (range?.from && range?.to) {
-                      setIsDatePickerOpen(false);
-                    }
-                  }}
-                  numberOfMonths={2}
-                  locale={ptBR}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          {/* Botão Limpar Filtros */}
-          {hasActiveFilters && (
-            <Button variant="outline" onClick={clearAllFilters} className="flex items-center gap-2">
-              <X className="h-4 w-4" />
-              Limpar Filtros
+          {currentUser && currentUser.role !== 2 && (
+            <Button onClick={handleOpenCreateModal}>
+              Criar Relatório
             </Button>
           )}
         </div>
+      </div>
 
-        {/* Badges dos Filtros Ativos */}
-        {hasActiveFilters && (
-          <div className="flex flex-wrap gap-2 mt-4">
-            {selectedTechnician !== 'all' && (
-              <Badge variant="secondary" className="flex items-center gap-1">
-                Técnico: {selectedTechnician}
-                <button onClick={clearTechnicianFilter} className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"><X className="h-3 w-3" /></button>
-              </Badge>
-            )}
-            {selectedCategory !== 'all' && (
-              <Badge variant="secondary" className="flex items-center gap-1">
-                Categoria: {selectedCategory}
-                <button onClick={clearCategoryFilter} className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"><X className="h-3 w-3" /></button>
-              </Badge>
-            )}
-            {(dateRange?.from || dateRange?.to) && (
-              <Badge variant="secondary" className="flex items-center gap-1">
-                Período: {dateRange.from && format(dateRange.from, "dd/MM/yyyy")} {dateRange.from && dateRange.to && " - "} {dateRange.to && format(dateRange.to, "dd/MM/yyyy")}
-                <button onClick={clearDateRangeFilter} className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"><X className="h-3 w-3" /></button>
-              </Badge>
-            )}
+      <div className="mb-6 p-4 border rounded-lg bg-muted/50">
+        <div className="flex flex-wrap gap-4 items-end">
+          <div className="min-w-[200px]">
+            <label className="text-sm font-medium mb-2 block">Técnico</label>
+            <Select value={selectedTechnician} onValueChange={setSelectedTechnician}>
+              <SelectTrigger><SelectValue placeholder="Todos os técnicos" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os técnicos</SelectItem>
+                {uniqueTechnicians.map(technician => (
+                  <SelectItem key={technician} value={technician}>{technician}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-        )}
 
-        {/* Contador de Resultados */}
-        <div className="mt-2 text-sm text-muted-foreground">
-          Mostrando {filteredReports.length} de {reports.length} relatórios
+          <div className="min-w-[200px]">
+            <label className="text-sm font-medium mb-2 block">Categoria</label>
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger><SelectValue placeholder="Todas as categorias" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas as categorias</SelectItem>
+                {uniqueCategories.map(category => (
+                  <SelectItem key={category} value={category}>{category}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="min-w-[250px]">
+             <label className="text-sm font-medium mb-2 block">Período</label>
+             <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
+               <PopoverTrigger asChild>
+                 <Button variant="outline" className="w-full justify-start text-left font-normal">
+                   <Calendar className="mr-2 h-4 w-4" />
+                   {dateRange?.from ? (dateRange.to ? `${format(dateRange.from, "dd/MM/yyyy")} - ${format(dateRange.to, "dd/MM/yyyy")}` : `A partir de ${format(dateRange.from, "dd/MM/yyyy")}`) : "Selecionar período"}
+                 </Button>
+               </PopoverTrigger>
+               <PopoverContent className="w-auto p-0" align="start">
+                 <CalendarComponent
+                   initialFocus mode="range" defaultMonth={dateRange?.from} selected={dateRange}
+                   onSelect={(range) => {
+                     setDateRange(range);
+                     if (range?.from && range?.to) {
+                       setIsDatePickerOpen(false);
+                     }
+                   }}
+                   numberOfMonths={2} locale={ptBR}
+                 />
+               </PopoverContent>
+             </Popover>
+           </div>
         </div>
       </div>
 
@@ -382,9 +283,8 @@ const ReportsPage: React.FC = () => {
         data={filteredReports}
         filterColumnId="requesterName"
         filterPlaceholder="Filtrar por nome do solicitante..."
-        initialSorting={initialSortConfig}
       />
-      
+
       {modalMode && (
         <ReportFormModal
           mode={modalMode}
@@ -392,6 +292,7 @@ const ReportsPage: React.FC = () => {
           isOpen={!!modalMode}
           onClose={closeModal}
           onSaveSuccess={handleSaveSuccess}
+          uniqueCategories={uniqueCategories}
         />
       )}
     </div>

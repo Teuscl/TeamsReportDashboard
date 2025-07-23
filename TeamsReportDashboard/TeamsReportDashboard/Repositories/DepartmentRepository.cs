@@ -19,7 +19,7 @@ public class DepartmentRepository : IDepartmentRepository
         return await _context.Departments.CountAsync(); 
     }
 
-    public async Task<List<Department>> GetAllAsync() => await _context.Departments.ToListAsync();
+    public async Task<List<Department>> GetAllAsync() => await _context.Departments.OrderBy(d => d.Name).ToListAsync();
    
 
     public async Task<Department?> GetDepartmentAsync(int id) => await _context.Departments.FirstOrDefaultAsync(x => x.Id == id);

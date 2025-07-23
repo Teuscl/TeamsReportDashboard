@@ -1,47 +1,56 @@
 // src/components/ReportFormModal.tsx
-import React, { useEffect } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+
+import React, { useEffect, useState } from 'react';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+
 import { Report, CreateReportPayload, UpdateReportPayload } from '@/types/Report';
+import { RequesterDto } from '@/types/Requester'; // Assuming you have this type defined
+import { getRequesters } from '@/services/requesterService';
 import { createReport, updateReport } from '@/services/reportService';
 
-// Interface para os dados do formulário (usada pelo React Hook Form)
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+
+// Form data interface
 interface ReportFormData {
-  requesterName: string;
-  requesterEmail: string;
-  technicianName: string; // No formulário, será string (pode ser vazia)
-  requestDate: string;    // Formato yyyy-MM-ddTHH:MM
+  requesterId: string;
+  technicianName?: string;
+  requestDate: string;
   reportedProblem: string;
-  firstResponseTime: string; // Formato HH:MM:SS
+  category: string;
+  firstResponseTime: string;
   averageHandlingTime: string;
-  category: string // Formato HH:MM:SS
 }
 
-// Schema Zod para validar os dados do formulário
+// Zod validation schema em português
 const reportFormSchema = z.object({
-  requesterName: z.string().min(1, "Nome do solicitante é obrigatório.").max(55),
-  requesterEmail: z.string().min(1).email().max(100),
-  technicianName: z.string().max(50),
-  requestDate: z.string().min(1),
-  reportedProblem: z.string().min(1).max(255),
-  firstResponseTime: z.string()
-    .min(1)
-    .regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, { message: "Tempo 1ª Resp. inválido (HH:MM:SS)." }),
-  averageHandlingTime: z.string()
-    .min(1)
-    .regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/, { message: "Tempo Médio Atend. inválido (HH:MM:SS)." }),
-  category: z.string().min(1, "Categoria é obrigatória.").max(50, "Máximo de 50 caracteres."), // <- novo
+  requesterId: z.string().min(1, "O solicitante é obrigatório."),
+  technicianName: z.string().max(50).optional(),
+  requestDate: z.string().min(1, "A data é obrigatória."),
+  reportedProblem: z.string().min(1, "A descrição do problema é obrigatória.").max(255),
+  category: z.string().min(1, "A categoria é obrigatória.").max(50),
+  firstResponseTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, "Formato de hora inválido (HH:MM:SS)."),
+  averageHandlingTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/, "Formato de hora inválido (HH:MM:SS)."),
 });
+
+// Date utility functions
+const formatDateTimeForInput = (isoDateString?: string): string => {
+  if (!isoDateString) return '';
+  const date = new Date(isoDateString);
+  // Adjust for timezone offset to display local time correctly in the input
+  return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+};
+const formatInputDateTimeToISOString = (inputDateTime: string): string => new Date(inputDateTime).toISOString();
 
 interface ReportFormModalProps {
   mode: 'create' | 'edit';
@@ -49,223 +58,191 @@ interface ReportFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSaveSuccess: () => void;
+  uniqueCategories: string[];
 }
 
-const formatDateTimeForInput = (isoDateString?: string): string => {
-  if (!isoDateString) return '';
-  try {
-    const date = new Date(isoDateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
-  } catch (e) { return ''; }
-};
-const formatInputDateTimeToISOString = (inputDateTime: string): string => {
-    if (!inputDateTime) return ''; // Deveria ser pego pela validação do Zod se obrigatório
-    try { return new Date(inputDateTime).toISOString(); } catch (e) { return ''; }
-};
+export const ReportFormModal: React.FC<ReportFormModalProps> = ({ mode, reportToEdit, isOpen, onClose, onSaveSuccess, uniqueCategories }) => {
+  const [requesters, setRequesters] = useState<RequesterDto[]>([]);
+  const [dataLoading, setDataLoading] = useState(false);
 
-const DEFAULT_FORM_VALUES: ReportFormData = {
-  requesterName: '',
-  requesterEmail: '',
-  technicianName: '',
-  requestDate: formatDateTimeForInput(new Date().toISOString()),
-  reportedProblem: '',
-  firstResponseTime: '00:00:00',
-  averageHandlingTime: '00:00:00',
-  category: '', // <- novo
-};
-
-export const ReportFormModal: React.FC<ReportFormModalProps> = ({
-  mode,
-  reportToEdit,
-  isOpen,
-  onClose,
-  onSaveSuccess,
-}) => {
-  const { 
-    register, 
-    handleSubmit: rhfHandleSubmit,
-    reset, 
-    formState: { errors, dirtyFields, isSubmitting } // dirtyFields será usado agora
-  } = useForm<ReportFormData>({
-    resolver: zodResolver(reportFormSchema), // Seu schema Zod
-    defaultValues: DEFAULT_FORM_VALUES,
+  const { control, register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<ReportFormData>({
+    resolver: zodResolver(reportFormSchema),
   });
 
-  // Guarda o estado inicial do formulário no modo de edição para comparação
-  // Isso é importante para a lógica de PATCH condicional
-
- const resetFormAndClose = () => {
-    reset(DEFAULT_FORM_VALUES);
-    onClose();
-  };
-
+  // Fetches requesters when the modal opens
   useEffect(() => {
     if (isOpen) {
+      const fetchDropdownData = async () => {
+        setDataLoading(true);
+        try {
+          setRequesters(await getRequesters());
+        } catch (error) {
+          toast.error("Falha ao carregar a lista de solicitantes.");
+        } finally {
+          setDataLoading(false);
+        }
+      };
+      fetchDropdownData();
+    }
+  }, [isOpen]);
+
+  // Populates the form for creation or editing
+  useEffect(() => {
+    if (isOpen && !dataLoading) {
       if (mode === 'edit' && reportToEdit) {
-        reset({ // Popula o RHF com os valores iniciais para edição
-          requesterName: reportToEdit.requesterName,
-          requesterEmail: reportToEdit.requesterEmail,
+        reset({
+          requesterId: String(reportToEdit.requesterId),
           technicianName: reportToEdit.technicianName || '',
           requestDate: formatDateTimeForInput(reportToEdit.requestDate),
           reportedProblem: reportToEdit.reportedProblem,
+          category: reportToEdit.category,
           firstResponseTime: reportToEdit.firstResponseTime || '00:00:00',
           averageHandlingTime: reportToEdit.averageHandlingTime || '00:00:00',
         });
-      } else { // Modo 'create'
-        reset({...DEFAULT_FORM_VALUES, requestDate: formatDateTimeForInput(new Date().toISOString())});
+      } else {
+        reset({
+          requesterId: '',
+          technicianName: '',
+          requestDate: formatDateTimeForInput(new Date().toISOString()),
+          reportedProblem: '',
+          category: '',
+          firstResponseTime: '00:00:00',
+          averageHandlingTime: '00:00:00',
+        });
       }
     }
-  }, [isOpen, mode, reportToEdit, reset]);
+  }, [isOpen, dataLoading, mode, reportToEdit, reset]);
 
   const onSubmit: SubmitHandler<ReportFormData> = async (data) => {
-    // 'data' contém os valores atuais do formulário, validados pelo Zod
-    try {
-      if (mode === 'edit' && reportToEdit) {
-        const changedValuesPayload: Partial<UpdateReportPayload> = {};
-        let hasRegisteredDirtyField = false;
+  try {
+    if (mode === 'edit' && reportToEdit) {
+      // **PAYLOAD PARA EDIÇÃO**
+      // Envie o requesterId, e não o nome e o e-mail.
+      const updatePayload: Partial<UpdateReportPayload> = {
+        requesterId: parseInt(data.requesterId, 10), // A correção principal está aqui!
+        technicianName: data.technicianName?.trim() === '' ? null : data.technicianName,
+        requestDate: formatInputDateTimeToISOString(data.requestDate),
+        reportedProblem: data.reportedProblem,
+        category: data.category,
+        firstResponseTime: data.firstResponseTime,
+        averageHandlingTime: data.averageHandlingTime,
+      };
+      await updateReport(reportToEdit.id, updatePayload as UpdateReportPayload);
+      toast.success("Relatório atualizado com sucesso!");
 
-        // Itera sobre as chaves que o React Hook Form marcou como 'dirty'
-        for (const key in dirtyFields) {
-          if (dirtyFields[key as keyof ReportFormData]) { // Verifica se o campo específico está 'dirty'
-            hasRegisteredDirtyField = true;
-            const typedKey = key as keyof ReportFormData;
-            let valueToSet: any = data[typedKey]; // Pega o valor atual do formulário para o campo 'dirty'
-
-            if (typedKey === 'requestDate') {
-              valueToSet = formatInputDateTimeToISOString(data.requestDate);
-            } else if (typedKey === 'technicianName') {
-              // Envia null se a string do formulário estiver vazia
-              valueToSet = data.technicianName.trim() === '' ? null : data.technicianName;
-            }
-            // Adiciona ao payload APENAS se a chave for válida para UpdateReportPayload
-            // Esta verificação de 'key in ...' garante que estamos mapeando para campos do DTO de update
-             if (Object.prototype.hasOwnProperty.call({} as UpdateReportPayload, typedKey) || 
-                ["requesterName", "requesterEmail", "technicianName", "requestDate", "reportedProblem", "firstResponseTime", "averageHandlingTime"].includes(typedKey)) {
-                (changedValuesPayload as any)[typedKey] = valueToSet;
-            }
-          }
-        }
-        
-        if (!hasRegisteredDirtyField) {
-          toast.info("Nenhuma alteração detectada para salvar.");
-          onClose(); 
-          return;
-        }
-        
-        await updateReport(reportToEdit.id, changedValuesPayload);
-        toast.success("Relatório atualizado com sucesso!");
-
-      } else if (mode === 'create') {
-        const createPayload: CreateReportPayload = {
-          requesterName: data.requesterName,
-          requesterEmail: data.requesterEmail,
-          technicianName: data.technicianName.trim() === '' ? undefined : data.technicianName,
-          requestDate: formatInputDateTimeToISOString(data.requestDate),
-          reportedProblem: data.reportedProblem,
-          firstResponseTime: data.firstResponseTime,
-          averageHandlingTime: data.averageHandlingTime,
-          category: data.category
-        };
-        await createReport(createPayload);
-        toast.success("Relatório criado com sucesso!");
+    } else {
+      // **PAYLOAD PARA CRIAÇÃO**
+      // Esta parte provavelmente já estava correta. Encontra o solicitante para obter nome/e-mail.
+      const selectedRequester = requesters.find(r => String(r.id) === data.requesterId);
+      if (!selectedRequester) {
+        toast.error("O solicitante selecionado é inválido.");
+        return;
       }
-      onSaveSuccess();
-      resetFormAndClose();
-    } catch (error: any) {
-      console.error(`Erro ao ${mode === 'create' ? 'criar' : 'atualizar'} relatório:`, error);
-      const message = error?.response?.data?.errors?.map((err: any) => err.ErrorMessage || err.errorMessage || err).join(", ") ||
-                      error?.response?.data?.message ||
-                      `Erro ao ${mode === 'create' ? 'criar' : 'atualizar'} relatório.`;
-      toast.error(message);
+      const createPayload: CreateReportPayload = {
+        requesterName: selectedRequester.name,
+        requesterEmail: selectedRequester.email,
+        technicianName: data.technicianName?.trim() === '' ? null : data.technicianName,
+        requestDate: formatInputDateTimeToISOString(data.requestDate),
+        reportedProblem: data.reportedProblem,
+        category: data.category,
+        firstResponseTime: data.firstResponseTime,
+        averageHandlingTime: data.averageHandlingTime,
+      };
+      await createReport(createPayload);
+      toast.success("Relatório criado com sucesso!");
     }
-  };
-
-  const dialogTitle = mode === 'create' ? "Criar Novo Relatório" : "Editar Relatório";
-  const saveButtonText = mode === 'create' ? "Criar Relatório" : "Salvar Alterações";
+    onSaveSuccess();
+  } catch (error: any) {
+    const actionVerb = mode === 'edit' ? 'editar' : 'criar';
+    const message = error?.response?.data?.message || `Falha ao ${actionVerb} o relatório.`;
+    toast.error(message);
+  }
+};
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open && !isSubmitting) resetFormAndClose(); }}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{dialogTitle}</DialogTitle>
-          {mode === 'edit' && reportToEdit && (
-            <DialogDescription>
-              Editando relatório de {reportToEdit.requesterName}. {/* Pode usar reportToEdit aqui para o nome original */}
-            </DialogDescription>
-          )}
-           {mode === 'create' && (
-            <DialogDescription>
-              Preencha os detalhes do novo relatório.
-            </DialogDescription>
-            )}
+          <DialogTitle>{mode === 'create' ? 'Criar Novo Relatório' : 'Editar Relatório'}</DialogTitle>
         </DialogHeader>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-2 max-h-[70vh] overflow-y-auto pr-2">
 
-        <form onSubmit={rhfHandleSubmit(onSubmit)} className="space-y-3 py-2 max-h-[70vh] overflow-y-auto pr-1">
-          {/* Nome do Solicitante */}
           <div className="space-y-1">
-            <Label htmlFor="requesterName">Nome do Solicitante</Label>
-            <Input id="requesterName" {...register("requesterName")} disabled={isSubmitting} />
-            {errors.requesterName && <p className="text-xs text-red-500 mt-1">{errors.requesterName.message}</p>}
+            <Label>Solicitante</Label>
+            <Controller name="requesterId" control={control} render={({ field }) => (
+              <Popover><PopoverTrigger asChild>
+                <Button variant="outline" role="combobox" className={cn("w-full justify-between", !field.value && "text-muted-foreground")} disabled={dataLoading || isSubmitting}>
+                  {field.value ? requesters.find((r) => String(r.id) === field.value)?.name : "Selecione um solicitante..."}
+                  <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger><PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                <Command><CommandInput placeholder="Buscar solicitante..." /><CommandList><CommandEmpty>Nenhum solicitante encontrado.</CommandEmpty><CommandGroup>
+                  {requesters.map((req) => (
+                    <CommandItem value={req.name} key={req.id} onSelect={() => field.onChange(String(req.id))}>
+                      <CheckIcon className={cn("mr-2 h-4 w-4", String(req.id) === field.value ? "opacity-100" : "opacity-0")} />
+                      <div><p>{req.name}</p><p className="text-xs text-muted-foreground">{req.email}</p></div>
+                    </CommandItem>
+                  ))}
+                </CommandGroup></CommandList></Command>
+              </PopoverContent></Popover>
+            )} />
+            {errors.requesterId && <p className="text-xs text-red-500 mt-1">{errors.requesterId.message}</p>}
           </div>
 
-          {/* Email do Solicitante */}
           <div className="space-y-1">
-            <Label htmlFor="requesterEmail">Email do Solicitante</Label>
-            <Input id="requesterEmail" type="email" {...register("requesterEmail")} disabled={isSubmitting} />
-            {errors.requesterEmail && <p className="text-xs text-red-500 mt-1">{errors.requesterEmail.message}</p>}
+            <Label>Categoria</Label>
+            <Controller name="category" control={control} render={({ field }) => (
+              <Popover><PopoverTrigger asChild>
+                <Button variant="outline" role="combobox" className={cn("w-full justify-between", !field.value && "text-muted-foreground")} disabled={isSubmitting}>
+                  {field.value || "Selecione ou digite uma categoria..."}
+                  <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger><PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                <Command>
+                  <CommandInput placeholder="Buscar ou criar categoria..." value={field.value || ''} onValueChange={field.onChange} />
+                  <CommandList><CommandEmpty>Nenhuma categoria encontrada.</CommandEmpty><CommandGroup>
+                    {uniqueCategories.map((catName) => (
+                      <CommandItem value={catName} key={catName} onSelect={() => field.onChange(catName)}>
+                        <CheckIcon className={cn("mr-2 h-4 w-4", catName === field.value ? "opacity-100" : "opacity-0")} />
+                        {catName}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup></CommandList></Command>
+                </PopoverContent></Popover>
+            )} />
+            {errors.category && <p className="text-xs text-red-500 mt-1">{errors.category.message}</p>}
           </div>
-          
-          {/* Nome do Técnico */}
+
           <div className="space-y-1">
             <Label htmlFor="technicianName">Nome do Técnico (Opcional)</Label>
             <Input id="technicianName" {...register("technicianName")} disabled={isSubmitting} />
-            {errors.technicianName && <p className="text-xs text-red-500 mt-1">{errors.technicianName.message}</p>}
           </div>
-          
-          {/* Data da Solicitação */}
+
           <div className="space-y-1">
             <Label htmlFor="requestDate">Data da Solicitação</Label>
             <Input id="requestDate" type="datetime-local" {...register("requestDate")} disabled={isSubmitting} />
-            {errors.requestDate && <p className="text-xs text-red-500 mt-1">{errors.requestDate.message}</p>}
           </div>
 
-          {/* Problema Relatado */}
           <div className="space-y-1">
-            <Label htmlFor="reportedProblem">Problema Relatado</Label>
-            <Textarea id="reportedProblem" {...register("reportedProblem")} disabled={isSubmitting} rows={3}/>
-            {errors.reportedProblem && <p className="text-xs text-red-500 mt-1">{errors.reportedProblem.message}</p>}
+            <Label htmlFor="reportedProblem">Descrição do Problema</Label>
+            <Textarea id="reportedProblem" {...register("reportedProblem")} disabled={isSubmitting} rows={3} />
           </div>
-          <div className="space-y-1">
-            <Label htmlFor="category">Categoria</Label>
-            <Input id="category" {...register("category")} disabled={isSubmitting} />
-            {errors.category && <p className="text-xs text-red-500 mt-1">{errors.category.message}</p>}
-        </div>
 
-          {/* Tempos de Resposta e Atendimento */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <Label htmlFor="firstResponseTime">Tempo 1ª Resposta (HH:MM:SS)</Label>
-              <Input id="firstResponseTime" placeholder="00:00:00" {...register("firstResponseTime")} disabled={isSubmitting} />
-              {errors.firstResponseTime && <p className="text-xs text-red-500 mt-1">{errors.firstResponseTime.message}</p>}
+              <Label htmlFor="firstResponseTime">Tempo de 1ª Resposta (HH:MM:SS)</Label>
+              <Input id="firstResponseTime" {...register("firstResponseTime")} disabled={isSubmitting} />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="averageHandlingTime">Tempo Médio Atend. (HH:MM:SS)</Label>
-              <Input id="averageHandlingTime" placeholder="00:00:00" {...register("averageHandlingTime")} disabled={isSubmitting} />
-              {errors.averageHandlingTime && <p className="text-xs text-red-500 mt-1">{errors.averageHandlingTime.message}</p>}
+              <Label htmlFor="averageHandlingTime">Tempo Médio de Atendimento (HH:MM:SS)</Label>
+              <Input id="averageHandlingTime" {...register("averageHandlingTime")} disabled={isSubmitting} />
             </div>
           </div>
-        
+
           <DialogFooter className="pt-5">
-            <DialogClose asChild>
-              <Button type="button" variant="outline" onClick={resetFormAndClose} disabled={isSubmitting}>Cancelar</Button>
-            </DialogClose>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (mode === 'create' ? "Criando..." : "Salvando...") : saveButtonText}
+            <DialogClose asChild><Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>Cancelar</Button></DialogClose>
+            <Button type="submit" disabled={isSubmitting || dataLoading}>
+              {isSubmitting ? "Salvando..." : (mode === 'create' ? "Criar Relatório" : "Salvar Alterações")}
             </Button>
           </DialogFooter>
         </form>

@@ -1,7 +1,8 @@
 # .NET Core build output
 [Bb]in/
 [Oo]bj/
-
+bin/
+obj/
 # Rider specific
 .idea/
 *.sln.iml

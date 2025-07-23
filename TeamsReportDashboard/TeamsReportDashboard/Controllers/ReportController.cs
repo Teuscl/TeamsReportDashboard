@@ -19,7 +19,8 @@ namespace TeamsReportDashboard.Backend.Controllers
     public class ReportController : ControllerBase
     {
         // POST: /Report
-        [HttpPost]
+        
+[HttpPost]
         [Authorize(Roles = "Admin, Master")]
         public async Task<IActionResult> CreateReport(
             [FromServices] ICreateReportService service,
@@ -32,7 +33,6 @@ namespace TeamsReportDashboard.Backend.Controllers
             var report = await service.Execute(createReportDto);
             return Ok();
         }
-
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<IEnumerable<ReportDto>>> GetAllReports( 

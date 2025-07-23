@@ -28,7 +28,17 @@ public class UpdateReportService : IUpdateReportService // Certifique-se que est
     public async Task Execute(int id, UpdateReportDto updateReportDto)
     {
         
-        var report = await Validate(id, updateReportDto); 
+        var report = await Validate(id, updateReportDto);
+
+        if (report.RequesterId != updateReportDto.RequesterId)
+        {
+            var newRequester = await _unitOfWork.RequesterRepository.GetRequesterAsync(updateReportDto.RequesterId);
+
+            if (newRequester != null)
+            {
+                report.Requester = newRequester;
+            }
+        }
         
         // 2. Mapear o DTO para a entidade existente.
         // O AutoMapper atualizará 'report' com os valores não nulos de 'updateReportDto'.

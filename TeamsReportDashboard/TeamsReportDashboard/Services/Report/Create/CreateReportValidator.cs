@@ -38,11 +38,8 @@ public class CreateReportValidator : AbstractValidator<CreateReportDto>
             .MaximumLength(255).WithMessage("A categoria do problema relatado deve ter no máximo 255 caracteres.");
 
         RuleFor(x => x.FirstResponseTime)
-            .NotEmpty().WithMessage("O tempo da primeira resposta é obrigatório.")
-            .GreaterThanOrEqualTo(TimeSpan.Zero).WithMessage("O tempo da primeira resposta deve ser um valor positivo."); // Sugestão
-
+            .GreaterThanOrEqualTo(TimeSpan.Zero).WithMessage("O tempo da primeira resposta não pode ser negativo.");
         RuleFor(x => x.AverageHandlingTime)
-            .NotEmpty().WithMessage("O tempo médio de atendimento é obrigatório.")
-            .GreaterThanOrEqualTo(TimeSpan.Zero).WithMessage("O tempo médio de atendimento deve ser um valor positivo."); // Sugestão
+            .GreaterThanOrEqualTo(TimeSpan.Zero).WithMessage("O tempo médio de atendimento não pode ser negativo.");
     }
 }
