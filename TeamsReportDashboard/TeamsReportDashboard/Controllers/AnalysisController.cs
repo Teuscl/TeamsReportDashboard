@@ -72,7 +72,7 @@ public class AnalysisController : ControllerBase
     }
     
     [HttpPost("reprocess/{jobId}")]
-    [Authorize(Roles = "Admin, Master")] // Proteja este endpoint de depuração
+    [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> ReprocessJob(Guid jobId)
     {
         var job = await _context.AnalysisJobs.FindAsync(jobId);
@@ -80,31 +80,80 @@ public class AnalysisController : ControllerBase
         {
             return NotFound("Job não encontrado.");
         }
-        if (job.Status != JobStatus.Completed || string.IsNullOrEmpty(job.ResultData))
+
+        var logger = HttpContext.RequestServices.GetRequiredService<ILogger<AnalysisController>>();
+
+        // CENÁRIO 1: O job foi concluído, mas o processamento local dos relatórios falhou.
+        if (job.Status == JobStatus.Completed && !string.IsNullOrEmpty(job.ResultData))
         {
-            return BadRequest("Este job não está concluído ou não contém dados para reprocessar.");
+            logger.LogInformation($"Iniciando reprocessamento LOCAL do Job {job.Id}.");
+            using (var scope = HttpContext.RequestServices.CreateScope())
+            {
+                var reportProcessor = scope.ServiceProvider.GetRequiredService<IReportProcessorService>();
+                var storedResult = JsonSerializer.Deserialize<PythonApiDto.PythonResultResponse>(job.ResultData);
+                if(storedResult != null)
+                {
+                    await reportProcessor.ProcessAnalysisResult(job, storedResult);
+                    return Ok(new { message = "Reprocessamento dos dados locais concluído." });
+                }
+                else 
+                {
+                    return StatusCode(500, "Falha ao ler os dados de resultado armazenados no banco.");
+                }
+            }
         }
 
-        // Usamos um service scope para injetar o serviço de processamento
-        using (var scope = HttpContext.RequestServices.CreateScope())
+        // CENÁRIO 2: O job está 'Failed' ou 'Pending'. Força uma sincronização.
+        if (string.IsNullOrEmpty(job.PythonBatchId))
         {
-            var reportProcessor = scope.ServiceProvider.GetRequiredService<IReportProcessorService>();
-            var logger = scope.ServiceProvider.GetRequiredService<ILogger<AnalysisController>>();
+            return BadRequest("Job não possui um BatchId para verificar na API de análise.");
+        }
+        
+        logger.LogInformation($"Iniciando sincronização forçada do Job {job.Id} (Batch: {job.PythonBatchId}).");
+        
+        var pythonApiClient = _httpClientFactory.CreateClient("PythonAnalysisService");
+        HttpResponseMessage pythonResponse;
+        try 
+        {
+            pythonResponse = await pythonApiClient.GetAsync($"/analyze/results/{job.PythonBatchId}");
+        }
+        catch(HttpRequestException ex)
+        {
+            return StatusCode(503, $"Serviço de análise indisponível ao tentar sincronizar: {ex.Message}");
+        }
 
-            logger.LogInformation($"==== INICIANDO REPROCESSAMENTO MANUAL DO JOB {jobId} ====");
+        if (!pythonResponse.IsSuccessStatusCode)
+        {
+            job.ErrorMessage = "Tentativa de sincronização manual falhou. O checker tentará novamente.";
+            await _context.SaveChangesAsync();
+            return StatusCode((int)pythonResponse.StatusCode, "Falha ao consultar a API de análise. O job continuará na fila para o checker.");
+        }
 
-            var storedResult = JsonSerializer.Deserialize<PythonApiDto.PythonResultResponse>(job.ResultData);
-            if (storedResult == null)
+        var result = await pythonResponse.Content.ReadFromJsonAsync<PythonApiDto.PythonResultResponse>();
+        
+        if (result?.Status?.ToLower() == "completed")
+        {
+            logger.LogInformation($"Sincronização forçada detectou que o Job {job.Id} está concluído. Corrigindo estado local.");
+            job.Status = JobStatus.Completed;
+            job.CompletedAt = DateTime.UtcNow;
+            job.ResultData = JsonSerializer.Serialize(result);
+            job.ErrorMessage = null; // Limpa erro antigo
+            _context.Update(job);
+            await _context.SaveChangesAsync();
+            
+            using (var scope = HttpContext.RequestServices.CreateScope())
             {
-                return StatusCode(500, "Falha ao deserializar os dados do job armazenado.");
+                var reportProcessor = scope.ServiceProvider.GetRequiredService<IReportProcessorService>();
+                await reportProcessor.ProcessAnalysisResult(job, result);
             }
 
-            // Chama a mesma lógica de processamento, mas com os dados já salvos!
-            await reportProcessor.ProcessAnalysisResult(job, storedResult);
-
-            logger.LogInformation($"==== REPROCESSAMENTO MANUAL DO JOB {jobId} CONCLUÍDO ====");
+            return Ok(new { message = "Sincronização bem-sucedida. O job foi marcado como concluído e os dados foram processados." });
         }
-
-        return Ok("Reprocessamento concluído. Verifique os logs para detalhes.");
+        else
+        {
+            job.ErrorMessage = $"Status na API de análise: '{result?.Status}'. Nenhuma ação adicional realizada.";
+            await _context.SaveChangesAsync();
+            return Ok(new { message = $"Sincronização concluída. Status na API de análise é '{result?.Status}'. O checker continuará monitorando se aplicável." });
+        }
     }
 }

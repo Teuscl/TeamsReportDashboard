@@ -96,6 +96,12 @@ public class PythonJobStatusChecker : BackgroundService
                             // ... (lógica para jobs que falham no lado do Python) ...
                         }
                     }
+                    catch (HttpRequestException httpEx)
+                    {
+                        // Apenas registra que não conseguiu se conectar, mas NÃO muda o status do job.
+                        // Ele continuará como "Pending" e será tentado novamente no próximo ciclo.
+                        _logger.LogWarning(httpEx, $"Não foi possível conectar à API Python para verificar o job {job.Id}. Tentando novamente em breve.");
+                    }
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, $"Exceção fatal ao processar o job {job.Id}.");

@@ -125,7 +125,7 @@ const ImportsPage: React.FC = () => {
             header: () => <div className="text-right">Ações</div>,
             cell: ({ row }) => {
                 const job = row.original;
-                const canReprocess = job.status === 'Completed' && job.errorMessage;
+                 const canReprocess = job.status === 'Failed' || (job.status === 'Completed' && !!job.errorMessage);
                 if (!canReprocess) return null;
 
                 const isThisJobReprocessing = reprocessingId === job.id;

@@ -18,7 +18,7 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
         private readonly ICreateReportService _createReportService;
         private readonly ILogger<ReportProcessorService> _logger;
         private readonly AppDbContext _context; // << NOVO: Injetando o DbContext
-
+        
         public ReportProcessorService(
             ICreateReportService createReportService, 
             ILogger<ReportProcessorService> logger,
