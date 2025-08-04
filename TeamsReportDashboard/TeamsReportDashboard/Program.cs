@@ -124,6 +124,7 @@ builder.Services.AddScoped<IValidator<UpdateDepartmentDto>, UpdateDepartmentVali
 builder.Services.AddScoped<IValidator<CreateRequesterDto>, CreateRequesterValidator >();
 builder.Services.AddScoped<IValidator<UpdateRequesterDto>, UpdateRequesterValidator>();
 
+
 builder.Services.AddScoped<IUnitOfWork,  UnitOfWork>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 

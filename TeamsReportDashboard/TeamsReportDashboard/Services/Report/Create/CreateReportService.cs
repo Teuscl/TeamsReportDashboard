@@ -35,13 +35,12 @@ public class CreateReportService : ICreateReportService
            };
            // Adicionamos ao repositório para ser salvo depois
            await _unitOfWork.RequesterRepository.CreateRequesterAsync(requester);
-           await _unitOfWork.CommitAsync(); // 🔴 NECESSÁRIO para popular o requester.Id
        }
        
        
        var report = new Entities.Report()
        {
-           RequesterId = requester.Id,
+           Requester = requester,
            ReportedProblem = createReportDto.ReportedProblem,
            Category = createReportDto.Category,
            TechnicianName = createReportDto.TechnicianName,

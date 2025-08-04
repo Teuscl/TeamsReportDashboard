@@ -1,5 +1,5 @@
 // src/components/layout/app-sidebar.tsx (ou o caminho correto)
-import { Home, FileText, Users, Building, BookUser  } from "lucide-react";
+import { Home, FileText, Users, Building, BookUser, Import  } from "lucide-react";
 import { Link } from "react-router-dom"; // 👈 Importar Link para navegação SPA
 import "../../index.css"; // Verifique se este caminho está correto ou se é necessário
 import { NavUser } from "./nav-user";
@@ -69,6 +69,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: "Usuários",
         url: "/users",
         icon: Users,
+      },
+      {
+        title: "Importações",
+        url: "/imports",
+        icon: Import, // Usando o ícone de importação
       });
     }
   }

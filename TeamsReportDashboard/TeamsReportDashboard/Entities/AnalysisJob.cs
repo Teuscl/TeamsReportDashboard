@@ -14,4 +14,7 @@ public class AnalysisJob
     
     [Column(TypeName = "nvarchar(max)")] public string? ResultData { get; set; }
     public string? ErrorMessage { get; set; }
+    
+    [Timestamp]
+    public byte[] RowVersion { get; set; }
 }

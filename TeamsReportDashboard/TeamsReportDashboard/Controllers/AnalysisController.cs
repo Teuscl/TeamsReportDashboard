@@ -7,6 +7,7 @@ using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Backend.Entities.Enums; // Substitua pelo seu namespace
 using TeamsReportDashboard.Backend.Models;
 using TeamsReportDashboard.Backend.Models.PythonApiDto;
+using TeamsReportDashboard.Backend.Services.JobSynchronization;
 using TeamsReportDashboard.Backend.Services.ProcessCompletedJob; // Substitua pelo seu namespace
 
 [ApiController]
@@ -15,34 +16,94 @@ public class AnalysisController : ControllerBase
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly AppDbContext _context;
+    private readonly IJobSynchronizationService _jobSyncService;
 
-    public AnalysisController(IHttpClientFactory httpClientFactory, AppDbContext context)
+    public AnalysisController(IHttpClientFactory httpClientFactory, AppDbContext context, IJobSynchronizationService jobSyncService)
     {
         _httpClientFactory = httpClientFactory;
         _context = context;
+        _jobSyncService = jobSyncService;
     }
 
     [HttpPost("start")]
     [RequestSizeLimit(200 * 1024 * 1024)] // Limite de 200 MB
     public async Task<IActionResult> StartAnalysis(IFormFile file)
     {
-        if (file == null || !file.FileName.ToLower().EndsWith(".zip")) return BadRequest("Arquivo .zip é obrigatório.");
-        var pythonApiClient = _httpClientFactory.CreateClient("PythonAnalysisService");
-        using var content = new MultipartFormDataContent();
-        content.Add(new StreamContent(file.OpenReadStream()), "file", file.FileName);
-        HttpResponseMessage pythonResponse;
-        try { pythonResponse = await pythonApiClient.PostAsync("/analyze/start", content); }
-        catch (HttpRequestException ex) { return StatusCode(503, $"Serviço de análise indisponível: {ex.Message}"); }
-        if (!pythonResponse.IsSuccessStatusCode) return StatusCode((int)pythonResponse.StatusCode, $"Erro na API Python: {await pythonResponse.Content.ReadAsStringAsync()}");
+        // if (file == null || !file.FileName.ToLower().EndsWith(".zip")) return BadRequest("Arquivo .zip é obrigatório.");
+        // var pythonApiClient = _httpClientFactory.CreateClient("PythonAnalysisService");
+        // using var content = new MultipartFormDataContent();
+        // content.Add(new StreamContent(file.OpenReadStream()), "file", file.FileName);
+        // HttpResponseMessage pythonResponse;
+        // try { pythonResponse = await pythonApiClient.PostAsync("/analyze/start", content); }
+        // catch (HttpRequestException ex) { return StatusCode(503, $"Serviço de análise indisponível: {ex.Message}"); }
+        // if (!pythonResponse.IsSuccessStatusCode) return StatusCode((int)pythonResponse.StatusCode, $"Erro na API Python: {await pythonResponse.Content.ReadAsStringAsync()}");
+        //
+        // var startResponse = await pythonResponse.Content.ReadFromJsonAsync<PythonApiDto.PythonStartResponse>();
+        // if (string.IsNullOrEmpty(startResponse?.BatchId)) return StatusCode(500, "API Python não retornou um BatchId válido.");
+        //
+        // var newJob = new AnalysisJob { Id = Guid.NewGuid(), PythonBatchId = startResponse.BatchId, Status = JobStatus.Pending, CreatedAt = DateTime.UtcNow };
+        // _context.AnalysisJobs.Add(newJob);
+        // await _context.SaveChangesAsync();
+        //
+        // return Accepted(new { JobId = newJob.Id });
         
-        var startResponse = await pythonResponse.Content.ReadFromJsonAsync<PythonApiDto.PythonStartResponse>();
-        if (string.IsNullOrEmpty(startResponse?.BatchId)) return StatusCode(500, "API Python não retornou um BatchId válido.");
+        if ( file == null || !file.FileName.ToLower().EndsWith(".zip"))
+            return BadRequest(".zip file is not valid.");
         
-        var newJob = new AnalysisJob { Id = Guid.NewGuid(), PythonBatchId = startResponse.BatchId, Status = JobStatus.Pending, CreatedAt = DateTime.UtcNow };
-        _context.AnalysisJobs.Add(newJob);
-        await _context.SaveChangesAsync();
+        var tempFilePath = Path.GetTempFileName();
+        try
+        {
+            using (var stream = new FileStream(tempFilePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var pythonApiClient = _httpClientFactory.CreateClient("PythonAnalysisService");
+
+            using var fileStream = new FileStream(tempFilePath, FileMode.Open, FileAccess.Read);
+            using var content = new MultipartFormDataContent();
+            content.Add(new StreamContent(fileStream), "file", file.FileName);
+
+            HttpResponseMessage pythonResponse;
+            try
+            {
+                pythonResponse = await pythonApiClient.PostAsync("/analyze/start", content);
+
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(503, $"Analysis service failed: {ex.Message}");
+            }
+            if (!pythonResponse.IsSuccessStatusCode)
+                return StatusCode((int)pythonResponse.StatusCode,
+                    $"Analysis service failed: {pythonResponse.StatusCode}");
+
+            var startResponse = await pythonResponse.Content.ReadFromJsonAsync<PythonApiDto.PythonStartResponse>();
+            if (string.IsNullOrEmpty(startResponse?.BatchId))
+                return StatusCode(500, "Python API did not return a valid batch id.");
+
+            var newJob = new AnalysisJob
+            {
+                Id = Guid.NewGuid(),
+                PythonBatchId = startResponse.BatchId,
+                Status = JobStatus.Pending,
+                CreatedAt = DateTime.UtcNow,
+            };
+            _context.AnalysisJobs.Add(newJob);
+            await _context.SaveChangesAsync();
+
+            return Accepted(new { JobId = newJob.Id });
+
+        }
+        finally
+        {
+            // PASSO C: Garante que o arquivo temporário seja sempre deletado.
+            if (System.IO.File.Exists(tempFilePath))
+            {
+                System.IO.File.Delete(tempFilePath);
+            }
+        }
         
-        return Accepted(new { JobId = newJob.Id });
     }
 
     [HttpGet("status/{jobId}")]
@@ -75,85 +136,32 @@ public class AnalysisController : ControllerBase
     [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> ReprocessJob(Guid jobId)
     {
-        var job = await _context.AnalysisJobs.FindAsync(jobId);
-        if (job == null)
+        try
         {
-            return NotFound("Job não encontrado.");
+            var result = await _jobSyncService.ReprocessJobAsync(jobId);
+            return Ok(result);
         }
-
-        var logger = HttpContext.RequestServices.GetRequiredService<ILogger<AnalysisController>>();
-
-        // CENÁRIO 1: O job foi concluído, mas o processamento local dos relatórios falhou.
-        if (job.Status == JobStatus.Completed && !string.IsNullOrEmpty(job.ResultData))
+        catch (KeyNotFoundException ex)
         {
-            logger.LogInformation($"Iniciando reprocessamento LOCAL do Job {job.Id}.");
-            using (var scope = HttpContext.RequestServices.CreateScope())
-            {
-                var reportProcessor = scope.ServiceProvider.GetRequiredService<IReportProcessorService>();
-                var storedResult = JsonSerializer.Deserialize<PythonApiDto.PythonResultResponse>(job.ResultData);
-                if(storedResult != null)
-                {
-                    await reportProcessor.ProcessAnalysisResult(job, storedResult);
-                    return Ok(new { message = "Reprocessamento dos dados locais concluído." });
-                }
-                else 
-                {
-                    return StatusCode(500, "Falha ao ler os dados de resultado armazenados no banco.");
-                }
-            }
+            return NotFound(new { message = ex.Message });
         }
-
-        // CENÁRIO 2: O job está 'Failed' ou 'Pending'. Força uma sincronização.
-        if (string.IsNullOrEmpty(job.PythonBatchId))
+        catch (DbUpdateConcurrencyException)
         {
-            return BadRequest("Job não possui um BatchId para verificar na API de análise.");
+            // Captura a exceção de concorrência!
+            return Conflict(new { message = "Este job foi modificado por outra operação. Por favor, atualize e tente novamente." });
         }
-        
-        logger.LogInformation($"Iniciando sincronização forçada do Job {job.Id} (Batch: {job.PythonBatchId}).");
-        
-        var pythonApiClient = _httpClientFactory.CreateClient("PythonAnalysisService");
-        HttpResponseMessage pythonResponse;
-        try 
+        catch (InvalidOperationException ex)
         {
-            pythonResponse = await pythonApiClient.GetAsync($"/analyze/results/{job.PythonBatchId}");
+            return BadRequest(new { message = ex.Message });
         }
-        catch(HttpRequestException ex)
+        catch (HttpRequestException ex)
         {
-            return StatusCode(503, $"Serviço de análise indisponível ao tentar sincronizar: {ex.Message}");
+            return StatusCode(503, new { message = ex.Message }); // 503 Service Unavailable
         }
-
-        if (!pythonResponse.IsSuccessStatusCode)
+        catch (Exception ex) // Captura geral para erros inesperados
         {
-            job.ErrorMessage = "Tentativa de sincronização manual falhou. O checker tentará novamente.";
-            await _context.SaveChangesAsync();
-            return StatusCode((int)pythonResponse.StatusCode, "Falha ao consultar a API de análise. O job continuará na fila para o checker.");
-        }
-
-        var result = await pythonResponse.Content.ReadFromJsonAsync<PythonApiDto.PythonResultResponse>();
-        
-        if (result?.Status?.ToLower() == "completed")
-        {
-            logger.LogInformation($"Sincronização forçada detectou que o Job {job.Id} está concluído. Corrigindo estado local.");
-            job.Status = JobStatus.Completed;
-            job.CompletedAt = DateTime.UtcNow;
-            job.ResultData = JsonSerializer.Serialize(result);
-            job.ErrorMessage = null; // Limpa erro antigo
-            _context.Update(job);
-            await _context.SaveChangesAsync();
-            
-            using (var scope = HttpContext.RequestServices.CreateScope())
-            {
-                var reportProcessor = scope.ServiceProvider.GetRequiredService<IReportProcessorService>();
-                await reportProcessor.ProcessAnalysisResult(job, result);
-            }
-
-            return Ok(new { message = "Sincronização bem-sucedida. O job foi marcado como concluído e os dados foram processados." });
-        }
-        else
-        {
-            job.ErrorMessage = $"Status na API de análise: '{result?.Status}'. Nenhuma ação adicional realizada.";
-            await _context.SaveChangesAsync();
-            return Ok(new { message = $"Sincronização concluída. Status na API de análise é '{result?.Status}'. O checker continuará monitorando se aplicável." });
+            // Logar o erro aqui é importante
+            return StatusCode(500, new { message = "Ocorreu um erro inesperado no servidor.", detail = ex.Message });
         }
     }
 }
