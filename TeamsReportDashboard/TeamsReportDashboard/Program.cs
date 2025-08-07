@@ -18,6 +18,7 @@ using TeamsReportDashboard.Backend.Services.Department.Create;
 using TeamsReportDashboard.Backend.Services.Department.Delete;
 using TeamsReportDashboard.Backend.Services.Department.Read;
 using TeamsReportDashboard.Backend.Services.Department.Update;
+using TeamsReportDashboard.Backend.Services.JobSynchronization;
 using TeamsReportDashboard.Backend.Services.ProcessCompletedJob;
 using TeamsReportDashboard.Backend.Services.Report.Create;
 using TeamsReportDashboard.Backend.Services.Report.Read;
@@ -50,7 +51,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddControllers();
+
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ExceptionFilter>();
@@ -136,6 +137,8 @@ builder.Services.AddScoped<IRequesterRepository, RequesterRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
 builder.Services.AddScoped<IReportProcessorService, ReportProcessorService>();
+builder.Services.AddScoped<IJobSynchronizationService, JobSynchronizationService>();
+
 
 builder.Services.AddScoped<ICreateUserService, CreateUserService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
