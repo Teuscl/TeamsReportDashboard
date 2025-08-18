@@ -189,6 +189,6 @@ app.UseAuthorization(); //Add configuration to use JWT
 // Mapear os controllers
 app.MapControllers();
 
-
+await DbInitializer.SeedMasterUser(app);
 app.Run();
 
