@@ -26,30 +26,17 @@ public class AnalysisController : ControllerBase
     }
 
     [HttpPost("start")]
-    [RequestSizeLimit(200 * 1024 * 1024)] // Limite de 200 MB
-    public async Task<IActionResult> StartAnalysis(IFormFile file)
+    // Limite de 200 MB[HttpPost("start")]
+    [RequestSizeLimit(200 * 1024 * 1024)]
+    public async Task<IActionResult> StartAnalysis(
+        [FromForm] IFormFile file, 
+        [FromForm] string name)
     {
-        // if (file == null || !file.FileName.ToLower().EndsWith(".zip")) return BadRequest("Arquivo .zip é obrigatório.");
-        // var pythonApiClient = _httpClientFactory.CreateClient("PythonAnalysisService");
-        // using var content = new MultipartFormDataContent();
-        // content.Add(new StreamContent(file.OpenReadStream()), "file", file.FileName);
-        // HttpResponseMessage pythonResponse;
-        // try { pythonResponse = await pythonApiClient.PostAsync("/analyze/start", content); }
-        // catch (HttpRequestException ex) { return StatusCode(503, $"Serviço de análise indisponível: {ex.Message}"); }
-        // if (!pythonResponse.IsSuccessStatusCode) return StatusCode((int)pythonResponse.StatusCode, $"Erro na API Python: {await pythonResponse.Content.ReadAsStringAsync()}");
-        //
-        // var startResponse = await pythonResponse.Content.ReadFromJsonAsync<PythonApiDto.PythonStartResponse>();
-        // if (string.IsNullOrEmpty(startResponse?.BatchId)) return StatusCode(500, "API Python não retornou um BatchId válido.");
-        //
-        // var newJob = new AnalysisJob { Id = Guid.NewGuid(), PythonBatchId = startResponse.BatchId, Status = JobStatus.Pending, CreatedAt = DateTime.UtcNow };
-        // _context.AnalysisJobs.Add(newJob);
-        // await _context.SaveChangesAsync();
-        //
-        // return Accepted(new { JobId = newJob.Id });
         
         if ( file == null || !file.FileName.ToLower().EndsWith(".zip"))
             return BadRequest(".zip file is not valid.");
-        
+        if (string.IsNullOrWhiteSpace(name))
+            return BadRequest("Job name is required.");
         var tempFilePath = Path.GetTempFileName();
         try
         {
@@ -85,6 +72,7 @@ public class AnalysisController : ControllerBase
             var newJob = new AnalysisJob
             {
                 Id = Guid.NewGuid(),
+                Name = name,
                 PythonBatchId = startResponse.BatchId,
                 Status = JobStatus.Pending,
                 CreatedAt = DateTime.UtcNow,
@@ -111,7 +99,7 @@ public class AnalysisController : ControllerBase
     {
         var job = await _context.AnalysisJobs.FindAsync(jobId);
         if (job == null) return NotFound();
-        return Ok(new { job.Id, Status = job.Status.ToString(), job.CreatedAt, job.CompletedAt, job.ErrorMessage });
+        return Ok(new { job.Id, job.Name, Status = job.Status.ToString(), job.CreatedAt, job.CompletedAt, job.ErrorMessage });
     }
     
     [HttpGet]
@@ -123,6 +111,7 @@ public class AnalysisController : ControllerBase
             {
                 j.Id,
                 Status = j.Status.ToString(),
+                Name = j.Name,
                 j.CreatedAt,
                 j.CompletedAt,
                 j.ErrorMessage

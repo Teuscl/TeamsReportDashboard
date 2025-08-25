@@ -1,27 +1,30 @@
-import axios from '@/services/axiosConfig'; // Usando sua instância configurada do Axios
+// src/services/analysisService.ts
+import axios from '@/services/axiosConfig';
 import { AnalysisJob } from '@/types/AnalysisJob';
 
 /**
- * Inicia o job de análise enviando um arquivo .zip.
- * @param file O arquivo .zip a ser enviado.
- * @param onProgress Uma função de callback que recebe a porcentagem (0-100) do progresso do upload.
- * @returns Uma promessa que resolve com o ID do job.
+ * Inicia o job de análise enviando um arquivo .zip e um nome para o job.
  */
 export const startAnalysisJob = async (
   file: File,
+  jobName: string,
   onProgress: (progress: number) => void
 ): Promise<{ jobId: string }> => {
   const formData = new FormData();
-  formData.append('file', file);
+  console.log(jobName)
+  formData.append("file", file);
+  formData.append("name", jobName.trim());
 
-  // ROTA CORRIGIDA: Removido o '/api'
-  const response = await axios.post('/analysis/start', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+  // Debug para garantir que o campo está indo
+  for (let [key, value] of formData.entries()) {
+    console.log("FormData =>", key, value);
+  }
+
+  const response = await axios.post("/analysis/start", formData, {
+    // ❌ NÃO setar Content-Type manualmente, axios faz isso sozinho
     onUploadProgress: (progressEvent) => {
       const { loaded, total } = progressEvent;
-      if (total && typeof total === 'number') {
+      if (total && typeof total === "number") {
         const percentCompleted = Math.round((loaded * 100) / total);
         onProgress(percentCompleted);
       }
@@ -31,28 +34,21 @@ export const startAnalysisJob = async (
   return response.data;
 };
 
-/**
- * Busca o histórico de todos os jobs de análise.
- * @returns Uma promessa que resolve com uma lista de jobs.
- */
+/** Lista de jobs */
 export const getAnalysisJobs = async (): Promise<AnalysisJob[]> => {
-  // ROTA CORRIGIDA: Removido o '/api'
-  const response = await axios.get('/analysis'); 
+  const response = await axios.get('/analysis');
   return response.data;
 };
 
-/**
- * Busca o status e os detalhes de um job de análise específico.
- * @param jobId O ID (GUID) do job a ser consultado.
- * @returns Uma promessa que resolve com os detalhes do job.
- */
+/** Status de um job */
 export const getJobStatus = async (jobId: string): Promise<AnalysisJob> => {
-  // ROTA CORRIGIDA: Removido o '/api'
   const response = await axios.get(`/analysis/status/${jobId}`);
   return response.data;
 };
 
+/** Reprocessar job */
 export const reprocessAnalysisJob = async (jobId: string): Promise<{ message: string }> => {
   const response = await axios.post(`/analysis/reprocess/${jobId}`);
   return response.data;
 };
+0                           

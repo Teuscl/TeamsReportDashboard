@@ -1,8 +1,8 @@
 export interface AnalysisJob {
-  id: string; // GUID
+  id: string;
+  name: string; // ✅ Novo campo adicionado
   status: 'Pending' | 'Completed' | 'Failed';
-  createdAt: string; // ISO Date string
-  completedAt?: string; // ISO Date string
+  createdAt: string;
+  completedAt?: string;
   errorMessage?: string;
-  // Opcional: Adicione outros campos se o backend retornar, como resultData
 }

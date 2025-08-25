@@ -1,6 +1,6 @@
 // src/pages/ReportsPage/ReportsPage.tsx
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { ColumnDef, SortingState } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { DateRange } from 'react-day-picker';
 import { DataTable } from '../../components/CustomTable/DataTable';
 import { MoreHorizontal, Calendar, X, Upload } from "lucide-react";
@@ -14,6 +14,9 @@ import {
 import {
   Popover, PopoverContent, PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { ReportFormModal } from '@/components/ReportFormModal';
 import { getReports, deleteReport } from '@/services/reportService';
@@ -23,7 +26,6 @@ import { Report } from '@/types/Report';
 import { format, isWithinInterval, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 
 const ReportsPage: React.FC = () => {
@@ -34,12 +36,15 @@ const ReportsPage: React.FC = () => {
   const [modalMode, setModalMode] = useState<'create' | 'edit' | null>(null);
   const [reportForModal, setReportForModal] = useState<Report | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
+  
+  const [problemToShow, setProblemToShow] = useState<string | null>(null);
 
   // Estados para filtros
   const [selectedTechnician, setSelectedTechnician] = useState<string>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [dateRange, setDateRange] = useState<DateRange | undefined>({ from: undefined, to: undefined });
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [tempDateRange, setTempDateRange] = useState<DateRange | undefined>(dateRange);
 
   const fetchReports = useCallback(async () => {
     setDataLoading(true);
@@ -61,7 +66,6 @@ const ReportsPage: React.FC = () => {
     fetchReports();
   }, [authIsLoading, fetchReports]);
 
-  // Deriva listas únicas para os filtros
   const uniqueTechnicians = useMemo(() => {
     const technicians = reports
       .map(report => report.technicianName)
@@ -71,7 +75,6 @@ const ReportsPage: React.FC = () => {
 
   const uniqueCategories = useMemo(() => Array.from(new Set(reports.map(r => r.category).filter(Boolean))).sort(), [reports]);
 
-  // Filtra os dados da tabela
   const filteredReports = useMemo(() => {
     return reports.filter(report => {
       if (selectedTechnician !== 'all' && report.technicianName !== selectedTechnician) {
@@ -80,16 +83,15 @@ const ReportsPage: React.FC = () => {
       if (selectedCategory !== 'all' && report.category !== selectedCategory) {
         return false;
       }
-      if (dateRange?.from) {
+      if (dateRange?.from && dateRange?.to) {
         try {
           const reportDate = parseISO(report.requestDate);
-          if (dateRange.from && dateRange.to) {
-            return isWithinInterval(reportDate, { start: dateRange.from, end: dateRange.to });
-          } else if (dateRange.from) {
-            return reportDate >= dateRange.from;
-          }
+          const endDate = new Date(dateRange.to);
+          endDate.setHours(23, 59, 59, 999);
+          return isWithinInterval(reportDate, { start: dateRange.from, end: endDate });
         } catch (error) {
           console.warn('Erro ao filtrar por data:', error);
+          return true;
         }
       }
       return true;
@@ -153,6 +155,18 @@ const ReportsPage: React.FC = () => {
     closeModal();
   };
 
+  const handleClearFilters = () => {
+    setSelectedTechnician('all');
+    setSelectedCategory('all');
+    setDateRange({ from: undefined, to: undefined });
+    setTempDateRange({ from: undefined, to: undefined });
+  };
+
+  const handleApplyDateFilter = () => {
+    setDateRange(tempDateRange);
+    setIsDatePickerOpen(false);
+  };
+
   const columns = useMemo<ColumnDef<Report>[]>(() => {
     const baseColumns: ColumnDef<Report>[] = [
       {
@@ -186,9 +200,14 @@ const ReportsPage: React.FC = () => {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                                <DropdownMenuItem onClick={() => handleOpenEditModal(report)}>Editar</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()} onClick={() => setProblemToShow(report.reportedProblem)}>
+                                    Ver Problema Relatado
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()} onClick={() => handleOpenEditModal(report)}>
+                                    Editar
+                                </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => handleDelete(report.id)} className="text-destructive focus:text-destructive">
+                                <DropdownMenuItem onSelect={(e) => e.preventDefault()} onClick={() => handleDelete(report.id)} className="text-destructive focus:text-destructive">
                                     Excluir
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -199,9 +218,8 @@ const ReportsPage: React.FC = () => {
         };
         return [...baseColumns, actionsColumn];
     }
-
     return baseColumns;
-  }, [currentUser]);
+  }, [currentUser]); // Adicionado currentUser como dependência
 
   if (authIsLoading || (dataLoading && reports.length === 0)) {
     return <div className="container mx-auto py-10 text-center">Carregando relatórios...</div>;
@@ -254,7 +272,15 @@ const ReportsPage: React.FC = () => {
 
           <div className="min-w-[250px]">
              <label className="text-sm font-medium mb-2 block">Período</label>
-             <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
+             <Popover 
+                open={isDatePickerOpen} 
+                onOpenChange={(isOpen) => {
+                  setIsDatePickerOpen(isOpen);
+                  if (isOpen) {
+                    setTempDateRange(dateRange);
+                  }
+                }}
+             >
                <PopoverTrigger asChild>
                  <Button variant="outline" className="w-full justify-start text-left font-normal">
                    <Calendar className="mr-2 h-4 w-4" />
@@ -263,18 +289,32 @@ const ReportsPage: React.FC = () => {
                </PopoverTrigger>
                <PopoverContent className="w-auto p-0" align="start">
                  <CalendarComponent
-                   initialFocus mode="range" defaultMonth={dateRange?.from} selected={dateRange}
-                   onSelect={(range) => {
-                     setDateRange(range);
-                     if (range?.from && range?.to) {
-                       setIsDatePickerOpen(false);
-                     }
-                   }}
-                   numberOfMonths={2} locale={ptBR}
+                   initialFocus
+                   mode="range"
+                   defaultMonth={tempDateRange?.from}
+                   selected={tempDateRange}
+                   onSelect={setTempDateRange}
+                   numberOfMonths={2}
+                   locale={ptBR}
                  />
+                 <div className="p-3 border-t flex justify-end gap-2">
+                    <Button variant="ghost" onClick={() => setIsDatePickerOpen(false)}>
+                      Cancelar
+                    </Button>
+                    <Button onClick={handleApplyDateFilter}>
+                      Aplicar
+                    </Button>
+                 </div>
                </PopoverContent>
              </Popover>
            </div>
+
+          {(selectedTechnician !== 'all' || selectedCategory !== 'all' || dateRange?.from) && (
+            <Button variant="ghost" onClick={handleClearFilters}>
+              <X className="mr-2 h-4 w-4" />
+              Limpar Filtros
+            </Button>
+          )}
         </div>
       </div>
 
@@ -295,6 +335,33 @@ const ReportsPage: React.FC = () => {
           uniqueCategories={uniqueCategories}
         />
       )}
+      
+      <AlertDialog
+        open={!!problemToShow}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            setProblemToShow(null);
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Problema Relatado</AlertDialogTitle>
+            <AlertDialogDescription
+              className="text-base text-foreground max-h-[60vh] overflow-y-auto pt-4"
+              style={{ whiteSpace: 'pre-wrap' }}
+            >
+              {problemToShow}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setProblemToShow(null)}>
+              Fechar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
     </div>
   );
 };

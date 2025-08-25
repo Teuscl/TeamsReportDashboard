@@ -3,10 +3,7 @@ import axios from 'axios';
 import { eventEmitter, AUTH_EVENTS } from './eventEmitter'; 
 
 const axiosConfig = axios.create({
-    baseURL: 'https://localhost:7258/', 
-    headers: {
-        'Content-Type': 'application/json',
-    },
+    baseURL: 'https://localhost:7258/',     
     withCredentials: true,
 });
 

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// TeamsReportDashboard.Backend/Entities/AnalysisJob.cs
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TeamsReportDashboard.Backend.Entities.Enums;
 
@@ -7,6 +9,12 @@ namespace TeamsReportDashboard.Backend.Entities;
 public class AnalysisJob
 {
     [Key] public Guid Id { get; set; }
+
+    // ✨ NOVO CAMPO
+    [Required] 
+    [MaxLength(100)] // Boa prática para definir um limite de tamanho
+    public string Name { get; set; } 
+
     [Required] public string PythonBatchId { get; set; }
     [Required] public JobStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
