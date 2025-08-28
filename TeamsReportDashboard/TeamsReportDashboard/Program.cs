@@ -23,6 +23,7 @@ using TeamsReportDashboard.Backend.Services.ProcessCompletedJob;
 using TeamsReportDashboard.Backend.Services.Report.Create;
 using TeamsReportDashboard.Backend.Services.Report.Read;
 using TeamsReportDashboard.Backend.Services.Report.Update;
+using TeamsReportDashboard.Backend.Services.Requester.BulkCreate;
 using TeamsReportDashboard.Backend.Services.Requester.Create;
 using TeamsReportDashboard.Backend.Services.Requester.Delete;
 using TeamsReportDashboard.Backend.Services.Requester.Read;
@@ -166,6 +167,8 @@ builder.Services.AddScoped<IGetRequestersService, GetRequestersService>();
 builder.Services.AddScoped<ICreateRequesterService, CreateRequesterService>();
 builder.Services.AddScoped<IUpdateRequesterService, UpdateRequesterService>();
 builder.Services.AddScoped<IDeleteRequesterService, DeleteRequesterService>();
+builder.Services.AddScoped<IBulkCreateRequesterService, BulkCreateRequesterService>();
+
 
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
@@ -191,4 +194,6 @@ app.MapControllers();
 
 await DbInitializer.SeedMasterUser(app);
 app.Run();
+
+
 

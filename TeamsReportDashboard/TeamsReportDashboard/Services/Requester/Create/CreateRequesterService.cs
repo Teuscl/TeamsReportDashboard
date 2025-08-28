@@ -36,7 +36,7 @@ public class CreateRequesterService : ICreateRequesterService
         };
         
         await _unitOfWork.RequesterRepository.CreateRequesterAsync(requester);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return dto;
 

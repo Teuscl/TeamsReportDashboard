@@ -14,6 +14,6 @@ public class DeleteDepartmentService : IDeleteDepartmentService
     public async Task Execute(int id)
     {
         await _unitOfWork.DepartmentRepository.DeleteDepartmentAsync(id);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 }

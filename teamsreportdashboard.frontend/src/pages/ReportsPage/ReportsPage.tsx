@@ -46,6 +46,9 @@ const ReportsPage: React.FC = () => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [tempDateRange, setTempDateRange] = useState<DateRange | undefined>(dateRange);
 
+  // New state to track dropdown menu open state
+  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
+
   const fetchReports = useCallback(async () => {
     setDataLoading(true);
     try {
@@ -100,6 +103,9 @@ const ReportsPage: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     const originalReports = [...reports];
+    // Close any open dropdowns before showing the toast
+    setOpenDropdownId(null);
+    
     toast.custom((t) => (
       <div className="bg-white dark:bg-zinc-950 p-4 rounded-md shadow-lg w-[380px] border border-input">
         <h3 className="text-lg font-semibold mb-2">Tem certeza que deseja excluir este relatório?</h3>
@@ -141,6 +147,8 @@ const ReportsPage: React.FC = () => {
   };
 
   const handleOpenEditModal = (reportToEdit: Report) => {
+    // Close any open dropdowns first
+    setOpenDropdownId(null);
     setReportForModal(reportToEdit);
     setModalMode('edit');
   };
@@ -167,19 +175,47 @@ const ReportsPage: React.FC = () => {
     setIsDatePickerOpen(false);
   };
 
+  const handleShowProblem = (problem: string) => {
+    // Close any open dropdowns first
+    setOpenDropdownId(null);
+    setProblemToShow(problem);
+  };
+
   const columns = useMemo<ColumnDef<Report>[]>(() => {
     const baseColumns: ColumnDef<Report>[] = [
       {
         id: "select",
-        header: ({ table }) => (<Checkbox checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")} onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)} aria-label="Selecionar todos" />),
-        cell: ({ row }) => (<Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Selecionar linha" />),
+        header: ({ table }) => (
+          <Checkbox 
+            checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")} 
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)} 
+            aria-label="Selecionar todos" 
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox 
+            checked={row.getIsSelected()} 
+            onCheckedChange={(value) => row.toggleSelected(!!value)} 
+            aria-label="Selecionar linha" 
+          />
+        ),
         enableSorting: false,
         enableHiding: false,
       },
-      { accessorKey: 'requestDate', header: 'Data Solicitação', cell: ({ row }) => format(parseISO(row.original.requestDate), 'dd/MM/yyyy') },
-      { accessorKey: 'requesterName', header: 'Solicitante' },
-      { accessorKey: 'technicianName', header: 'Técnico', cell: ({ row }) => row.original.technicianName || <span className="text-xs text-muted-foreground">N/A</span> },
-      { accessorKey: 'category', header: 'Categoria' },
+      { 
+        accessorKey: 'requestDate', 
+        header: 'Data Solicitação', 
+        cell: ({ row }) => format(parseISO(row.original.requestDate), 'dd/MM/yyyy') 
+      },
+      { accessorKey: 'requesterName', header: 'Solicitante', enableSorting: false },
+      { 
+        accessorKey: 'technicianName', 
+        header: 'Técnico', 
+        enableSorting: false,
+        cell: ({ row }) => row.original.technicianName || <span className="text-xs text-muted-foreground">N/A</span> 
+      },
+        
+      { accessorKey: 'category', header: 'Categoria', enableSorting: false},
       { accessorKey: 'firstResponseTime', header: 'Tpo. 1ª Resp.' },
     ];
 
@@ -189,25 +225,50 @@ const ReportsPage: React.FC = () => {
             header: () => <div className="text-right">Ações</div>,
             cell: ({ row }) => {
                 const report = row.original;
+                const isOpen = openDropdownId === report.id;
+                
                 return (
                     <div className="text-right">
-                        <DropdownMenu>
+                        <DropdownMenu 
+                          open={isOpen}
+                          onOpenChange={(open) => {
+                            setOpenDropdownId(open ? report.id : null);
+                          }}
+                        >
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
                                     <span className="sr-only">Abrir menu</span>
                                     <MoreHorizontal className="h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
+                            <DropdownMenuContent align="end" className="w-[200px]">
                                 <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                                <DropdownMenuItem onSelect={(e) => e.preventDefault()} onClick={() => setProblemToShow(report.reportedProblem)}>
+                                <DropdownMenuItem 
+                                  onSelect={(e) => {
+                                    e.preventDefault();
+                                    handleShowProblem(report.reportedProblem);
+                                  }}
+                                  className="cursor-pointer"
+                                >
                                     Ver Problema Relatado
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onSelect={(e) => e.preventDefault()} onClick={() => handleOpenEditModal(report)}>
+                                <DropdownMenuItem 
+                                  onSelect={(e) => {
+                                    e.preventDefault();
+                                    handleOpenEditModal(report);
+                                  }}
+                                  className="cursor-pointer"
+                                >
                                     Editar
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onSelect={(e) => e.preventDefault()} onClick={() => handleDelete(report.id)} className="text-destructive focus:text-destructive">
+                                <DropdownMenuItem 
+                                  onSelect={(e) => {
+                                    e.preventDefault();
+                                    handleDelete(report.id);
+                                  }}
+                                  className="text-destructive focus:text-destructive cursor-pointer"
+                                >
                                     Excluir
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -219,7 +280,7 @@ const ReportsPage: React.FC = () => {
         return [...baseColumns, actionsColumn];
     }
     return baseColumns;
-  }, [currentUser]); // Adicionado currentUser como dependência
+  }, [currentUser, openDropdownId]);
 
   if (authIsLoading || (dataLoading && reports.length === 0)) {
     return <div className="container mx-auto py-10 text-center">Carregando relatórios...</div>;
@@ -228,7 +289,7 @@ const ReportsPage: React.FC = () => {
   return (
     <div className='container mx-auto py-10 px-4 md:px-0'>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold">Gerenciamento de Relatórios</h1>
+        <h1 className="text-2xl md:text-3xl font-bold">Gerenciamento de Relatórios de atendimentos</h1>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => navigate('/imports')}>
             <Upload className="mr-2 h-4 w-4" />
@@ -236,7 +297,7 @@ const ReportsPage: React.FC = () => {
           </Button>
           {currentUser && currentUser.role !== 2 && (
             <Button onClick={handleOpenCreateModal}>
-              Criar Relatório
+              Criar Relatório de atendimento
             </Button>
           )}
         </div>
@@ -284,7 +345,11 @@ const ReportsPage: React.FC = () => {
                <PopoverTrigger asChild>
                  <Button variant="outline" className="w-full justify-start text-left font-normal">
                    <Calendar className="mr-2 h-4 w-4" />
-                   {dateRange?.from ? (dateRange.to ? `${format(dateRange.from, "dd/MM/yyyy")} - ${format(dateRange.to, "dd/MM/yyyy")}` : `A partir de ${format(dateRange.from, "dd/MM/yyyy")}`) : "Selecionar período"}
+                   {dateRange?.from ? (
+                     dateRange.to 
+                       ? `${format(dateRange.from, "dd/MM/yyyy")} - ${format(dateRange.to, "dd/MM/yyyy")}` 
+                       : `A partir de ${format(dateRange.from, "dd/MM/yyyy")}`
+                   ) : "Selecionar período"}
                  </Button>
                </PopoverTrigger>
                <PopoverContent className="w-auto p-0" align="start">
@@ -344,7 +409,7 @@ const ReportsPage: React.FC = () => {
           }
         }}
       >
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-2xl">
           <AlertDialogHeader>
             <AlertDialogTitle>Problema Relatado</AlertDialogTitle>
             <AlertDialogDescription
@@ -361,7 +426,6 @@ const ReportsPage: React.FC = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
     </div>
   );
 };

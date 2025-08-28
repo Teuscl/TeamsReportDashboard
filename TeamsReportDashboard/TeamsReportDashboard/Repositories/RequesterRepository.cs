@@ -66,4 +66,8 @@ public class RequesterRepository : IRequesterRepository
         return await _context.Requesters.CountAsync();
     }
     
+    public async Task CreateRequesterRangeAsync(IEnumerable<Requester> requesters)
+    {
+        await _context.Requesters.AddRangeAsync(requesters);
+    }
 }

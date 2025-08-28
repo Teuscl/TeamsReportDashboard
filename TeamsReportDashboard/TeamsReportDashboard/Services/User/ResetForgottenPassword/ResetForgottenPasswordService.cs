@@ -34,7 +34,7 @@ public class ResetForgottenPasswordService : IResetForgottenPasswordService
         user.PasswordResetTokenExpiryTime = null;
         
         _unitOfWork.UserRepository.Update(user);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
     
     private void Validate(ResetForgottenPasswordDto dto)

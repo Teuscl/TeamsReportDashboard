@@ -34,7 +34,7 @@ public class UpdateUserService : IUpdateUserService
         user.UpdatedAt = DateTime.Now;
         user.IsActive = updateUserDto.IsActive;
         _unitOfWork.UserRepository.Update(user);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
 
     }
 

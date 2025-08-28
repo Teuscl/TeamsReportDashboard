@@ -29,7 +29,7 @@ public class UpdateRequesterService : IUpdateRequesterService
         requester.UpdatedAt = DateTime.Now;
         
         _unitOfWork.RequesterRepository.UpdateRequester(requester);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
     
     private async Task Validate(UpdateRequesterDto updateReportDto)

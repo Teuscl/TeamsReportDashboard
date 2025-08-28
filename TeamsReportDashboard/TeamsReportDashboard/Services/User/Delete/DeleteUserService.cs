@@ -26,6 +26,6 @@ public class DeleteUserService : IDeleteUserService
             throw new InvalidOperationException($"This user cannot be deleted!");
         }
         await _unitOfWork.UserRepository.DeleteAsync(userId);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 }

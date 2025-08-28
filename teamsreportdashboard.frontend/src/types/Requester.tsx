@@ -14,5 +14,17 @@ export interface CreateRequesterDto {
   departmentId?: number | null;
 }
 
+export interface BulkInsertFailure {
+  rowNumber: number;
+  errorMessage: string;
+  offendingLine: string;
+}
+
+export interface BulkInsertResultDto {
+  successfulInserts: number;
+  failures: BulkInsertFailure[];
+  hasErrors: boolean;
+}
+
 // DTO para atualizar um solicitante
 export interface UpdateRequesterDto extends CreateRequesterDto {}

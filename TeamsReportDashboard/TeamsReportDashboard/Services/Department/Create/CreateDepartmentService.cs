@@ -29,7 +29,7 @@ public class CreateDepartmentService : ICreateDepartmentService
         };
 
         await _unitOfWork.DepartmentRepository.CreateDepartmentAsync(dep);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return createDepartmentDto;
     }
     

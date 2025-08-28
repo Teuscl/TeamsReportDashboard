@@ -27,7 +27,7 @@ public class ResetPasswordService : IResetPasswordService
         user.Password = _passwordService.HashPassword(resetPasswordDto.NewPassword);
         Console.WriteLine($"Resetando a senha do usuario {user.Name}");
         _unitOfWork.UserRepository.Update(user);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     private void Validate(TeamsReportDashboard.Entities.User user, ResetPasswordDto resetPasswordDto)

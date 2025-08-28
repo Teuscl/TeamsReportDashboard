@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Backend.Models.Requester;
+using TeamsReportDashboard.Backend.Services.Requester.BulkCreate;
 using TeamsReportDashboard.Backend.Services.Requester.Create;
 using TeamsReportDashboard.Backend.Services.Requester.Delete;
 using TeamsReportDashboard.Backend.Services.Requester.Read;
@@ -76,5 +77,24 @@ public class RequestersController : Controller
 
         // Retorna 204 No Content
         return NoContent();
+    }
+
+
+    [HttpPost("bulk-insert")]
+    [Authorize(Roles = "Admin, Master")]
+    public async Task<IActionResult> BulkInsert([FromServices] IBulkCreateRequesterService service,
+        IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest(new { Message = "None file was uploaded!"});
+        
+        var result = await service.Execute(file);
+
+        if (result.HasErrors)
+        {
+            return StatusCode(207, result); 
+        }
+        
+        return StatusCode(201,result);
     }
 }

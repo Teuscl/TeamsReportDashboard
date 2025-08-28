@@ -47,7 +47,7 @@ public class UpdateReportService : IUpdateReportService // Certifique-se que est
         report.UpdatedAt = DateTime.UtcNow;
 
         _unitOfWork.ReportRepository.UpdateReport(report);
-        await _unitOfWork.CommitAsync(); // Ou _unitOfWork.CommitAsync(); dependendo da sua implementação
+        await _unitOfWork.SaveChangesAsync(); // Ou _unitOfWork.CommitAsync(); dependendo da sua implementação
     }
 
     // Renomeado para maior clareza e corrigido para retornar o Report

@@ -51,7 +51,7 @@ public class CreateReportService : ICreateReportService
        };
        
        await _unitOfWork.ReportRepository.CreateReportAsync(report);
-       await _unitOfWork.CommitAsync();
+       await _unitOfWork.SaveChangesAsync();
        
        return createReportDto;
 

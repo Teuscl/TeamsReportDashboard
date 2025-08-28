@@ -33,7 +33,7 @@ public class CreateUserService : ICreateUserService
        };
        
        await _unitOfWork.UserRepository.AddAsync(user);
-       await _unitOfWork.CommitAsync();
+       await _unitOfWork.SaveChangesAsync();
        
        return createUserDto;
 

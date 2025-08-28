@@ -25,7 +25,7 @@ public class ChangeMyPasswordService : IChangeMyPasswordService
         
         user.Password = _passwordService.HashPassword(changeMyPasswordDto.NewPassword);
         _unitOfWork.UserRepository.Update(user);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     private void Validate(Entities.User user, ChangeMyPasswordDto changeMyPasswordDto)

@@ -39,7 +39,7 @@ public class AuthService : IAuthService
         user.RefreshTokenExpiryTime = refreshTokenExpiryTime;
         
         _unitOfWork.UserRepository.Update(user);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return new LoginResponse()
         {

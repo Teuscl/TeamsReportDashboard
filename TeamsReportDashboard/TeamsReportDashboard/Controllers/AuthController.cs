@@ -83,7 +83,7 @@ public class AuthController : ControllerBase
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7); // A expiração pode ser configurada como desejado
 
             _unitOfWork.UserRepository.Update(user);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
             
             
             // Define o NOVO Access Token como um cookie HttpOnly

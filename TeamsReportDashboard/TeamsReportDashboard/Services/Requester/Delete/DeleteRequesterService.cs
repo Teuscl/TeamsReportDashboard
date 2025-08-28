@@ -29,6 +29,6 @@ public class DeleteRequesterService : IDeleteRequesterService
 
 
         await _unitOfWork.RequesterRepository.DeleteRequesterAsync(id);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 }

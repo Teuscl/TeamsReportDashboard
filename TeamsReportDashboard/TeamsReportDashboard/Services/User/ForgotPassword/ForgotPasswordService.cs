@@ -31,7 +31,7 @@ public class ForgotPasswordService : IForgotPasswordService
         user.PasswordResetTokenExpiryTime = DateTime.UtcNow.AddMinutes(30);
         
         _unitOfWork.UserRepository.Update(user);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         
         // 2. Monta o link de redefinição
         // A URL base do frontend deve vir de uma configuração (ex: appsettings.json)

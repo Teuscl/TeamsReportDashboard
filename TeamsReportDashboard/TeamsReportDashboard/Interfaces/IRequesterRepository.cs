@@ -12,4 +12,5 @@ public interface IRequesterRepository
     Task<bool> ExistsAsync(int id);            // Adicionado
     Task<Requester?> GetByEmailAsync(string email);
     Task<int> CountAsync();
+    Task CreateRequesterRangeAsync(IEnumerable<Requester> requesters);
 }

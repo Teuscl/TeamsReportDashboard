@@ -35,7 +35,7 @@ public class UpdateDepartmentService : IUpdateDepartmentService
 
         _unitOfWork.DepartmentRepository.UpdateDepartment(department);
         // 4. Salvar as mudanças no banco de dados
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
     
     private async Task Validate(UpdateDepartmentDto updateDepartmentDto)
