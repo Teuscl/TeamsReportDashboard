@@ -13,6 +13,6 @@ public class DeleteReportService : IDeleteReportService
     public async Task Execute(int id)
     {
         await _unitOfWork.ReportRepository.DeleteReportAsync(id);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 }

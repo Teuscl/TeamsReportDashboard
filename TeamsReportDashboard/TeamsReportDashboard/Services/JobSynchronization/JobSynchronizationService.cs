@@ -86,7 +86,5 @@ public class JobSynchronizationService : IJobSynchronizationService
         await _context.SaveChangesAsync(); // Protegido pela RowVersion!
         return new ReprocessResponseDto { Message = $"Sync completed. API Status '{result?.Status}'." };
 
-
-
     }
 }

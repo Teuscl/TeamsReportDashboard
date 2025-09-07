@@ -9,6 +9,7 @@ using TeamsReportDashboard.Backend.Models.ReportDto;
 using TeamsReportDashboard.Backend.Services;
 using TeamsReportDashboard.Backend.Services.Report.Create;
 using TeamsReportDashboard.Exceptions;
+using TeamsReportDashboard.Interfaces;
 
 namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
 {
@@ -17,16 +18,16 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
     {
         private readonly ICreateReportService _createReportService;
         private readonly ILogger<ReportProcessorService> _logger;
-        private readonly AppDbContext _context; // << NOVO: Injetando o DbContext
+        private readonly IUnitOfWork _unitOfWork; // << NOVO: Injetando o DbContext
         
         public ReportProcessorService(
             ICreateReportService createReportService, 
             ILogger<ReportProcessorService> logger,
-            AppDbContext context) // << NOVO: Adicionado aqui
+            IUnitOfWork unitOfWork) // << NOVO: Adicionado aqui
         {
             _createReportService = createReportService;
             _logger = logger;
-            _context = context; // << NOVO: Atribuição
+            _unitOfWork = unitOfWork; // << NOVO: Atribuição
         }
 
         public async Task ProcessAnalysisResult(AnalysisJob job, PythonApiDto.PythonResultResponse result)
@@ -47,8 +48,8 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
             {
                 _logger.LogError(ex, $"Job {job.Id}: Falha ao deserializar 'results'.");
                 job.ErrorMessage = "Erro de sistema: Falha ao deserializar resultado.";
-                _context.Update(job); // << ALTERADO: Usando o _context injetado
-                await _context.SaveChangesAsync();
+                _unitOfWork.AnalysisJobRepository.Update(job); // << ALTERADO: Usando o _context injetado
+                await _unitOfWork.SaveChangesAsync();
                 return;
             }
 
@@ -56,8 +57,8 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
             {
                 _logger.LogWarning($"Job {job.Id}: Não há contêineres de atendimento para processar.");
                 job.ErrorMessage = null;
-                _context.Update(job); // << ALTERADO: Usando o _context injetado
-                await _context.SaveChangesAsync();
+                _unitOfWork.AnalysisJobRepository.Update(job); // << ALTERADO: Usando o _context injetado
+                await _unitOfWork.SaveChangesAsync();
                 return;
             }
             
@@ -70,71 +71,98 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
 
             int successCount = 0;
             int failureCount = 0;
-
-            foreach (var atendimento in allAtendimentos)
+            
+            await _unitOfWork.BeginTransactionAsync();
+            try
             {
-                try
+                foreach (var atendimento in allAtendimentos)
                 {
-                    // ... (lógica de parse e criação do createReportDto permanece a mesma) ...
-                    if (!DateTime.TryParse($"{atendimento.DataSolicitacao} {atendimento.HoraPrimeiraMensagem}", out var requestDate))
+                    try
                     {
-                        _logger.LogWarning($"Job {job.Id}: Data/hora inválida para '{atendimento.EmailSolicitante}'. Pulando.");
-                        failureCount++;
-                        continue;
-                    }
-                    var firstResponseTime = ParseTimeSpanRobust(atendimento.TempoPrimeiraResposta);
-                    var handlingTime = TimeSpan.FromMinutes(atendimento.TempoTotalAtendimento);
-                    var createReportDto = new CreateReportDto 
-                    { 
-                        RequesterName = atendimento.QuemSolicitouAtendimento, 
-                        RequesterEmail = atendimento.EmailSolicitante, 
-                        TechnicianName = atendimento.QuemRespondeu, 
-                        ReportedProblem = atendimento.ProblemaRelatado, 
-                        Category = atendimento.Categoria, 
-                        RequestDate = requestDate, 
-                        FirstResponseTime = firstResponseTime, 
-                        AverageHandlingTime = handlingTime 
-                    };
-                    
-                    Console.WriteLine("===== Relatório de Atendimento =====");
-                    Console.WriteLine($"Solicitante: {createReportDto.RequesterName}");
-                    Console.WriteLine($"Email do Solicitante: {createReportDto.RequesterEmail}");
-                    Console.WriteLine($"Técnico Responsável: {createReportDto.TechnicianName}");
-                    Console.WriteLine($"Problema Reportado: {createReportDto.ReportedProblem}");
-                    Console.WriteLine($"Categoria: {createReportDto.Category}");
-                    Console.WriteLine($"Data da Solicitação: {createReportDto.RequestDate}");
-                    Console.WriteLine($"Tempo para Primeira Resposta: {createReportDto.FirstResponseTime}");
-                    Console.WriteLine($"Tempo Médio de Atendimento: {createReportDto.AverageHandlingTime}");
-                    Console.WriteLine("====================================");
+                        // ... (lógica de parse e criação do createReportDto permanece a mesma) ...
+                        if (!DateTime.TryParse($"{atendimento.DataSolicitacao} {atendimento.HoraPrimeiraMensagem}",
+                                out var requestDate))
+                        {
+                            _logger.LogWarning(
+                                $"Job {job.Id}: Data/hora inválida para '{atendimento.EmailSolicitante}'. Pulando.");
+                            failureCount++;
+                            continue;
+                        }
 
-                    
-                    // A chamada para o serviço de criação não muda
-                    await _createReportService.Execute(createReportDto);
-                    successCount++;
+                        var firstResponseTime = ParseTimeSpanRobust(atendimento.TempoPrimeiraResposta);
+                        var handlingTime = TimeSpan.FromMinutes(atendimento.TempoTotalAtendimento);
+                        var createReportDto = new CreateReportDto
+                        {
+                            RequesterName = atendimento.QuemSolicitouAtendimento,
+                            RequesterEmail = atendimento.EmailSolicitante,
+                            TechnicianName = atendimento.QuemRespondeu,
+                            ReportedProblem = atendimento.ProblemaRelatado,
+                            Category = atendimento.Categoria,
+                            RequestDate = requestDate,
+                            FirstResponseTime = firstResponseTime,
+                            AverageHandlingTime = handlingTime
+                        };
+
+                        Console.WriteLine("===== Relatório de Atendimento =====");
+                        Console.WriteLine($"Solicitante: {createReportDto.RequesterName}");
+                        Console.WriteLine($"Email do Solicitante: {createReportDto.RequesterEmail}");
+                        Console.WriteLine($"Técnico Responsável: {createReportDto.TechnicianName}");
+                        Console.WriteLine($"Problema Reportado: {createReportDto.ReportedProblem}");
+                        Console.WriteLine($"Categoria: {createReportDto.Category}");
+                        Console.WriteLine($"Data da Solicitação: {createReportDto.RequestDate}");
+                        Console.WriteLine($"Tempo para Primeira Resposta: {createReportDto.FirstResponseTime}");
+                        Console.WriteLine($"Tempo Médio de Atendimento: {createReportDto.AverageHandlingTime}");
+                        Console.WriteLine("====================================");
+                        // A chamada para o serviço de criação não muda
+                        await _createReportService.Execute(createReportDto);
+                        successCount++;
+                    }
+                    catch (ErrorOnValidationException valEx)
+                    {
+                        failureCount++;
+                        // Este log agora mostrará exatamente quais campos falharam na validação!
+                        var errorString = string.Join("; ", valEx.GetErrorMessages());
+                        _logger.LogError("FALHA DE VALIDAÇÃO para '{Email}': {ValidationErrors}",
+                            atendimento.EmailSolicitante, errorString);
+                    }
+                    catch (Exception ex)
+                    {
+                        failureCount++;
+                        _logger.LogError(ex, "FALHA CRÍTICA ao processar atendimento para '{Email}' do Job {JobId}.",
+                            atendimento.EmailSolicitante, job.Id);
+                    }
                 }
-                catch (ErrorOnValidationException valEx)
-                {
-                    failureCount++;
-                    // Este log agora mostrará exatamente quais campos falharam na validação!
-                    var errorString = string.Join("; ", valEx.GetErrorMessages());
-                    _logger.LogError("FALHA DE VALIDAÇÃO para '{Email}': {ValidationErrors}", atendimento.EmailSolicitante, errorString);
-                }
+                // Se chegamos até aqui, o loop terminou.
+                // Agora vamos comitar todas as inserções de relatórios de uma vez.
+                job.ErrorMessage = failureCount > 0 
+                    ? $"Processamento concluído com {failureCount} falhas de um total de {allAtendimentos.Count}." 
+                    : null;
+
+                _unitOfWork.AnalysisJobRepository.Update(job);
+
+                // ✅ PASSO CRÍTICO: ADICIONAR O COMMIT AQUI!
+                await _unitOfWork.CommitAsync();
+
+                _logger.LogInformation($"Job {job.Id}: Transação comitada com sucesso. {successCount} relatórios salvos.");
+
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackAsync();
                 
-                catch (Exception ex)
-                {
-                    failureCount++;
-                    _logger.LogError(ex, "FALHA CRÍTICA ao processar atendimento para '{Email}' do Job {JobId}.", atendimento.EmailSolicitante, job.Id);
-                }
+                job.ErrorMessage = "Falha no processamento em lote. Nenhum relatório foi salvo. Verifique os logs.";
+            }
+            finally
+            {
+                // PASSO 4 (FINALLY): Garante que o status do Job seja sempre atualizado.
+                // Esta operação ocorre fora da transação principal, salvando o resultado final do job.
+                _logger.LogInformation("Atualizando status final do Job {JobId}.", job.Id);
+                // Usamos o novo repositório para atualizar o job.
+                _unitOfWork.AnalysisJobRepository.Update(job);
+                await _unitOfWork.SaveChangesAsync();
             }
             
-            _logger.LogInformation($"Processamento do Job {job.Id} finalizado. Criados: {successCount}. Falhas: {failureCount}.");
             
-            job.ErrorMessage = failureCount > 0
-                ? $"Processamento concluído com {failureCount} falha(s)."
-                : null;
-
-            _context.Update(job); // << ALTERADO: Usando o _context injetado
-            await _context.SaveChangesAsync();
         }
         
         // ... (A função ParseTimeSpanRobust permanece a mesma) ...

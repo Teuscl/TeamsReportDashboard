@@ -50,6 +50,7 @@ public class AnalysisController : ControllerBase
             using var fileStream = new FileStream(tempFilePath, FileMode.Open, FileAccess.Read);
             using var content = new MultipartFormDataContent();
             content.Add(new StreamContent(fileStream), "file", file.FileName);
+            content.Add(new StringContent(name), "name");
 
             HttpResponseMessage pythonResponse;
             try

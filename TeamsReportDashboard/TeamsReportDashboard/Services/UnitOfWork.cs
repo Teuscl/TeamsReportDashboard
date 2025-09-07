@@ -15,15 +15,17 @@ namespace TeamsReportDashboard.Services
         private IReportRepository _reportRepository;
         private IRequesterRepository _requesterRepository;
         private IDepartmentRepository _departmentRepository;
+        private IAnalysisJobRepository _analysisJobRepository;
 
         // ... seu construtor permanece o mesmo ...
-        public UnitOfWork(AppDbContext context, IUserRepository userRepository, IReportRepository reportRepository, IRequesterRepository requesterRepository, IDepartmentRepository departmentRepository)
+        public UnitOfWork(AppDbContext context, IUserRepository userRepository, IReportRepository reportRepository, IRequesterRepository requesterRepository, IDepartmentRepository departmentRepository, IAnalysisJobRepository analysisJobRepository)
         {
             _context = context;
             _userRepository = userRepository;
             _reportRepository = reportRepository;
             _requesterRepository = requesterRepository;
             _departmentRepository = departmentRepository;
+            _analysisJobRepository = analysisJobRepository;
         }
 
 
@@ -32,6 +34,8 @@ namespace TeamsReportDashboard.Services
         public IReportRepository ReportRepository => _reportRepository ??= new ReportRepository(_context);
         public IRequesterRepository RequesterRepository => _requesterRepository ??= new RequesterRepository(_context);
         public IDepartmentRepository DepartmentRepository => _departmentRepository ??= new DepartmentRepository(_context);
+        
+        public IAnalysisJobRepository AnalysisJobRepository => _analysisJobRepository ??= new AnalysisJobRepository(_context);
 
 
         // Implementação dos novos métodos

@@ -34,6 +34,20 @@ public class AppDbContext : DbContext
             .WithMany() // Um solicitante pode ter muitos relatórios
             .HasForeignKey(r => r.RequesterId)
             .OnDelete(DeleteBehavior.Restrict); // Impede que um solicitante seja deletado se ele tiver relatórios associados
+        
+        modelBuilder.Entity<Report>()
+            .Property(r => r.FirstResponseTime)
+            .HasConversion(
+                timespan => timespan.Ticks,
+                ticks => TimeSpan.FromTicks(ticks)
+            );
+        
+        modelBuilder.Entity<Report>()
+            .Property(r => r.AverageHandlingTime)
+            .HasConversion(
+                timespan => timespan.Ticks,
+                ticks => TimeSpan.FromTicks(ticks)
+            );
 
     }
 

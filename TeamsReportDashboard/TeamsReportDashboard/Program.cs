@@ -136,6 +136,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IRequesterRepository, RequesterRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IAnalysisJobRepository, AnalysisJobRepository>();
 
 builder.Services.AddScoped<IReportProcessorService, ReportProcessorService>();
 builder.Services.AddScoped<IJobSynchronizationService, JobSynchronizationService>();
