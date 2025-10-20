@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using TeamsReportDashboard.Exceptions;
 
@@ -28,7 +29,7 @@ public class ExceptionFilter : IExceptionFilter
         context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
         context.Result = new ObjectResult(new
         {
-            errors = new List<string> { "An unknown error has occurred. {}" }
+            errors = new List<string> { $"An unknown error has occurred. {context.Exception.Message}" }
         });
     }
 }

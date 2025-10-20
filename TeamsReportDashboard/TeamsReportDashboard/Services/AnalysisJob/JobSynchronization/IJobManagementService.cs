@@ -2,8 +2,7 @@
 
 namespace TeamsReportDashboard.Backend.Services.JobSynchronization;
 
-public interface IJobSynchronizationService
+public interface IJobManagementService
 {
-    // Vamos retornar um DTO simples com a mensagem de sucesso
     Task<ReprocessResponseDto> ReprocessJobAsync(Guid jobId);
 }

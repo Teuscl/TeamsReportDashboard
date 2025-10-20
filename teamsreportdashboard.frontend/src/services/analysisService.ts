@@ -1,54 +1,46 @@
-// src/services/analysisService.ts
-import axios from '@/services/axiosConfig';
-import { AnalysisJob } from '@/types/AnalysisJob';
+// Caminho: src/services/analysisService.ts
 
-/**
- * Inicia o job de análise enviando um arquivo .zip e um nome para o job.
- */
-export const startAnalysisJob = async (
-  file: File,
-  jobName: string,
-  onProgress: (progress: number) => void
-): Promise<{ jobId: string }> => {
+import { AnalysisJob} from "@/types/AnalysisJob";
+import api from "./axiosConfig";
+
+// READ (GET ALL) - Para carga inicial e refresh manual
+export const getAnalysisJobs = async (): Promise<AnalysisJob[]> => {
+  const response = await api.get("/analysis");
+  return response.data;
+};
+
+// READ (GET ONE) - Usado pelo hook de polling
+export const getJobStatus = async (jobId: string): Promise<AnalysisJob> => {
+  const response = await api.get(`/analysis/${jobId}`);
+  return response.data;
+};
+
+// CREATE (POST)
+export const startAnalysisJob = async (file: File, name: string, onProgress: (p: number) => void): Promise<{ jobId: string }> => {
   const formData = new FormData();
-  console.log(jobName)
-  formData.append("file", file);
-  formData.append("name", jobName.trim());
+  formData.append('file', file);
+  formData.append('name', name.trim());
 
-  // Debug para garantir que o campo está indo
-  for (let [key, value] of formData.entries()) {
-    console.log("FormData =>", key, value);
-  }
-
-  const response = await axios.post("/analysis/start", formData, {
-    // ❌ NÃO setar Content-Type manualmente, axios faz isso sozinho
-    onUploadProgress: (progressEvent) => {
-      const { loaded, total } = progressEvent;
-      if (total && typeof total === "number") {
-        const percentCompleted = Math.round((loaded * 100) / total);
-        onProgress(percentCompleted);
-      }
+  const response = await api.post("/analysis/start", formData, {
+    onUploadProgress: (e) => {
+      if (e.total) onProgress(Math.round((e.loaded * 100) / e.total));
     },
   });
-
   return response.data;
 };
 
-/** Lista de jobs */
-export const getAnalysisJobs = async (): Promise<AnalysisJob[]> => {
-  const response = await axios.get('/analysis');
-  return response.data;
+// UPDATE (PUT)
+export const updateAnalysisJob = async (jobId: string, data: { name: string }): Promise<void> => {
+  await api.put(`/analysis/${jobId}`, data);
 };
 
-/** Status de um job */
-export const getJobStatus = async (jobId: string): Promise<AnalysisJob> => {
-  const response = await axios.get(`/analysis/status/${jobId}`);
-  return response.data;
+// DELETE
+export const deleteAnalysisJob = async (jobId: string): Promise<void> => {
+  await api.delete(`/analysis/${jobId}`);
 };
 
-/** Reprocessar job */
+// REPROCESS (POST CUSTOM ACTION)
 export const reprocessAnalysisJob = async (jobId: string): Promise<{ message: string }> => {
-  const response = await axios.post(`/analysis/reprocess/${jobId}`);
+  const response = await api.post(`/analysis/reprocess/${jobId}`);
   return response.data;
 };
-0                           

@@ -47,7 +47,8 @@ public class CreateReportService : ICreateReportService
            AverageHandlingTime = createReportDto.AverageHandlingTime,
            CreatedAt = DateTime.Now,
            RequestDate = createReportDto.RequestDate,
-           FirstResponseTime = createReportDto.FirstResponseTime
+           FirstResponseTime = createReportDto.FirstResponseTime,
+           AnalysisJobId = createReportDto.AnalysisJobId 
        };
        
        await _unitOfWork.ReportRepository.CreateReportAsync(report);

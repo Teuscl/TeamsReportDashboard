@@ -13,13 +13,14 @@ import {
   getAnalysisJobs,
   startAnalysisJob,
   reprocessAnalysisJob,
+  deleteAnalysisJob,
 } from "@/services/analysisService";
 import { AnalysisJob } from "@/types/AnalysisJob";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
-import { FileUp, Loader2, RefreshCw, RotateCw } from "lucide-react";
+import { FileUp, Loader2, RefreshCw, RotateCw, MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import { useJobPolling } from "./useJobPolling";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
@@ -29,9 +30,16 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { EditJobModal } from "@/components/EditJobModal";
 
 // mapa de status traduzido e estilizado
 const statusMap: Record<
@@ -55,6 +63,10 @@ const ImportsPage: React.FC = () => {
 
   const [selectedError, setSelectedError] = useState<string | null>(null);
   const [confirmReprocessJob, setConfirmReprocessJob] = useState<AnalysisJob | null>(null);
+  const [confirmDeleteJob, setConfirmDeleteJob] = useState<AnalysisJob | null>(null);
+  
+  // Estados do modal de edição - simplificados
+  const [jobToEdit, setJobToEdit] = useState<AnalysisJob | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -103,7 +115,6 @@ const ImportsPage: React.FC = () => {
       toast.warning("Por favor, preencha o nome do job e selecione um arquivo.");
       return;
     }
-    // limite opcional de tamanho
     if (fileToUpload.size > 200 * 1024 * 1024) {
       toast.error("Arquivo muito grande (limite de 200MB).");
       return;
@@ -154,6 +165,35 @@ const ImportsPage: React.FC = () => {
     [fetchJobs]
   );
 
+  const handleOpenEditModal = useCallback((job: AnalysisJob) => {
+      setJobToEdit(job);
+    }, []);
+
+    // 2. FECHAR O MODAL: Apenas limpa o job selecionado.
+  const handleCloseEditModal = () => {
+    setJobToEdit(null);
+  };
+
+  // 3. QUANDO SALVAR COM SUCESSO: Apenas manda recarregar a lista.
+  const handleEditSuccess = () => {
+    fetchJobs();
+  };
+
+  const handleDelete = useCallback(async (job: AnalysisJob) => {
+    try {
+      await deleteAnalysisJob(job.id);
+      toast.success("Job removido com sucesso!");
+      setConfirmDeleteJob(null);
+      await fetchJobs();
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.detail ??
+        error?.response?.data?.message ??
+        "Erro desconhecido ao excluir job.";
+      toast.error(`Falha na exclusão: ${message}`);
+    }
+  }, [fetchJobs]);
+
   const renderStatus = (status: string, errorMessage?: string) => {
     let meta = statusMap[status] ?? {
       label: status,
@@ -173,23 +213,44 @@ const ImportsPage: React.FC = () => {
     );
   };
 
+
+
   const columns: ColumnDef<AnalysisJob>[] = useMemo(
     () => [
-      { accessorKey: "id", header: "ID do Job", enableSorting: false },
-      { accessorKey: "name", header: "Nome da Importação", enableSorting: false },
+      { 
+        accessorKey: "id", 
+        header: "ID do Job", 
+        enableSorting: false,
+        cell: ({ row }) => (
+          <span className="font-mono text-xs">{row.original.id}</span>
+        ),
+      },
+      { 
+        accessorKey: "name", 
+        header: "Nome da Importação", 
+        enableSorting: false,
+        cell: ({ row }) => (
+          <span className="max-w-xs truncate block" title={row.original.name}>
+            {row.original.name}
+          </span>
+        ),
+      },
       {
         accessorKey: "status",
         header: "Status",
         cell: ({ row }) =>
-          renderStatus(row.original.status, row.original.errorMessage),
+          renderStatus(row.original.status, row.original.errorMessage || undefined),
       },
       {
         accessorKey: "createdAt",
         header: "Data de Envio",
-        cell: ({ row }) =>
-          format(parseISO(row.original.createdAt), "dd/MM/yyyy - HH:mm", {
-            locale: ptBR,
-          }),
+        cell: ({ row }) => (
+          <span className="whitespace-nowrap">
+            {format(parseISO(row.original.createdAt), "dd/MM/yyyy - HH:mm", {
+              locale: ptBR,
+            })}
+          </span>
+        ),
       },
       {
         accessorKey: "errorMessage",
@@ -199,7 +260,7 @@ const ImportsPage: React.FC = () => {
           row.original.errorMessage ? (
             <Button
               variant="link"
-              className="text-xs text-red-600 truncate max-w-xs"
+              className="text-xs text-red-600 truncate max-w-xs p-0 h-auto"
               onClick={() => setSelectedError(row.original.errorMessage!)}
             >
               Ver erro
@@ -216,43 +277,104 @@ const ImportsPage: React.FC = () => {
           const job = row.original;
           const canReprocess =
             job.status === "Failed" ||
-            (job.status === "Completed" );
-          if (!canReprocess) return null;
-
+            (job.status === "Completed");
+          
+          const canEdit = job.status !== "Processing";
+          const canDelete = job.status !== "Processing" ;
           const isThisJobReprocessing = reprocessingId === job.id;
+           // Adiciona um estado para controlar o DropdownMenu
+          const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+          // Função que organiza a abertura do modal
+          const handleEditClick = () => {
+            // 1. Fecha o menu
+            setIsMenuOpen(false);
+            // 2. Abre o modal
+            handleOpenEditModal(job);
+          };
+
+          // Função para Reprocessar
+          const handleReprocessClick = () => {
+            setIsMenuOpen(false); // Fecha o menu
+            setConfirmReprocessJob(job); // Abre o modal de confirmação
+          };
+
+          // Função para Excluir
+          const handleDeleteClick = () => {
+            setIsMenuOpen(false); // Fecha o menu
+            setConfirmDeleteJob(job); // Abre o modal de confirmação
+          };
+
           return (
             <div className="text-right">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setConfirmReprocessJob(job)}
-                disabled={isThisJobReprocessing}
-                aria-busy={isThisJobReprocessing}
-                title="Tentar reprocessar os relatórios"
-              >
-                {isThisJobReprocessing ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <RotateCw className="h-4 w-4" />
-                )}
-                <span className="sr-only">Reprocessar</span>
-              </Button>
+              <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    disabled={isThisJobReprocessing}
+                  >
+                    {isThisJobReprocessing ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <MoreHorizontal className="h-4 w-4" />
+                    )}
+                    <span className="sr-only">Abrir menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem
+                    onClick={handleEditClick}
+                    disabled={!canEdit}
+                  >
+                    <Edit className="mr-2 h-4 w-4" />
+                    Editar nome
+                  </DropdownMenuItem>
+                  
+                  {canReprocess && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onSelect={handleReprocessClick}
+                        disabled={isThisJobReprocessing}
+                      >
+                        <RotateCw className="mr-2 h-4 w-4" />
+                        Reprocessar
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                  
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={handleDeleteClick}
+                    disabled={!canDelete}
+                    className="text-red-600 focus:text-red-600"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Excluir
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           );
         },
       },
     ],
-    [reprocessingId]
+    [reprocessingId, handleOpenEditModal]
   );
 
   return (
-    <div className="container mx-auto py-10 px-4 md:px-0">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6">
+    <div className="container mx-auto py-6 px-4 space-y-6">
+      <h1 className="text-2xl md:text-3xl font-bold">
         Importação e Acompanhamento
       </h1>
 
+      {/* BOTÃO DE TESTE */}
+    
+
       {/* Form de Upload */}
-      <Card className="mb-8">
+      <Card>
         <CardHeader>
           <CardTitle>Nova Importação</CardTitle>
           <CardDescription>
@@ -260,8 +382,8 @@ const ImportsPage: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <div className="flex-1 w-full">
+          <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
                 type="text"
                 placeholder="Nome do Job (Ex: Atendimentos 05/25)"
@@ -269,70 +391,79 @@ const ImportsPage: React.FC = () => {
                 onChange={(e) => setJobName(e.target.value)}
                 disabled={isUploading}
               />
+              <div>
+                <label
+                  htmlFor="file-upload"
+                  className="flex items-center justify-center w-full h-10 px-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer hover:bg-gray-50 dark:bg-zinc-800 dark:text-gray-200 dark:border-zinc-700 transition-colors"
+                >
+                  <span className="truncate">
+                    {fileToUpload ? fileToUpload.name : "Clique para selecionar o arquivo .zip"}
+                  </span>
+                </label>
+                <input
+                  ref={fileInputRef}
+                  id="file-upload"
+                  name="file-upload"
+                  type="file"
+                  className="sr-only"
+                  onChange={handleFileChange}
+                  accept=".zip,application/zip"
+                />
+              </div>
             </div>
-            <div className="flex-1 w-full">
-              <label
-                htmlFor="file-upload"
-                className="flex items-center justify-center w-full h-12 px-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer hover:bg-gray-50 dark:bg-zinc-800 dark:text-gray-200 dark:border-zinc-700"
+            
+            <div className="flex justify-end">
+              <Button
+                onClick={handleUpload}
+                disabled={!fileToUpload || !jobName.trim() || isUploading}
+                className="w-full md:w-auto"
               >
-                {fileToUpload ? fileToUpload.name : "Clique para selecionar o arquivo .zip"}
-              </label>
-              <input
-                ref={fileInputRef}
-                id="file-upload"
-                name="file-upload"
-                type="file"
-                className="sr-only"
-                onChange={handleFileChange}
-                accept=".zip,application/zip"
-              />
+                {isUploading ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <FileUp className="mr-2 h-4 w-4" />
+                )}
+                {isUploading ? `Enviando... ${uploadProgress}%` : "Iniciar Análise"}
+              </Button>
             </div>
-            <Button
-              onClick={handleUpload}
-              disabled={!fileToUpload || !jobName.trim() || isUploading}
-            >
-              {isUploading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <FileUp className="mr-2 h-4 w-4" />
-              )}
-              {isUploading ? `Enviando... ${uploadProgress}%` : "Iniciar Análise"}
-            </Button>
-          </div>
-          {isUploading && (
-            <div className="mt-4">
+            
+            {isUploading && (
               <Progress value={uploadProgress} className="w-full" />
-            </div>
-          )}
+            )}
+          </div>
         </CardContent>
       </Card>
 
       {/* Histórico */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Histórico de Importações</h2>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={fetchJobs}
-          disabled={isLoading}
-        >
-          <RefreshCw
-            className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
-          />
-          Atualizar
-        </Button>
-      </div>
+      <div>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+          <h2 className="text-xl font-semibold">Histórico de Importações</h2>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={fetchJobs}
+            disabled={isLoading}
+          >
+            <RefreshCw
+              className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+            />
+            Atualizar
+          </Button>
+        </div>
 
-      <DataTable
-        columns={columns}
-        data={jobs}
-        filterColumnId="name"
-        filterPlaceholder="Filtrar por nome do Job..."
-      />
+        <div className="overflow-x-auto">
+          <DataTable
+            columns={columns}
+            data={jobs}
+            filterColumnId="name"
+            filterPlaceholder="Filtrar por nome do Job..."
+          />
+        </div>
+      </div>
 
       {/* Dialog Detalhes do Erro */}
       <Dialog open={!!selectedError} onOpenChange={() => setSelectedError(null)}>
-        <DialogContent>
+        <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>Detalhes do Erro</DialogTitle>
             <DialogDescription>
@@ -350,12 +481,21 @@ const ImportsPage: React.FC = () => {
         </DialogContent>
       </Dialog>
 
+      <EditJobModal
+        isOpen={!!jobToEdit}
+        job={jobToEdit}
+        onClose={handleCloseEditModal}
+        onSaveSuccess={handleEditSuccess}
+      />
+      
+        
+
       {/* Dialog Confirmação Reprocessamento */}
       <Dialog
         open={!!confirmReprocessJob}
         onOpenChange={() => setConfirmReprocessJob(null)}
       >
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Confirmar Reprocessamento</DialogTitle>
             <DialogDescription>
@@ -382,6 +522,38 @@ const ImportsPage: React.FC = () => {
                 <RotateCw className="mr-2 h-4 w-4" />
               )}
               Confirmar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog Confirmação Exclusão */}
+      <Dialog
+        open={!!confirmDeleteJob}
+        onOpenChange={() => setConfirmDeleteJob(null)}
+      >
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Confirmar Exclusão</DialogTitle>
+            <DialogDescription>
+              Deseja realmente excluir o job{" "}
+              <span className="font-semibold">
+                {confirmDeleteJob?.name}
+              </span>
+              ? Esta ação não pode ser desfeita.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setConfirmDeleteJob(null)}>
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => confirmDeleteJob && handleDelete(confirmDeleteJob)}             
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Excluir Permanentemente
             </Button>
           </DialogFooter>
         </DialogContent>

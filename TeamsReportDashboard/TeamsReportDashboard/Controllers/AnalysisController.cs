@@ -1,157 +1,169 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TeamsReportDashboard.Backend.Data;
-using TeamsReportDashboard.Backend.Entities;
-using TeamsReportDashboard.Backend.Entities.Enums; // Substitua pelo seu namespace
-using TeamsReportDashboard.Backend.Models;
-using TeamsReportDashboard.Backend.Models.PythonApiDto;
+using Microsoft.EntityFrameworkCore; // Este using pode ser removido
+using TeamsReportDashboard.Backend.Interfaces;
+using TeamsReportDashboard.Backend.Models.Job;
+using TeamsReportDashboard.Exceptions;
+using TeamsReportDashboard.Backend.Services.AnalysisJob.Query;
+using TeamsReportDashboard.Backend.Services.AnalysisJob.Start;
+using TeamsReportDashboard.Backend.Services.AnalysisJob.Update;
+using TeamsReportDashboard.Backend.Services.AnalysisJob.Delete;
 using TeamsReportDashboard.Backend.Services.JobSynchronization;
-using TeamsReportDashboard.Backend.Services.ProcessCompletedJob; // Substitua pelo seu namespace
 
-[ApiController]
-[Route("[controller]")]
-public class AnalysisController : ControllerBase
+namespace TeamsReportDashboard.Backend.Controllers
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly AppDbContext _context;
-    private readonly IJobSynchronizationService _jobSyncService;
-
-    public AnalysisController(IHttpClientFactory httpClientFactory, AppDbContext context, IJobSynchronizationService jobSyncService)
+    [ApiController]
+    [Route("[controller]")]
+    public class AnalysisController : ControllerBase
     {
-        _httpClientFactory = httpClientFactory;
-        _context = context;
-        _jobSyncService = jobSyncService;
-    }
+        private readonly IStartAnalysisService _startService;
+        private readonly IAnalysisJobQueryService _queryService;
+        private readonly IJobManagementService _jobManagementService; // Nome da variável corrigido
+        private readonly IDeleteJobService _deleteService; 
+        private readonly ILogger<AnalysisController> _logger;
+        private readonly IUpdateAnalysisService _updateService;
 
-    [HttpPost("start")]
-    // Limite de 200 MB[HttpPost("start")]
-    [RequestSizeLimit(200 * 1024 * 1024)]
-    public async Task<IActionResult> StartAnalysis(
-        [FromForm] IFormFile file, 
-        [FromForm] string name)
-    {
-        
-        if ( file == null || !file.FileName.ToLower().EndsWith(".zip"))
-            return BadRequest(".zip file is not valid.");
-        if (string.IsNullOrWhiteSpace(name))
-            return BadRequest("Job name is required.");
-        var tempFilePath = Path.GetTempFileName();
-        try
+        public AnalysisController(
+            IStartAnalysisService startService,
+            IAnalysisJobQueryService queryService,
+            IJobManagementService jobManagementService, 
+            IUpdateAnalysisService updateService,
+            IDeleteJobService deleteService, 
+            ILogger<AnalysisController> logger)
         {
-            using (var stream = new FileStream(tempFilePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
+            _startService = startService;
+            _queryService = queryService;
+            _jobManagementService = jobManagementService;
+            _updateService = updateService;
+            _deleteService = deleteService;
+            _logger = logger;
+        }
 
-            var pythonApiClient = _httpClientFactory.CreateClient("PythonAnalysisService");
-
-            using var fileStream = new FileStream(tempFilePath, FileMode.Open, FileAccess.Read);
-            using var content = new MultipartFormDataContent();
-            content.Add(new StreamContent(fileStream), "file", file.FileName);
-            content.Add(new StringContent(name), "name");
-
-            HttpResponseMessage pythonResponse;
+        [HttpPost("start")]
+        [Authorize(Roles = "Admin, Master")]
+        [RequestSizeLimit(200 * 1024 * 1024)]
+        public async Task<IActionResult> StartAnalysis([FromForm] StartJobAnalysisDto dto)
+        {
             try
             {
-                pythonResponse = await pythonApiClient.PostAsync("/analyze/start", content);
-
+                var newJobId = await _startService.ExecuteAsync(dto);
+                return AcceptedAtAction(nameof(GetJobStatus), new { jobId = newJobId }, new { JobId = newJobId });
+            }
+            catch (ErrorOnValidationException ex)
+            {
+                // CORRIGIDO: Retorna a lista de erros, não a mensagem genérica
+                return BadRequest(new { errors = ex.Message });
             }
             catch (HttpRequestException ex)
             {
-                return StatusCode(503, $"Analysis service failed: {ex.Message}");
+                return StatusCode(503, new { message = "Serviço de análise indisponível.", detail = ex.Message });
             }
-            if (!pythonResponse.IsSuccessStatusCode)
-                return StatusCode((int)pythonResponse.StatusCode,
-                    $"Analysis service failed: {pythonResponse.StatusCode}");
-
-            var startResponse = await pythonResponse.Content.ReadFromJsonAsync<PythonApiDto.PythonStartResponse>();
-            if (string.IsNullOrEmpty(startResponse?.BatchId))
-                return StatusCode(500, "Python API did not return a valid batch id.");
-
-            var newJob = new AnalysisJob
+            catch (Exception ex)
             {
-                Id = Guid.NewGuid(),
-                Name = name,
-                PythonBatchId = startResponse.BatchId,
-                Status = JobStatus.Pending,
-                CreatedAt = DateTime.UtcNow,
-            };
-            _context.AnalysisJobs.Add(newJob);
-            await _context.SaveChangesAsync();
-
-            return Accepted(new { JobId = newJob.Id });
-
+                _logger.LogError(ex, "Erro inesperado ao iniciar o job.");
+                return StatusCode(500, new { message = "Ocorreu um erro inesperado ao iniciar o job." });
+            }
         }
-        finally
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, Master")]
+        public async Task<IActionResult> GetAllJobs()
         {
-            // PASSO C: Garante que o arquivo temporário seja sempre deletado.
-            if (System.IO.File.Exists(tempFilePath))
-            {
-                System.IO.File.Delete(tempFilePath);
-            }
+            var jobs = await _queryService.GetAllAsync();
+            return Ok(jobs);
+        }
+
+        [HttpGet("{jobId:guid}", Name = "GetJobStatus")]
+        [Authorize]
+        public async Task<IActionResult> GetJobStatus(Guid jobId)
+        {
+            var job = await _queryService.GetByIdAsync(jobId);
+            return job != null ? Ok(job) : NotFound();
         }
         
-    }
-
-    [HttpGet("status/{jobId}")]
-    public async Task<IActionResult> GetJobStatus(Guid jobId)
-    {
-        var job = await _context.AnalysisJobs.FindAsync(jobId);
-        if (job == null) return NotFound();
-        return Ok(new { job.Id, job.Name, Status = job.Status.ToString(), job.CreatedAt, job.CompletedAt, job.ErrorMessage });
-    }
-    
-    [HttpGet]
-    public async Task<IActionResult> GetAllJobs()
-    {
-        var jobs = await _context.AnalysisJobs
-            .OrderByDescending(j => j.CreatedAt)
-            .Select(j => new 
+        [HttpPut("{jobId:guid}")]
+        [Authorize(Roles = "Admin, Master")]
+        public async Task<IActionResult> UpdateJob(Guid jobId, [FromBody] UpdateAnalysisJobDto dto)
+        {
+            try
             {
-                j.Id,
-                Status = j.Status.ToString(),
-                Name = j.Name,
-                j.CreatedAt,
-                j.CompletedAt,
-                j.ErrorMessage
-            })
-            .ToListAsync();
+                await _updateService.ExecuteAsync(jobId, dto);
+                return NoContent();
+            }
+            catch (ErrorOnValidationException ex)
+            {
+                return BadRequest(new { errors = ex.Message }); // CORRIGIDO
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro inesperado ao atualizar o job {JobId}", jobId);
+                return StatusCode(500, new { message = "Ocorreu um erro inesperado ao atualizar o job." });
+            }
+        }
 
-        return Ok(jobs);
-    }
-    
-    [HttpPost("reprocess/{jobId}")]
-    [Authorize(Roles = "Admin, Master")]
-    public async Task<IActionResult> ReprocessJob(Guid jobId)
-    {
-        try
+        // Endpoint de Delete ATIVADO
+        [HttpDelete("{jobId:guid}")]
+        [Authorize(Roles = "Admin, Master")]
+        public async Task<IActionResult> DeleteJob(Guid jobId)
         {
-            var result = await _jobSyncService.ReprocessJobAsync(jobId);
-            return Ok(result);
+            try
+            {
+                await _deleteService.Execute(jobId);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro inesperado ao deletar o job {JobId}", jobId);
+                return StatusCode(500, new { message = $"Ocorreu um erro inesperado ao deletar o job. {ex.Message}" });
+            }
         }
-        catch (KeyNotFoundException ex)
+
+        [HttpPost("reprocess/{jobId:guid}")]
+        [Authorize(Roles = "Admin, Master")]
+        public async Task<IActionResult> ReprocessJob(Guid jobId)
         {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            // Captura a exceção de concorrência!
-            return Conflict(new { message = "Este job foi modificado por outra operação. Por favor, atualize e tente novamente." });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (HttpRequestException ex)
-        {
-            return StatusCode(503, new { message = ex.Message }); // 503 Service Unavailable
-        }
-        catch (Exception ex) // Captura geral para erros inesperados
-        {
-            // Logar o erro aqui é importante
-            return StatusCode(500, new { message = "Ocorreu um erro inesperado no servidor.", detail = ex.Message });
+            try
+            {
+                var result = await _jobManagementService.ReprocessJobAsync(jobId); // Nome da variável corrigido
+                return Ok(result);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Conflict(new { message = "Este job foi modificado por outra operação. Por favor, atualize e tente novamente." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(503, new { message = "Serviço de análise indisponível.", detail = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro inesperado no reprocessamento do job {JobId}", jobId);
+                return StatusCode(500, new { message = "Ocorreu um erro inesperado no reprocessamento." });
+            }
         }
     }
 }

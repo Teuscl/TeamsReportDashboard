@@ -8,11 +8,19 @@ using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Interfaces;
 using TeamsReportDashboard.Backend.Models.Configuration;
 using TeamsReportDashboard.Backend.Models.DepartmentDto;
+using TeamsReportDashboard.Backend.Models.Job;
 using TeamsReportDashboard.Backend.Models.ReportDto;
 using TeamsReportDashboard.Backend.Models.Requester;
 using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Backend.Repositories;
 using TeamsReportDashboard.Backend.Services;
+using TeamsReportDashboard.Backend.Services.AnalysisJob;
+using TeamsReportDashboard.Backend.Services.AnalysisJob.Delete;
+using TeamsReportDashboard.Backend.Services.AnalysisJob.JobSynchronization;
+using TeamsReportDashboard.Backend.Services.AnalysisJob.ProcessCompletedJob;
+using TeamsReportDashboard.Backend.Services.AnalysisJob.Query;
+using TeamsReportDashboard.Backend.Services.AnalysisJob.Start;
+using TeamsReportDashboard.Backend.Services.AnalysisJob.Update;
 using TeamsReportDashboard.Backend.Services.Dashboard;
 using TeamsReportDashboard.Backend.Services.Department.Create;
 using TeamsReportDashboard.Backend.Services.Department.Delete;
@@ -28,6 +36,7 @@ using TeamsReportDashboard.Backend.Services.Requester.Create;
 using TeamsReportDashboard.Backend.Services.Requester.Delete;
 using TeamsReportDashboard.Backend.Services.Requester.Read;
 using TeamsReportDashboard.Backend.Services.Requester.Update;
+using TeamsReportDashboard.Backend.Services.Start;
 using TeamsReportDashboard.Backend.Services.User.ChangeMyPassword;
 using TeamsReportDashboard.Backend.Services.User.ForgotPassword;
 using TeamsReportDashboard.Backend.Services.User.ResetForgottenPassword;
@@ -107,24 +116,30 @@ builder.Services.AddHttpClient("PythonAnalysisService", client =>
     client.BaseAddress = new Uri(builder.Configuration["PythonApi:BaseUrl"]);
 });
 
-builder.Services.AddHostedService<PythonJobStatusChecker>();
+builder.Services.AddHostedService<AnalysisJobWorker>();
 
 // Injeção de dependências
 builder.Services.AddScoped<ITokenService, TokenService>();  // Adiciona o TokenService
 builder.Services.AddScoped<IAuthService, AuthService>();  // Adiciona o AuthService
 builder.Services.AddScoped<IValidator<CreateUserDto>, CreateUserValidator>();  // Validador do CreateUserDto
-builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>();  // Validador do UpdateUserDto
+builder.Services.AddScoped<IValidator<UpdateUserDto>, UpdateUserValidator>(); // Validador do UpdateUserDto
+
+
 builder.Services.AddScoped<IValidator<CreateReportDto>, CreateReportValidator>();  // Validador do CreateUserDto
-builder.Services.AddScoped<IValidator<UpdateReportDto>, UpdateReportValidator>();  // Validador do UpdateUserDto
-builder.Services.AddScoped<IValidator<ChangeMyPasswordDto>, ChangeMyPasswordValidator>();  // Validador do UpdateUserDto
-builder.Services.AddScoped<IValidator<CreateReportDto>, CreateReportValidator>();
-builder.Services.AddScoped<IValidator<UpdateReportDto>, UpdateReportValidator>();
+builder.Services.AddScoped<IValidator<UpdateReportDto>, UpdateReportValidator>(); // Validador do UpdateUserDto
+builder.Services.AddScoped<IValidator<ChangeMyPasswordDto>, ChangeMyPasswordValidator>(); 
+
+builder.Services.AddScoped<IValidator<CreateReportDto>, CreateReportValidator>(); //Validator do CreateReportDto
+builder.Services.AddScoped<IValidator<UpdateReportDto>, UpdateReportValidator>(); // Validator do UpdateReportDto
+
 builder.Services.AddScoped<IValidator<ResetPasswordDto>, ResetPasswordValidator>();
 builder.Services.AddScoped<IValidator<ForgotPasswordDto>, ForgotPasswordValidator>();
 builder.Services.AddScoped<IValidator<CreateDepartmentDto>, CreateDepartmentValidator>();
 builder.Services.AddScoped<IValidator<UpdateDepartmentDto>, UpdateDepartmentValidator>();
 builder.Services.AddScoped<IValidator<CreateRequesterDto>, CreateRequesterValidator >();
 builder.Services.AddScoped<IValidator<UpdateRequesterDto>, UpdateRequesterValidator>();
+builder.Services.AddScoped<IValidator<UpdateAnalysisJobDto>, UpdateAnalysisValidator>();
+builder.Services.AddScoped<IValidator<StartJobAnalysisDto>, StartAnalysisValidator>();
 
 
 builder.Services.AddScoped<IUnitOfWork,  UnitOfWork>();
@@ -139,7 +154,14 @@ builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IAnalysisJobRepository, AnalysisJobRepository>();
 
 builder.Services.AddScoped<IReportProcessorService, ReportProcessorService>();
-builder.Services.AddScoped<IJobSynchronizationService, JobSynchronizationService>();
+builder.Services.AddScoped<IJobManagementService, JobManagementService>();
+builder.Services.AddScoped<IJobResultOrchestrator, JobResultOrchestrator>();
+builder.Services.AddScoped<IAnalysisJobQueryService, AnalysisJobQueryService>();
+builder.Services.AddScoped<IStartAnalysisService, StartAnalysisService>();
+builder.Services.AddScoped<IValidator<StartJobAnalysisDto>, StartAnalysisValidator>();
+builder.Services.AddScoped<IUpdateAnalysisService, UpdateAnalysisService>();
+builder.Services.AddScoped<IDeleteJobService, DeleteJobService>();
+
 
 
 builder.Services.AddScoped<ICreateUserService, CreateUserService>();
@@ -157,12 +179,13 @@ builder.Services.AddScoped<IUpdateReportService, UpdateReportService>();
 builder.Services.AddScoped<IGetReportService, GetReportService>();
 builder.Services.AddScoped<IDeleteReportService, DeleteReportService>();
 
-builder.Services.AddScoped<IGetRequestersService, GetRequestersService>();
 
 builder.Services.AddScoped<IGetDepartmentsService, GetDepartmentsService>();
 builder.Services.AddScoped<ICreateDepartmentService, CreateDepartmentService>();
 builder.Services.AddScoped<IDeleteDepartmentService, DeleteDepartmentService>();
 builder.Services.AddScoped<IUpdateDepartmentService, UpdateDepartmentService>();
+
+
 
 builder.Services.AddScoped<IGetRequestersService, GetRequestersService>();
 builder.Services.AddScoped<ICreateRequesterService, CreateRequesterService>();

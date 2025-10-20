@@ -32,7 +32,10 @@ const DashboardPage: React.FC = () => {
   const [modalContent, setModalContent] = useState<{ title: string; data: ChartData[] } | null>(null);
 
   // Define a cor do texto do gráfico com base no tema atual
-  const chartTextColor = theme === 'dark' ? '#94a3b8' : '#334155'; // Cores (slate-400 / slate-700)
+  const chartTextColor = theme === 'dark' ? '#edeff1ff' : '#01050cff'; // slate-400 / slate-700
+  
+  // Define a cor vermelha para as barras
+  const barColor = "#ef4444"; // red-500
 
   useEffect(() => {
     const fetchData = async () => {
@@ -133,8 +136,8 @@ const DashboardPage: React.FC = () => {
                   <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} stroke={chartTextColor} />
                   <YAxis fontSize={12} tickLine={false} axisLine={false} stroke={chartTextColor} />
                   <Tooltip cursor={{ className: "fill-muted" }} content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{fontSize: "0.8rem", color: chartTextColor}}/>
-                  <Bar dataKey="total" name="Atendimentos" radius={[4, 4, 0, 0]} className="fill-primary" />
+                  <Legend wrapperStyle={{fontSize: "0.8rem"}}/>
+                  <Bar dataKey="total" name="Atendimentos" radius={[4, 4, 0, 0]} fill={barColor} />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -151,8 +154,8 @@ const DashboardPage: React.FC = () => {
                   <XAxis type="number" fontSize={12} tickLine={false} axisLine={false} stroke={chartTextColor}/>
                   <YAxis type="category" dataKey="name" fontSize={12} tickLine={false} axisLine={false} width={120} stroke={chartTextColor} />
                   <Tooltip cursor={{ className: "fill-muted" }} content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{fontSize: "0.8rem", color: chartTextColor}}/>
-                  <Bar dataKey="total" name="Problemas" radius={[0, 4, 4, 0]} className="fill-primary" />
+                  <Legend wrapperStyle={{fontSize: "0.8rem"}}/>
+                  <Bar dataKey="total" name="Problemas" radius={[0, 4, 4, 0]} fill={barColor} />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -169,8 +172,8 @@ const DashboardPage: React.FC = () => {
                   <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} stroke={chartTextColor}/>
                   <YAxis fontSize={12} tickLine={false} axisLine={false} stroke={chartTextColor}/>
                   <Tooltip cursor={{ className: "fill-muted" }} content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{fontSize: "0.8rem", color: chartTextColor}}/>
-                  <Bar dataKey="total" name="Atendimentos" radius={[4, 4, 0, 0]} className="fill-primary" />
+                  <Legend wrapperStyle={{fontSize: "0.8rem"}}/>
+                  <Bar dataKey="total" name="Atendimentos" radius={[4, 4, 0, 0]} fill={barColor} />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -187,8 +190,8 @@ const DashboardPage: React.FC = () => {
                     <XAxis type="number" fontSize={12} tickLine={false} axisLine={false} stroke={chartTextColor}/>
                     <YAxis type="category" dataKey="name" fontSize={12} tickLine={false} axisLine={false} width={120} stroke={chartTextColor} />
                     <Tooltip cursor={{ className: "fill-muted" }} content={<CustomTooltip />} />
-                    <Legend wrapperStyle={{fontSize: "0.8rem", color: chartTextColor}}/>
-                    <Bar dataKey="total" name="Atendimentos" radius={[0, 4, 4, 0]} className="fill-primary" />
+                    <Legend wrapperStyle={{fontSize: "0.8rem"}}/>
+                    <Bar dataKey="total" name="Atendimentos" radius={[0, 4, 4, 0]} fill={barColor} />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>

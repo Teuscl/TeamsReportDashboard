@@ -48,6 +48,12 @@ public class AppDbContext : DbContext
                 timespan => timespan.Ticks,
                 ticks => TimeSpan.FromTicks(ticks)
             );
+        
+        modelBuilder.Entity<AnalysisJob>()
+            .HasMany(job => job.Reports)
+            .WithOne(r => r.AnalysisJob)
+            .HasForeignKey(report => report.AnalysisJobId)
+            .OnDelete(DeleteBehavior.Cascade);
 
     }
 

@@ -7,6 +7,7 @@ using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Backend.Models.PythonApiDto;
 using TeamsReportDashboard.Backend.Models.ReportDto;
 using TeamsReportDashboard.Backend.Services;
+using TeamsReportDashboard.Backend.Services.AnalysisJob.ProcessCompletedJob;
 using TeamsReportDashboard.Backend.Services.Report.Create;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
@@ -30,7 +31,7 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
             _unitOfWork = unitOfWork; // << NOVO: Atribuição
         }
 
-        public async Task ProcessAnalysisResult(AnalysisJob job, PythonApiDto.PythonResultResponse result)
+        public async Task ProcessAnalysisResult(Entities.AnalysisJob job, PythonApiDto.PythonResultResponse result)
         {
             if (result.Results is null)
             {
@@ -100,7 +101,8 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
                             Category = atendimento.Categoria,
                             RequestDate = requestDate,
                             FirstResponseTime = firstResponseTime,
-                            AverageHandlingTime = handlingTime
+                            AverageHandlingTime = handlingTime,
+                            AnalysisJobId = job.Id
                         };
 
                         Console.WriteLine("===== Relatório de Atendimento =====");
