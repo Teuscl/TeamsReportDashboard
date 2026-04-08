@@ -1,28 +1,38 @@
 # .NET Core build output
 [Bb]in/
 [Oo]bj/
-bin/
-obj/
-# Rider specific
-.idea/
-*.sln.iml
+**/bin/
+**/obj/
 
-# Visual Studio specific
-.vs/
+# .NET user/IDE files
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
+*.csproj.user
 
-# Outros comuns
-*.DS_Store
-*.log
-*.پژ
+# IDE
+.idea/
+*.sln.iml
+.vs/
+.vscode/
+
+# Python
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+*.env
+
+# OS
+*.DS_Store
 *.swp
+Thumbs.db
 
-# Cache files
+# Logs
+*.log
+
+# Cache
 *.cache
-
-**/obj/
-**/bin/
