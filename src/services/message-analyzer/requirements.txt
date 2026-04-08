@@ -1,0 +1,14 @@
+# Servidor de API
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Processamento de dados e arquivos
+pandas
+beautifulsoup4
+extract-msg
+lxml
+
+# API da OpenAI e gerenciamento de chave
+openai
+python-dotenv

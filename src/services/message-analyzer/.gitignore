@@ -1,0 +1,15 @@
+# Secrets
+.env
+
+# Dados de mensagens (dados reais, não versionar)
+TeamsMessages/
+TeamsMessages.zip
+*.zip
+*.msg
+
+# Outputs gerados pelo serviço
+*.csv
+*.jsonl
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
