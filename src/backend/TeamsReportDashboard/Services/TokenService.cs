@@ -35,8 +35,10 @@ public class TokenService : ITokenService
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
+            issuer: "TeamsReportDashboard",
+            audience: "TeamsReportDashboard",
             claims: claims,
-            expires: DateTime.Now.AddHours(2),
+            expires: DateTime.UtcNow.AddHours(2),
             signingCredentials: credentials
         );
 

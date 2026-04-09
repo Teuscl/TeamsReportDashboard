@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
     {
         HttpOnly = true,
         Secure = !_env.IsDevelopment(),
-        SameSite = _env.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.None,
+        SameSite = _env.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.Strict,
         Expires = expires
     };
 
@@ -40,13 +40,13 @@ public class AuthController : ControllerBase
         try
         {
             var loginResponse = await _authService.LoginAsync(loginRequest);
-            var cookieOptions = BuildCookieOptions(DateTimeOffset.Now.AddHours(2));
-            Response.Cookies.Append("accessToken", loginResponse.Token, cookieOptions);
-            Response.Cookies.Append("refreshToken", loginResponse.RefreshToken, cookieOptions);
-            
+            Response.Cookies.Append("accessToken", loginResponse.Token,
+                BuildCookieOptions(DateTimeOffset.UtcNow.AddHours(2)));
+            Response.Cookies.Append("refreshToken", loginResponse.RefreshToken,
+                BuildCookieOptions(DateTimeOffset.UtcNow.AddDays(7)));
+
             return Ok(new
             {
-                token = loginResponse.Token,
                 name = loginResponse.Name,
                 role = loginResponse.Role,
                 id = loginResponse.Id
@@ -59,7 +59,7 @@ public class AuthController : ControllerBase
         catch (Exception ex)
         {
             // Caso ocorra algum outro erro
-            return StatusCode(500, new { message = "An error occurred during the login process.", details = ex.Message });
+            return StatusCode(500, new { message = "An error occurred during the login process." });
         }
     }
 
@@ -73,43 +73,48 @@ public class AuthController : ControllerBase
 
             var user = await _unitOfWork.UserRepository.GetByRefreshTokenAsync(refreshToken);
 
-            if (user == null || user.RefreshTokenExpiryTime <= DateTime.Now)
-            {
-                // Caso o refresh token tenha expirado ou sido invalidado
+            if (user == null || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
                 return Unauthorized(new { message = "Refresh token is invalid or expired." });
-            }
 
             var newAccessToken = _tokenService.GenerateToken(user);
             var newRefreshToken = _tokenService.GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7); // A expiração pode ser configurada como desejado
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
 
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangesAsync();
             
             
-            Response.Cookies.Append("accessToken", newAccessToken, BuildCookieOptions(DateTimeOffset.Now.AddHours(2)));
-            HttpContext.Response.Cookies.Append("refreshToken", newRefreshToken, BuildCookieOptions(DateTimeOffset.UtcNow.AddDays(7)));
+            Response.Cookies.Append("accessToken", newAccessToken,
+                BuildCookieOptions(DateTimeOffset.UtcNow.AddHours(2)));
+            Response.Cookies.Append("refreshToken", newRefreshToken,
+                BuildCookieOptions(DateTimeOffset.UtcNow.AddDays(7)));
 
-            return Ok(new
-            {
-                token = newAccessToken
-            });
+            return Ok(new { message = "Token refreshed" });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while refreshing the token.",
-                details = ex.Message
-            });
+            return StatusCode(500, new { message = "An error occurred while refreshing the token." });
         }
     }
     
     [HttpPost("logout")]
-    public IActionResult Logout()
+    [Authorize]
+    public async Task<IActionResult> Logout()
     {
+        if (Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
+        {
+            var user = await _unitOfWork.UserRepository.GetByRefreshTokenAsync(refreshToken);
+            if (user != null)
+            {
+                user.RefreshToken = null;
+                user.RefreshTokenExpiryTime = null;
+                _unitOfWork.UserRepository.Update(user);
+                await _unitOfWork.SaveChangesAsync();
+            }
+        }
+
         Response.Cookies.Append("accessToken", "", BuildCookieOptions(DateTimeOffset.UtcNow.AddDays(-1)));
         Response.Cookies.Append("refreshToken", "", BuildCookieOptions(DateTimeOffset.UtcNow.AddDays(-1)));
         return Ok(new { message = "Logged out successfully" });

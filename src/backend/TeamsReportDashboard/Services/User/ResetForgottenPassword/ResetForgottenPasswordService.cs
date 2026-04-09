@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using System.Security.Cryptography;
+using System.Text;
+using FluentValidation;
 using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
@@ -22,7 +24,8 @@ public class ResetForgottenPasswordService : IResetForgottenPasswordService
     {
         
         Validate(dto);
-        var user = await _unitOfWork.UserRepository.GetByPasswordResetToken(dto.Token);
+        var hashedToken = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(dto.Token)));
+        var user = await _unitOfWork.UserRepository.GetByPasswordResetToken(hashedToken);
         
         // Valida o token
         if (user == null || user.PasswordResetTokenExpiryTime <= DateTime.UtcNow)

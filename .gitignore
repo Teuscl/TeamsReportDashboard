@@ -36,3 +36,7 @@ Thumbs.db
 
 # Cache
 *.cache
+
+#files
+code-review-backend.md
+code-review-backend.pdf

@@ -22,17 +22,13 @@ public class AuthService : IAuthService
     public async Task<LoginResponse> LoginAsync(LoginRequest loginRequest)
     {
         var user = await _unitOfWork.UserRepository.GetByEmailAsync(loginRequest.Email);
-        if(user == null)
-            throw new KeyNotFoundException("Invalid credentials");
-        
-        var result = _passwordService.VerifyPassword(loginRequest.Password, user.Password);
-        if (!result)
-        {
+        var isValid = user != null && user.IsActive &&
+                      _passwordService.VerifyPassword(loginRequest.Password, user.Password);
+        if (!isValid)
             throw new UnauthorizedAccessException("Invalid credentials");
-        }
         var token = _tokenService.GenerateToken(user);
         var refreshToken = _tokenService.GenerateRefreshToken();
-        var refreshTokenExpiryTime = DateTime.Now.AddDays(7);
+        var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = refreshTokenExpiryTime;
