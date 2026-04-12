@@ -1,28 +1,60 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamsReportDashboard.Backend", "TeamsReportDashboard\TeamsReportDashboard.Backend.csproj", "{07CB2266-8DB4-45CC-A040-CC89277F7485}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "teamsreportdashboard.frontend", "..\TeamsReportDashboard.Frontend\teamsreportdashboard.frontend.esproj", "{D67CBC7B-37ED-434E-B6A3-D5B483C45BF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamsReportDashboard.Tests", "TeamsReportDashboard.Tests\TeamsReportDashboard.Tests.csproj", "{D11B0016-F45F-4B11-9047-8E7E08A4F72C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TeamsReportDashboard", "TeamsReportDashboard", "{96C4055D-C64A-CF6D-907B-E532DD7E641D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Debug|x64.Build.0 = Debug|Any CPU
+		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Debug|x86.Build.0 = Debug|Any CPU
 		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Release|x64.ActiveCfg = Release|Any CPU
+		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Release|x64.Build.0 = Release|Any CPU
+		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Release|x86.ActiveCfg = Release|Any CPU
+		{07CB2266-8DB4-45CC-A040-CC89277F7485}.Release|x86.Build.0 = Release|Any CPU
 		{D67CBC7B-37ED-434E-B6A3-D5B483C45BF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D67CBC7B-37ED-434E-B6A3-D5B483C45BF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D67CBC7B-37ED-434E-B6A3-D5B483C45BF7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D67CBC7B-37ED-434E-B6A3-D5B483C45BF7}.Debug|x64.ActiveCfg = Debug|x64
+		{D67CBC7B-37ED-434E-B6A3-D5B483C45BF7}.Debug|x86.ActiveCfg = Debug|x86
 		{D67CBC7B-37ED-434E-B6A3-D5B483C45BF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D67CBC7B-37ED-434E-B6A3-D5B483C45BF7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D67CBC7B-37ED-434E-B6A3-D5B483C45BF7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D67CBC7B-37ED-434E-B6A3-D5B483C45BF7}.Release|x64.ActiveCfg = Release|x64
+		{D67CBC7B-37ED-434E-B6A3-D5B483C45BF7}.Release|x86.ActiveCfg = Release|x86
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Debug|x64.Build.0 = Debug|Any CPU
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Debug|x86.Build.0 = Debug|Any CPU
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Release|x64.ActiveCfg = Release|Any CPU
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Release|x64.Build.0 = Release|Any CPU
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Release|x86.ActiveCfg = Release|Any CPU
+		{D11B0016-F45F-4B11-9047-8E7E08A4F72C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

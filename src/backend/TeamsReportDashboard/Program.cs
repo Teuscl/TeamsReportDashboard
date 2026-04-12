@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using TeamsReportDashboard.Backend.Data;
@@ -21,8 +22,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddOptions<JwtSettings>()
+    .BindConfiguration(JwtSettings.SectionName)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+builder.Services.AddOptions<EmailSettings>()
+    .BindConfiguration(EmailSettings.SectionName)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 builder.Services.AddControllers(options =>
 {
@@ -50,13 +60,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             {
                 var accessToken = context.Request.Cookies["accessToken"];
                 if (!string.IsNullOrEmpty(accessToken))
-                {
                     context.Token = accessToken;
-                }
                 return Task.CompletedTask;
             }
         };
-        options.TokenValidationParameters = new TokenValidationParameters
+    });
+
+// Defer reading Jwt:Key until DI resolution — config sources (including test overrides) are fully loaded by then.
+// JwtSettings.ValidateOnStart() still provides fail-fast for missing/invalid key in production.
+builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
+    .Configure<IOptions<JwtSettings>>((jwtBearerOptions, jwtSettings) =>
+    {
+        jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidIssuer = "TeamsReportDashboard",
@@ -64,8 +79,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = "TeamsReportDashboard",
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Value.Key))
         };
     });
 
@@ -76,7 +90,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddHttpClient("PythonAnalysisService", client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["PythonApi:BaseUrl"]);
+    var baseUrl = builder.Configuration["PythonApi:BaseUrl"]
+        ?? throw new InvalidOperationException("PythonApi:BaseUrl is not configured.");
+    client.BaseAddress = new Uri(baseUrl);
 });
 
 // Repositories + UnitOfWork
@@ -122,3 +138,6 @@ app.MapControllers();
 
 await DbInitializer.SeedMasterUser(app);
 app.Run();
+
+// Exposes Program to WebApplicationFactory<Program> in the test project
+public partial class Program { }

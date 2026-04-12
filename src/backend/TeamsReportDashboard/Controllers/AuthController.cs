@@ -100,7 +100,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("logout")]
-    [Authorize]
+    [AllowAnonymous]
     public async Task<IActionResult> Logout()
     {
         if (Request.Cookies.TryGetValue("refreshToken", out var refreshToken))

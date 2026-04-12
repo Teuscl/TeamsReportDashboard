@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using TeamsReportDashboard.Interfaces;
+﻿using TeamsReportDashboard.Interfaces;
 using TeamsReportDashboard.Models.Auth;
 
 namespace TeamsReportDashboard.Services;
@@ -8,16 +7,13 @@ public class AuthService : IAuthService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
-    private readonly IConfiguration _configuration;
     private readonly IPasswordService _passwordService;
 
-    public AuthService(IUnitOfWork unitOfWork, ITokenService tokenService, IConfiguration configuration, IPasswordService passwordService)
+    public AuthService(IUnitOfWork unitOfWork, ITokenService tokenService, IPasswordService passwordService)
     {
         _unitOfWork = unitOfWork;
         _tokenService = tokenService;
-        _configuration = configuration;
         _passwordService = passwordService;
-        
     }
     public async Task<LoginResponse> LoginAsync(LoginRequest loginRequest)
     {
