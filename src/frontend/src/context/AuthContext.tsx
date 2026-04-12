@@ -79,30 +79,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [clearAuthState]); // Adiciona clearAuthState como dependência
 
   const login = async (credentials: { email: string; password: string }): Promise<boolean> => {
-    // ... (implementação do login como antes)
-    // No try:
-    // await axiosConfig.post('/auth/login', credentials);
-    // await checkAuthStatus(); // Isso vai popular o user e isAuthenticated
-    // return isAuthenticated; // Ou retorne true se checkAuthStatus popular o user
-
-    // No catch:
-    // clearAuthState();
-    // return false;
     setIsLoading(true);
     try {
       await axiosConfig.post('/auth/login', credentials);
-      await checkAuthStatus(); // Revalida e atualiza o estado
-      // checkAuthStatus definirá isAuthenticated, então podemos confiar nisso para o retorno
-      // Para garantir que o valor retornado reflita o estado após checkAuthStatus:
-      const success = !!(await axiosConfig.get<User>('/user/me').catch(() => null))?.data; // Verifica novamente
-      setIsLoading(false);
-      return success;
+      const response = await axiosConfig.get<User>('/user/me');
+      if (response.data) {
+        setUser(response.data);
+        setIsAuthenticated(true);
+      }
+      return true;
     } catch (error) {
-        // (F) Este CATCH é para erros vindos de (B) ou de (C) se checkAuthStatus lançar erro não tratado internamente
-        console.error('Login failed in AuthContext:', error);
-        clearAuthState(); 
-        setIsLoading(false); // (G) isLoading do AuthContext
-        return false; // (H) Indica falha no login
+      console.error('Login failed in AuthContext:', error);
+      clearAuthState();
+      return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 

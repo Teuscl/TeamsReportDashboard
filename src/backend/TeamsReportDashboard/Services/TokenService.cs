@@ -2,8 +2,9 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using TeamsReportDashboard.Backend.Models.Configuration;
 using TeamsReportDashboard.Entities;
 using TeamsReportDashboard.Interfaces;
 
@@ -11,17 +12,17 @@ namespace TeamsReportDashboard.Services;
 
 public class TokenService : ITokenService
 {
-    private readonly IConfiguration _configuration;
-    
-    public TokenService(IConfiguration configuration)
+    private readonly JwtSettings _jwtSettings;
+
+    public TokenService(IOptions<JwtSettings> jwtOptions)
     {
-        _configuration = configuration;
+        _jwtSettings = jwtOptions.Value;
     }
-    
+
     public string GenerateToken(Entities.User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = _configuration["Jwt:Key"];
+        var key = _jwtSettings.Key;
         
         var claims = new List<Claim>()
         {
@@ -35,8 +36,10 @@ public class TokenService : ITokenService
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
+            issuer: "TeamsReportDashboard",
+            audience: "TeamsReportDashboard",
             claims: claims,
-            expires: DateTime.Now.AddHours(2),
+            expires: DateTime.UtcNow.AddHours(2),
             signingCredentials: credentials
         );
 

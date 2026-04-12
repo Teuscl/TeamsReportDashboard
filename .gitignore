@@ -36,3 +36,9 @@ Thumbs.db
 
 # Cache
 *.cache
+
+#files
+code-review-backend.md
+code-review-backend.pdf
+# Verify snapshot testing — never commit received files
+*.received.*

@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
@@ -31,15 +32,15 @@ public class ForgotPasswordService : IForgotPasswordService
         if (user == null)
             return;
 
-        var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
-        user.PasswordResetToken = token;
+        var rawToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+        user.PasswordResetToken = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(rawToken)));
         user.PasswordResetTokenExpiryTime = DateTime.UtcNow.AddMinutes(30);
 
         _unitOfWork.UserRepository.Update(user);
         await _unitOfWork.SaveChangesAsync();
 
         var frontendUrl = _configuration["FrontendUrl"] ?? "http://localhost:60414";
-        var resetLink = $"{frontendUrl}/reset-password?token={HttpUtility.UrlEncode(token)}";
+        var resetLink = $"{frontendUrl}/reset-password?token={HttpUtility.UrlEncode(rawToken)}";
 
         await _emailService.SendPasswordResetEmailAsync(user.Email, user.Name, resetLink);
     }

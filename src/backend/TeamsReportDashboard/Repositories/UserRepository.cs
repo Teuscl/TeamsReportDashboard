@@ -36,11 +36,11 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<User>> GetAllAsync() => 
         await _context.Users.AsNoTracking().ToListAsync();
 
-    public async Task<User?> GetByRefreshTokenAsync(string refreshToken) => 
-        await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
-        
-    public async Task<User?> GetByPasswordResetToken(string resetToken) => 
-        await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == resetToken);
+    public async Task<User?> GetByRefreshTokenAsync(string refreshToken) =>
+        await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken && u.IsActive);
+
+    public async Task<User?> GetByPasswordResetToken(string resetToken) =>
+        await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == resetToken && u.IsActive);
 
     public async Task<bool> ExistsAsync(int id) =>
         await _context.Users.AnyAsync(u => u.Id == id);

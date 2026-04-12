@@ -59,7 +59,8 @@ public class UserController : ControllerBase
         return Ok(await service.GetAll());
     }
 
-    [HttpPut("change-my-password")] // A rota da action permanece a mesma
+    [HttpPut("change-my-password")]
+    [Authorize]
     public async Task<IActionResult> ChangeMyPassword(
         [FromServices] IChangeMyPasswordService service,
         [FromBody] ChangeMyPasswordDto changeMyPasswordDto) 
@@ -94,6 +95,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("me")]
+    [Authorize]
     public async Task<IActionResult> GetLoggedUser([FromServices] IGetUsersService service)
     {
         var userIdClaim = User.FindFirst("id");

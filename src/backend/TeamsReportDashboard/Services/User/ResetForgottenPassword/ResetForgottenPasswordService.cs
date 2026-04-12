@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using System.Security.Cryptography;
+using System.Text;
+using FluentValidation;
 using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
@@ -22,18 +24,20 @@ public class ResetForgottenPasswordService : IResetForgottenPasswordService
     {
         
         Validate(dto);
-        var user = await _unitOfWork.UserRepository.GetByPasswordResetToken(dto.Token);
+        var hashedToken = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(dto.Token)));
+        var user = await _unitOfWork.UserRepository.GetByPasswordResetToken(hashedToken);
         
-        // Valida o token
         if (user == null || user.PasswordResetTokenExpiryTime <= DateTime.UtcNow)
-        {
-            throw new ArgumentException("Token inválido ou expirado.");
-        }
-        
+            throw new ErrorOnValidationException(["Token inválido ou expirado."]);
+
         user.Password = _passwordService.HashPassword(dto.NewPassword);
-        
+
         user.PasswordResetToken = null;
         user.PasswordResetTokenExpiryTime = null;
+
+        // Invalida sessões existentes após troca de senha
+        user.RefreshToken = null;
+        user.RefreshTokenExpiryTime = null;
         
         _unitOfWork.UserRepository.Update(user);
         await _unitOfWork.SaveChangesAsync();
