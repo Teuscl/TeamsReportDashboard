@@ -30,8 +30,8 @@ public class DashboardService : IDashboardService
         var reportsWithResponseTimeQuery = _unitOfWork.ReportRepository.GetAll().Where(r => r.FirstResponseTime > TimeSpan.Zero);
         if (await reportsWithResponseTimeQuery.AnyAsync())
         {
-            var allSecondsList = await reportsWithResponseTimeQuery.Select(r => r.FirstResponseTime.TotalSeconds).ToListAsync();
-            var averageSeconds = allSecondsList.Average();
+            var allTimeSpans = await reportsWithResponseTimeQuery.Select(r => r.FirstResponseTime).ToListAsync();
+            var averageSeconds = allTimeSpans.Average(ts => ts.TotalSeconds);
             var averageTimeSpan = TimeSpan.FromSeconds(averageSeconds);
             tempoMedioFormatado = $"{(int)averageTimeSpan.TotalHours:00}:{averageTimeSpan.Minutes:00}:{averageTimeSpan.Seconds:00}";
         }
