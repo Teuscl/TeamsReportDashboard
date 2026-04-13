@@ -1,6 +1,6 @@
-﻿namespace TeamsReportDashboard.Backend.Services.Department.Delete;
+namespace TeamsReportDashboard.Backend.Services.Department.Delete;
 
 public interface IDeleteDepartmentService
 {
-    Task Execute(int id);
+    Task Execute(Guid id);
 }

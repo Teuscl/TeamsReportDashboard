@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using TeamsReportDashboard.Backend.Models.Requester;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
@@ -15,7 +15,7 @@ public class UpdateRequesterService : IUpdateRequesterService
         _unitOfWork = unitOfWork;
         _validator = validator;
     }
-    public async Task Execute(int id, UpdateRequesterDto dto)
+    public async Task Execute(Guid id, UpdateRequesterDto dto)
     {
         var requester = await _unitOfWork.RequesterRepository.GetRequesterAsync(id);
         if (requester == null)

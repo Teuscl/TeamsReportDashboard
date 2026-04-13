@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
@@ -18,7 +18,7 @@ public class ResetPasswordService : IResetPasswordService
         _passwordService = passwordService;
         _validator = validator;
     }
-    public async Task Execute(int userId, ResetPasswordDto resetPasswordDto)
+    public async Task Execute(Guid userId, ResetPasswordDto resetPasswordDto)
     {
         var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
         if (user == null)

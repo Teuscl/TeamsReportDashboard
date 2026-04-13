@@ -1,4 +1,4 @@
-﻿using TeamsReportDashboard.Interfaces;
+using TeamsReportDashboard.Interfaces;
 
 namespace TeamsReportDashboard.Services.User.Delete;
 
@@ -12,7 +12,7 @@ public class DeleteUserService : IDeleteUserService
         _unitOfWork = unitOfWork;
         _configuration = configuration;
     }
-    public async Task Execute(int userId)
+    public async Task Execute(Guid userId)
     {
         var userToDelete = await _unitOfWork.UserRepository.GetByIdAsync(userId);
         if (userToDelete == null)

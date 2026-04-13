@@ -1,4 +1,4 @@
-﻿using TeamsReportDashboard.Backend.Models.Requester;
+using TeamsReportDashboard.Backend.Models.Requester;
 using TeamsReportDashboard.Interfaces;
 
 namespace TeamsReportDashboard.Backend.Services.Requester.Read;
@@ -28,7 +28,7 @@ public class GetRequestersService : IGetRequestersService
         });
     }
 
-    public async Task<RequesterDto?> Get(int id)
+    public async Task<RequesterDto?> Get(Guid id)
     {
         var requester = await _unitOfWork.RequesterRepository.GetRequesterAsync(id);
         if (requester == null) return null;

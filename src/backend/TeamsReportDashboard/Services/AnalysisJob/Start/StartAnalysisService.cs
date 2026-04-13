@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using TeamsReportDashboard.Backend.Entities.Enums;
 using TeamsReportDashboard.Backend.Models.Job;
 using TeamsReportDashboard.Backend.Models.PythonApiDto;
@@ -19,7 +19,7 @@ public class StartAnalysisService : IStartAnalysisService
         _validator = validator;
         _httpClientFactory = httpClientFactory;
     }
-    public async Task<Guid> ExecuteAsync(StartJobAnalysisDto dto)
+    public async Task<Guid> ExecuteAsync(StartJobAnalysisDto dto, Guid userId)
     {
         await Validate(dto);
         
@@ -64,11 +64,11 @@ public class StartAnalysisService : IStartAnalysisService
 
             var newJob = new Entities.AnalysisJob
             {
-                Id = Guid.NewGuid(),
                 Name = dto.Name,
                 PythonBatchId = startResponse.BatchId,
                 Status = JobStatus.Pending,
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
+                UserId = userId,
             };
             
             await _unitOfWork.AnalysisJobRepository.AddAsync(newJob);

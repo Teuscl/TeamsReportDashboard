@@ -1,4 +1,4 @@
-﻿using TeamsReportDashboard.Backend.Models.ReportDto;
+using TeamsReportDashboard.Backend.Models.ReportDto;
 using TeamsReportDashboard.Interfaces;
 
 namespace TeamsReportDashboard.Backend.Services.Report.Read;
@@ -31,7 +31,7 @@ public class GetReportService : IGetReportService
         });
     }
 
-    public async Task<ReportDto> Get(int id)
+    public async Task<ReportDto> Get(Guid id)
     {
         var report = await _unitOfWork.ReportRepository.GetReportAsync(id);
         if (report == null)

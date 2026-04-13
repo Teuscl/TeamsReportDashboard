@@ -1,9 +1,9 @@
-﻿namespace TeamsReportDashboard.Backend.Models.ReportDto;
+namespace TeamsReportDashboard.Backend.Models.ReportDto;
 
 public class ReportDto
 {
-    public int Id { get; set; }
-    public int RequesterId { get; set; }
+    public Guid Id { get; set; }
+    public Guid RequesterId { get; set; }
     public string? RequesterName { get; set; } // Propriedade achatada
     public string? RequesterEmail { get; set; } // Propriedade achatada
     public string? TechnicianName { get; set; }

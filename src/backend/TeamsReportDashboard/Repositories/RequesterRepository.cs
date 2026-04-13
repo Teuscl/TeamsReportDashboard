@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Backend.Interfaces;
@@ -21,10 +21,9 @@ public class RequesterRepository : IRequesterRepository
             .AsNoTracking()
             .ToListAsync();
 
-    public async Task<Requester?> GetRequesterAsync(int id) => 
+    public async Task<Requester?> GetRequesterAsync(Guid id) => 
         await _context.Requesters
             .Include(r => r.Department) 
-            .AsNoTracking()
             .FirstOrDefaultAsync(r => r.Id == id);
 
     public async Task CreateRequesterAsync(Requester requester) => 
@@ -36,29 +35,19 @@ public class RequesterRepository : IRequesterRepository
         _context.Requesters.Update(requester);
     }
 
-    public async Task DeleteRequesterAsync(int id)
+    public async Task DeleteRequesterAsync(Guid id)
     {
-        var requester = await _context.Requesters.FindAsync(id);
-        if (requester != null)
-        {
-            _context.Requesters.Remove(requester);
-        }
+        await _context.Requesters.Where(r => r.Id == id).ExecuteDeleteAsync();
     }
 
-    public async Task<bool> ExistsAsync(int id) => 
+    public async Task<bool> ExistsAsync(Guid id) => 
         await _context.Requesters.AnyAsync(r => r.Id == id);
 
     
     public async Task<Requester?> GetByEmailAsync(string email)
     {
-        // A forma antiga e não traduzível:
-        // return await _context.Requesters
-        //     .FirstOrDefaultAsync(r => String.Equals(r.Email, email, StringComparison.InvariantCultureIgnoreCase));
-
-        // 👇 A FORMA CORRETA E TRADUZÍVEL 👇
-        // Converte tanto o email do banco quanto o email do parâmetro para maiúsculas antes de comparar.
         return await _context.Requesters
-            .FirstOrDefaultAsync(r => r.Email.ToUpper() == email.ToUpper());
+            .FirstOrDefaultAsync(r => EF.Functions.ILike(r.Email, email));
     }
     
     public async Task<int> CountAsync()

@@ -16,7 +16,7 @@ public class UpdateMyProfileService : IUpdateMyProfileService{
         _validator = validator;
     }
 
-    public async Task Execute(int userId, UpdateMyProfileDto dto){
+    public async Task Execute(Guid userId, UpdateMyProfileDto dto){
         var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
         if (user == null)
             throw new ErrorOnValidationException(new List<string> { "User not found" });

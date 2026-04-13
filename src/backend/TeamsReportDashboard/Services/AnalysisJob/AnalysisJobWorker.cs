@@ -1,4 +1,4 @@
-﻿using TeamsReportDashboard.Backend.Entities.Enums;
+using TeamsReportDashboard.Backend.Entities.Enums;
 using TeamsReportDashboard.Backend.Services.AnalysisJob.JobSynchronization;
 using TeamsReportDashboard.Interfaces;
 
@@ -23,7 +23,6 @@ public class AnalysisJobWorker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
 
             using var scope = _scopeFactory.CreateScope();
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
@@ -33,14 +32,20 @@ public class AnalysisJobWorker : BackgroundService
                 .GetPendingJobsAsync(stoppingToken);
 
             if (!jobsToProcess.Any())
+            {
+                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
                 continue;
+            }
 
             _logger.LogInformation("Travando {Count} job(s) para processamento.", jobsToProcess.Count);
-            jobsToProcess.ForEach(job => job.Status = JobStatus.Processing);
-            await unitOfWork.SaveChangesAsync(stoppingToken);
+            
+            // ExecuteUpdateAsync ensures atomic update of status without race conditions on concurrency conflicts (EF Core 7+)
+            await unitOfWork.AnalysisJobRepository.UpdateJobsStatusAtomicAsync(jobsToProcess.Select(j => j.Id), JobStatus.Processing, stoppingToken);
 
             foreach (var job in jobsToProcess)
             {
+                job.Status = JobStatus.Processing; // update in memory for the orchestrator below
+                
                 try
                 {
                     await orchestrator.SyncAndProcessJobResultAsync(job, stoppingToken);

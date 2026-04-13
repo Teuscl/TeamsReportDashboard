@@ -27,21 +27,18 @@ const UsersPage: React.FC = () => {
   
   const [modalMode, setModalMode] = useState<'create' | 'edit' | null>(null);
   const [userForModal, setUserForModal] = useState<User | null>(null);
-  const [dataLoading, setDataLoading] = useState(true);
+
 
   const [userToResetPassword, setUserToResetPassword] = useState<User | null>(null);
   const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
 
   const fetchUsers = useCallback(async () => {
-    setDataLoading(true);
     try {
       const data = await getUsers();
       setUsers(data);
     } catch (error) {
       console.error('Erro ao buscar usuários:', error);
       toast.error("Erro ao buscar usuários. Verifique o console para detalhes.");
-    } finally {
-      setDataLoading(false);
     }
   }, []);
 
@@ -54,7 +51,7 @@ const UsersPage: React.FC = () => {
     }
   }, [authIsLoading, currentUser, fetchUsers]);
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     if (!currentUser) return;
     if (id === currentUser.id) {
       toast.warning("Você não pode excluir a si mesmo.");
@@ -164,7 +161,7 @@ const UsersPage: React.FC = () => {
       cell: ({ row }) => {
         const userRowData = row.original;
         // ✨ MELHORIA: Usa variável de ambiente para o e-mail protegido.
-        const protectedUserEmail = 'helpdesk@pecege.com' || '';
+        const protectedUserEmail = 'helpdesk@pecege.com';
         
         // ✨ CORREÇÃO: A comparação agora é robusta (ignora maiúsculas/minúsculas).
         const isProtected = userRowData.email.toLowerCase() === protectedUserEmail.toLowerCase();
@@ -227,8 +224,6 @@ const UsersPage: React.FC = () => {
       <DataTable
         columns={columns}
         data={users}
-        // ✨ MELHORIA: Passa o estado de loading para a DataTable para um melhor feedback de UX.
-        isLoading={dataLoading} 
         filterColumnId="email"
         filterPlaceholder="Filtrar por email do usuário..."
       />

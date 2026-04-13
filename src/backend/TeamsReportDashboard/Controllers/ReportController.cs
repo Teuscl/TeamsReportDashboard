@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -46,7 +46,7 @@ namespace TeamsReportDashboard.Backend.Controllers
         [Authorize]
         public async Task<ActionResult<ReportDto>> GetReportById( 
             [FromServices] IGetReportService service,
-            int id)
+            Guid id)
         {
             var report = await service.Get(id);
             if (report == null)
@@ -61,7 +61,7 @@ namespace TeamsReportDashboard.Backend.Controllers
         [Authorize(Roles = "Admin, Master")]
         public async Task<IActionResult> UpdateReport(
             [FromServices] TeamsReportDashboard.Backend.Services.Report.Update.IUpdateReportService service, // Usando o namespace completo para clareza
-            int id,
+            Guid id,
             [FromBody] UpdateReportDto updateReportDto)
         {
             if (!ModelState.IsValid)
@@ -79,7 +79,7 @@ namespace TeamsReportDashboard.Backend.Controllers
         [Authorize(Roles = "Admin, Master")]
         public async Task<IActionResult> DeleteReport(
             [FromServices] IDeleteReportService service,
-            int id)
+            Guid id)
         {
             // O serviço Execute não retorna valor, mas pode lançar exceções (ex: NotFoundException)
             await service.Execute(id);

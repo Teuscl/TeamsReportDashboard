@@ -1,4 +1,4 @@
-﻿using TeamsReportDashboard.Backend.Models.UserDto;
+using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Interfaces;
 
 namespace TeamsReportDashboard.Services.User.Read;
@@ -18,7 +18,7 @@ public class GetUsersService : IGetUsersService
         return users.Select(u => new UserDto(u.Id, u.Name, u.Email, u.Role, u.IsActive));
     }
 
-    public async Task<UserDto> Get(int id)
+    public async Task<UserDto> Get(Guid id)
     {
         var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
         if (user == null)

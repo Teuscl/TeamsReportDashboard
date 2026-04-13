@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using TeamsReportDashboard.Backend.Models.UserDto;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
@@ -20,23 +20,22 @@ public class UpdateUserService : IUpdateUserService
 
     public async Task Execute(UpdateUserDto updateUserDto)
     {
-        await Validate(updateUserDto);
-        
         var user = await _unitOfWork.UserRepository.GetByIdAsync(updateUserDto.Id);
+        await Validate(updateUserDto, user);
+        
         
         user.Name = updateUserDto.Name;
         user.Email = updateUserDto.Email;
         user.Role = updateUserDto.Role;
-        user.UpdatedAt = DateTime.Now;
+        user.UpdatedAt = DateTime.UtcNow;
         user.IsActive = updateUserDto.IsActive;
         _unitOfWork.UserRepository.Update(user);
         await _unitOfWork.SaveChangesAsync();
 
     }
 
-    private async Task Validate(UpdateUserDto updateUserDto)
+    private async Task Validate(UpdateUserDto updateUserDto, TeamsReportDashboard.Entities.User user)
     {
-        var user = await _unitOfWork.UserRepository.GetByIdAsync(updateUserDto.Id);
         if(user == null)
              throw new ErrorOnValidationException(new List<string>{"User not found"});
         var result = await _validator.ValidateAsync(updateUserDto);

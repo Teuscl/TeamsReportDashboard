@@ -12,8 +12,8 @@ using TeamsReportDashboard.Backend.Data;
 namespace TeamsReportDashboard.Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260407135211_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260413175047_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,9 @@ namespace TeamsReportDashboard.Backend.Migrations
                     b.Property<string>("ResultData")
                         .HasColumnType("text");
 
+                    b.Property<int>("RetryCount")
+                        .HasColumnType("integer");
+
                     b.Property<uint>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -61,18 +64,21 @@ namespace TeamsReportDashboard.Backend.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("AnalysisJobs");
                 });
 
             modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.Department", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
@@ -92,11 +98,9 @@ namespace TeamsReportDashboard.Backend.Migrations
 
             modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.Report", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("AnalysisJobId")
                         .HasColumnType("uuid");
@@ -123,8 +127,8 @@ namespace TeamsReportDashboard.Backend.Migrations
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("RequesterId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("RequesterId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("TechnicianName")
                         .HasMaxLength(50)
@@ -144,17 +148,15 @@ namespace TeamsReportDashboard.Backend.Migrations
 
             modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.Requester", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("DepartmentId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -181,11 +183,9 @@ namespace TeamsReportDashboard.Backend.Migrations
 
             modelBuilder.Entity("TeamsReportDashboard.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
@@ -232,6 +232,17 @@ namespace TeamsReportDashboard.Backend.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.AnalysisJob", b =>
+                {
+                    b.HasOne("TeamsReportDashboard.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.Report", b =>

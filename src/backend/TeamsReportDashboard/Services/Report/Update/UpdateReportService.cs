@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentValidation;
 using TeamsReportDashboard.Backend.Models.ReportDto;
 using TeamsReportDashboard.Backend.Services.User.Update;
@@ -25,7 +25,7 @@ public class UpdateReportService : IUpdateReportService // Certifique-se que est
         _mapper = mapper;
     }
 
-    public async Task Execute(int id, UpdateReportDto updateReportDto)
+    public async Task Execute(Guid id, UpdateReportDto updateReportDto)
     {
         
         var report = await Validate(id, updateReportDto);
@@ -51,7 +51,7 @@ public class UpdateReportService : IUpdateReportService // Certifique-se que est
     }
 
     // Renomeado para maior clareza e corrigido para retornar o Report
-    private async Task<Entities.Report> Validate(int id, UpdateReportDto updateReportDto)
+    private async Task<Entities.Report> Validate(Guid id, UpdateReportDto updateReportDto)
     {
         // Valida o DTO primeiro
         var validationResult = await _validator.ValidateAsync(updateReportDto);

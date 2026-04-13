@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamsReportDashboard.Backend.Models.UserDto;
@@ -41,9 +41,11 @@ public class UserController : ControllerBase
     [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Delete(
         [FromServices]IDeleteUserService service,
-        int id)
+        Guid id)
     {
-        var currentUser = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+        var currentUserStr = User.FindFirst("id")?.Value;
+        if (!Guid.TryParse(currentUserStr, out var currentUser))
+            return Unauthorized();
         if (currentUser == id)
         {
             return BadRequest(new { message = "You cannot delete your own account." });
@@ -66,32 +68,26 @@ public class UserController : ControllerBase
         [FromServices] IChangeMyPasswordService service,
         [FromBody] ChangeMyPasswordDto changeMyPasswordDto) 
     {
-        // Obter o ID do usuário logado a partir das claims do token JWT
         var userIdString = User.FindFirst("id")?.Value; 
-        // Ou use ClaimTypes.NameIdentifier se você configurou o JWT para usar essa claim como ID
-        // var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
         {
-            // Isso não deveria acontecer se o usuário estiver autenticado e o token contiver a claim "id"
             return Unauthorized(new { message = "Não foi possível identificar o usuário autenticado." });
         }
 
-        // Agora use o userId obtido do token para chamar o serviço
         await service.Execute(userId, changeMyPasswordDto);
         return NoContent();
     }
     
     
     [HttpPut("change-password")] 
-    [Authorize(Roles = "Admin, Master")] // Você precisará garantir que esta rota seja protegida para Masters
+    [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> ChangePassword(
         [FromServices] IResetPasswordService service, 
         [FromBody] ResetPasswordDto resetPasswordDto,   
-        int id) 
+        Guid id) 
     {
-        Console.WriteLine(id);
-        await service.Execute(id, resetPasswordDto); // O serviço lida com a lógica
+        await service.Execute(id, resetPasswordDto);
         return NoContent();
     }
 
@@ -102,7 +98,8 @@ public class UserController : ControllerBase
         var userIdClaim = User.FindFirst("id");
         if (userIdClaim == null) return Unauthorized();
 
-        var userId = int.Parse(userIdClaim.Value);
+        if (!Guid.TryParse(userIdClaim.Value, out var userId))
+            return Unauthorized();
         var user = await service.Get(userId);
         return Ok(user);
     }
@@ -114,7 +111,7 @@ public class UserController : ControllerBase
         [FromBody] UpdateMyProfileDto updateMyProfileDto) 
     {
         var userIdClaim = User.FindFirst("id")?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
         {
             return Unauthorized(new { message = "Não foi possível identificar o usuário autenticado." });
         }

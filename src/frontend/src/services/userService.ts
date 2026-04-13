@@ -16,7 +16,7 @@ export interface CreateUserPayload {
 }
 
 export interface UpdateUserPayload {
-  id: number; 
+  id: string;
   name: string;
   email: string;
   role: RoleEnum;
@@ -59,7 +59,22 @@ export const createUser = async (payload: CreateUserPayload): Promise<User> => {
 
 export const updateUser = async (payload: UpdateUserPayload): Promise<User> => {
   await AxiosConfig.put('/user', payload);
-  return payload as User;
+  return payload as User; // Retorna o payload atualizado como User
+};
+
+export const deleteUser = async (id: string): Promise<void> => {
+  await AxiosConfig.delete('/user', {
+    params: { id },
+  });
+};
+export const changeMyPassword = async (payload: ChangeMyPasswordPayload): Promise<void> => {
+  await axiosConfig.put(`/user/change-my-password`, payload);
+};
+
+export const adminChangeUserPassword = async (userId: string, payload: AdminChangePasswordPayload): Promise<void> => {
+  // Assumindo que o backend espera o ID como query param para o endpoint "change-password"
+  // Se o controller for UserController (rota /user), a URL será /user/change-password
+  await axiosConfig.put(`/user/change-password?id=${userId}`, payload);
 };
 
 export interface UpdateMyProfilePayload {
@@ -68,20 +83,5 @@ export interface UpdateMyProfilePayload {
 }
 
 export const updateMyProfile = async (payload: UpdateMyProfilePayload): Promise<void> => {
-  await axiosConfig.put('/user/my-profile', payload);
-};
-
-export const deleteUser = async (id: number): Promise<void> => {
-  await AxiosConfig.delete('/user', {
-    params: { id },
-  });  
-};
-export const changeMyPassword = async (payload: ChangeMyPasswordPayload): Promise<void> => {
-  await axiosConfig.put(`/user/change-my-password`, payload);
-};
-
-export const adminChangeUserPassword = async (userId: number, payload: AdminChangePasswordPayload): Promise<void> => {
-  // Assumindo que o backend espera o ID como query param para o endpoint "change-password"
-  // Se o controller for UserController (rota /user), a URL será /user/change-password
-  await axiosConfig.put(`/user/change-password?id=${userId}`, payload);
+  await axiosConfig.put(`/user/my-profile`, payload);
 };

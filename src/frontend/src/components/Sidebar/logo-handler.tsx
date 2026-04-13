@@ -1,17 +1,4 @@
-import * as React from "react"
-import { ChevronsUpDown } from "lucide-react"
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
+
 import {
   SidebarMenu,
   SidebarMenuButton,

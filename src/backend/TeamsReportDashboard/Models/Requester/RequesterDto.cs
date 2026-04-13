@@ -1,10 +1,10 @@
-﻿namespace TeamsReportDashboard.Backend.Models.Requester;
+namespace TeamsReportDashboard.Backend.Models.Requester;
 
 public class RequesterDto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public int? DepartmentId { get; set; }
+    public Guid? DepartmentId { get; set; }
     public string? DepartmentName { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Entities;
@@ -29,10 +29,9 @@ public class ReportRepository : IReportRepository
         // Apenas retorna a "planta" da consulta, sem executá-la.
         return _context.Reports.AsNoTracking();
     }
-    public async Task<Report?> GetReportAsync(int id) =>
+    public async Task<Report?> GetReportAsync(Guid id) =>
         await _context.Reports
             .Include(r => r.Requester)
-            .AsNoTracking()
             .FirstOrDefaultAsync(r => r.Id == id);
 
     public async Task CreateReportAsync(Report report)
@@ -47,13 +46,9 @@ public class ReportRepository : IReportRepository
         _context.Reports.Update(report);
     }
 
-    public async Task DeleteReportAsync(int id)
+    public async Task DeleteReportAsync(Guid id)
     {
-        var report = await _context.Reports.FindAsync(id);
-        if (report != null)
-        {
-            _context.Reports.Remove(report);
-        }
+        await _context.Reports.Where(r => r.Id == id).ExecuteDeleteAsync();
     }
     
     public async Task<int> CountAsync(Expression<Func<Report, bool>> predicate)
@@ -62,7 +57,7 @@ public class ReportRepository : IReportRepository
     }
     
     
-    public async Task<bool> HasReportsForRequesterAsync(int requesterId)
+    public async Task<bool> HasReportsForRequesterAsync(Guid requesterId)
     {
         return await _context.Reports.AnyAsync(r => r.RequesterId == requesterId);
     }

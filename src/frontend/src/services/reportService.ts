@@ -9,7 +9,7 @@ export const getReports = async (): Promise<Report[]> => {
   return response.data;
 };
 
-export const getReportById = async (id: number): Promise<Report> => {
+export const getReportById = async (id: string): Promise<Report> => {
   const response = await axiosConfig.get<Report>(`${API_URL}/${id}`);
   return response.data;
 };
@@ -26,12 +26,12 @@ export const createReport = async (payload: CreateReportPayload): Promise<Report
   // return { id: 0, ...payload, requestDate: payload.requestDate || new Date().toISOString() }; // Simulação, idealmente backend retorna o ID
 };
 
-export const updateReport = async (id: number, payload: UpdateReportPayload): Promise<void> => {
+export const updateReport = async (id: string, payload: UpdateReportPayload): Promise<void> => {
   // Seu backend retorna NoContent (204) para PATCH, então a Promise é void.
   await axiosConfig.patch(`${API_URL}/${id}`, payload);
 };
 
-export const deleteReport = async (id: number): Promise<void> => {
+export const deleteReport = async (id: string): Promise<void> => {
   // Seu backend retorna Ok com uma mensagem para DELETE, mas não precisamos do corpo aqui.
   await axiosConfig.delete(`${API_URL}/${id}`);
 };

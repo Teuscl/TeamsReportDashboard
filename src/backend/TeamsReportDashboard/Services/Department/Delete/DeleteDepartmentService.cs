@@ -1,4 +1,4 @@
-﻿using TeamsReportDashboard.Interfaces;
+using TeamsReportDashboard.Interfaces;
 
 namespace TeamsReportDashboard.Backend.Services.Department.Delete;
 
@@ -11,7 +11,7 @@ public class DeleteDepartmentService : IDeleteDepartmentService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Execute(int id)
+    public async Task Execute(Guid id)
     {
         await _unitOfWork.DepartmentRepository.DeleteDepartmentAsync(id);
         await _unitOfWork.SaveChangesAsync();

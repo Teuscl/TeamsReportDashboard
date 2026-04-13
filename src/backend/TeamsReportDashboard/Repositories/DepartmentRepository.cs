@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Backend.Interfaces;
@@ -22,7 +22,7 @@ public class DepartmentRepository : IDepartmentRepository
     public async Task<List<Department>> GetAllAsync() => await _context.Departments.OrderBy(d => d.Name).ToListAsync();
    
 
-    public async Task<Department?> GetDepartmentAsync(int id) => await _context.Departments.FirstOrDefaultAsync(x => x.Id == id);
+    public async Task<Department?> GetDepartmentAsync(Guid id) => await _context.Departments.FirstOrDefaultAsync(x => x.Id == id);
     
 
     public async Task CreateDepartmentAsync(Department department)
@@ -39,10 +39,8 @@ public class DepartmentRepository : IDepartmentRepository
         _context.Departments.Update(department);
     }
 
-    public async Task DeleteDepartmentAsync(int id)
+    public async Task DeleteDepartmentAsync(Guid id)
     {
-       var department = await _context.Departments.FirstOrDefaultAsync(x => x.Id == id);
-       if( department is not null)
-        _context.Departments.Remove(department);
+        await _context.Departments.Where(d => d.Id == id).ExecuteDeleteAsync();
     }
 }
