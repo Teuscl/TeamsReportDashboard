@@ -5,6 +5,7 @@ using TeamsReportDashboard.Backend.Services.User.ForgotPassword;
 using TeamsReportDashboard.Backend.Services.User.ResetForgottenPassword;
 using TeamsReportDashboard.Backend.Services.User.ResetPassword;
 using TeamsReportDashboard.Backend.Services.User.Update;
+using TeamsReportDashboard.Backend.Services.User.UpdateMyProfile;
 using TeamsReportDashboard.Interfaces;
 using TeamsReportDashboard.Models.Dto;
 using TeamsReportDashboard.Services;
@@ -25,6 +26,7 @@ public static class UserServiceExtensions
         services.AddScoped<IValidator<ResetPasswordDto>, ResetPasswordValidator>();
         services.AddScoped<IValidator<ForgotPasswordDto>, ForgotPasswordValidator>();
         services.AddScoped<IValidator<ResetForgottenPasswordDto>, ResetForgottenPasswordValidator>();
+        services.AddScoped<IValidator<UpdateMyProfileDto>, UpdateMyProfileValidator>();
 
         services.AddScoped<ICreateUserService, CreateUserService>();
         services.AddScoped<IPasswordService, PasswordService>();
@@ -35,6 +37,7 @@ public static class UserServiceExtensions
         services.AddScoped<IResetPasswordService, ResetPasswordService>();
         services.AddScoped<IForgotPasswordService, ForgotPasswordService>();
         services.AddScoped<IResetForgottenPasswordService, ResetForgottenPasswordService>();
+        services.AddScoped<IUpdateMyProfileService, UpdateMyProfileService>();
 
         return services;
     }

@@ -1,20 +1,18 @@
 import extract_msg
+import hashlib
 import os
 import pandas as pd
 from bs4 import BeautifulSoup
 import re
-from openai import OpenAI
-from dotenv import load_dotenv
+from openai import AsyncOpenAI
 import json
 import tempfile
 from typing import List
 
-# Carrega a chave da API do arquivo .env
-load_dotenv()
-client = OpenAI()
+from config import settings
 
-# Constante para o e-mail do Help Desk
-HELP_DESK_NORMALIZED_EMAIL = 'helpdesk@pecege.com'
+# Carrega o cliente Async (token pego via env var automaticamente)
+client = AsyncOpenAI(api_key=settings.openai_api_key)
 
 # ==============================================================================
 # PROMPT DO SISTEMA PARA ANÁLISE DE ATENDIMENTOS
@@ -224,7 +222,7 @@ Não faça:
 # SEÇÃO 1: FUNÇÕES DE HELPERS PARA LIMPEZA E NORMALIZAÇÃO DE DADOS
 # ==============================================================================
 
-def extract_and_clean_email(text_field: str) -> str or None:
+def extract_and_clean_email(text_field: str) -> str | None:
     """Extrai e limpa um único e-mail de um campo de texto."""
     if pd.isna(text_field):
         return None
@@ -261,9 +259,9 @@ def extract_and_clean_email(text_field: str) -> str or None:
     if not valid_emails_found:
         return None
 
-    if HELP_DESK_NORMALIZED_EMAIL in valid_emails_found:
-        other_emails = [e for e in valid_emails_found if e != HELP_DESK_NORMALIZED_EMAIL]
-        return other_emails[0] if other_emails else HELP_DESK_NORMALIZED_EMAIL
+    if settings.help_desk_email in valid_emails_found:
+        other_emails = [e for e in valid_emails_found if e != settings.help_desk_email]
+        return other_emails[0] if other_emails else settings.help_desk_email
     elif valid_emails_found:
         return valid_emails_found[0]
     return None
@@ -277,9 +275,9 @@ def create_normalized_chat_id(row: pd.Series) -> str:
     if isinstance(to_email, str) and 'none' in to_email.lower(): to_email = None
     if isinstance(from_email, str) and 'none' in from_email.lower(): from_email = None
 
-    if from_email == HELP_DESK_NORMALIZED_EMAIL and pd.notna(to_email):
+    if from_email == settings.help_desk_email and pd.notna(to_email):
         return to_email
-    elif pd.notna(from_email) and from_email != HELP_DESK_NORMALIZED_EMAIL:
+    elif pd.notna(from_email) and from_email != settings.help_desk_email:
         return from_email
     
     return f"unknown_chat_{row_name}" # Fallback simplificado
@@ -289,27 +287,25 @@ def create_normalized_chat_id(row: pd.Series) -> str:
 # SEÇÃO 2: FUNÇÕES PRINCIPAIS DO FLUXO DE ANÁLISE
 # ==============================================================================
 
-def process_msg_files_to_dataframe(uploaded_files: List) -> pd.DataFrame:
-    """Recebe arquivos .msg, processa e retorna um DataFrame com conversas agrupadas."""
+def process_msg_files_to_dataframe(file_paths: List[str]) -> pd.DataFrame:
+    """Recebe arquivos .msg, processa com segurança de memória e retorna um DataFrame."""
     messages_data = []
-    for uploaded_file in uploaded_files:
+    for file_path in file_paths:
         try:
-            uploaded_file.file.seek(0)
-            msg = extract_msg.Message(uploaded_file.file)
+            with extract_msg.Message(file_path) as msg:
+                msg_message_html = msg.htmlBodyPrepared
+                if msg_message_html:
+                    formatted_message_body = BeautifulSoup(msg_message_html, 'lxml').get_text(separator=' ', strip=True)
+                else:
+                    formatted_message_body = msg.body.strip() if msg.body else ""
 
-            msg_message_html = msg.htmlBodyPrepared
-            if msg_message_html:
-                formatted_message_body = BeautifulSoup(msg_message_html, 'lxml').get_text(separator=' ', strip=True)
-            else:
-                formatted_message_body = msg.body.strip() if msg.body else ""
-
-            messages_data.append({
-                'Original_From': msg.sender, 'Original_To': msg.to,
-                'Date': msg.date, 'Message_Body': formatted_message_body,
-                'Source_File': uploaded_file.filename
-            })
+                messages_data.append({
+                    'Original_From': msg.sender, 'Original_To': msg.to,
+                    'Date': msg.date, 'Message_Body': formatted_message_body,
+                    'Source_File': os.path.basename(file_path)
+                })
         except Exception as e:
-            print(f"Erro ao processar o arquivo {uploaded_file.filename}: {e}")
+            print(f"Erro ao processar o arquivo {file_path}: {e}")
             continue
 
     if not messages_data: return pd.DataFrame()
@@ -333,7 +329,7 @@ def process_msg_files_to_dataframe(uploaded_files: List) -> pd.DataFrame:
         return f"[{row['Date'].strftime('%Y-%m-%d %H:%M:%S %Z')}] {from_cleaned}: {body_cleaned}"
 
     df_sorted['FormattedMessage'] = df_sorted.apply(format_display_message, axis=1)
-    df_valid_client_chats = df_sorted[df_sorted['ChatID'].str.contains('@', na=False) & (df_sorted['ChatID'] != HELP_DESK_NORMALIZED_EMAIL)]
+    df_valid_client_chats = df_sorted[df_sorted['ChatID'].str.contains('@', na=False) & (df_sorted['ChatID'] != settings.help_desk_email)]
 
     if df_valid_client_chats.empty: return pd.DataFrame()
 
@@ -342,12 +338,16 @@ def process_msg_files_to_dataframe(uploaded_files: List) -> pd.DataFrame:
     
     return grouped_conversations
 
-def start_openai_batch_job(conversations_df: pd.DataFrame) -> str:
+async def start_openai_batch_job(conversations_df: pd.DataFrame) -> str:
     """Recebe o DataFrame de conversas, cria um trabalho em lote na OpenAI e retorna o ID."""
     tasks = []
     for index, row in conversations_df.iterrows():
+        # custom_id deve ter no máximo 64 chars (limite da OpenAI Batch API).
+        # Usamos um hash curto do email para garantir unicidade sem estourar o limite.
+        chat_hash = hashlib.sha1(row['ChatID'].encode()).hexdigest()[:12]
+        custom_id = f"task-{chat_hash}-{index}"
         task = {
-            "custom_id": f"task-{row['ChatID']}-{index}", "method": "POST", "url": "/v1/chat/completions",
+            "custom_id": custom_id, "method": "POST", "url": "/v1/chat/completions",
             "body": {
                 "model": "gpt-4o-mini", "temperature": 0.1, "response_format": {"type": "json_object"},
                 "messages": [
@@ -364,18 +364,18 @@ def start_openai_batch_job(conversations_df: pd.DataFrame) -> str:
 
     try:
         with open(tmp_file_path, "rb") as file_to_upload:
-            batch_file = client.files.create(file=file_to_upload, purpose="batch")
+            batch_file = await client.files.create(file=file_to_upload, purpose="batch")
     except Exception as e:
         raise RuntimeError(f"Erro ao enviar o arquivo .jsonl para a OpenAI: {str(e)}")
     finally:
         os.remove(tmp_file_path) 
 
-    batch_job = client.batches.create(input_file_id=batch_file.id, endpoint="/v1/chat/completions", completion_window="24h")
+    batch_job = await client.batches.create(input_file_id=batch_file.id, endpoint="/v1/chat/completions", completion_window="24h")
     return batch_job.id
 
-def get_batch_job_status_and_results(batch_id: str) -> dict:
+async def get_batch_job_status_and_results(batch_id: str) -> dict:
     """Verifica o status de um trabalho em lote. Se concluído, baixa e retorna os resultados."""
-    batch_job = client.batches.retrieve(batch_id)
+    batch_job = await client.batches.retrieve(batch_id)
     
     response = {
         "batch_id": batch_job.id, "status": batch_job.status, "created_at": batch_job.created_at,
@@ -385,7 +385,8 @@ def get_batch_job_status_and_results(batch_id: str) -> dict:
 
     if batch_job.status == "completed":
         if batch_job.output_file_id:
-            result_content = client.files.content(batch_job.output_file_id).content
+            response_file = await client.files.content(batch_job.output_file_id)
+            result_content = response_file.content
             lines = result_content.decode('utf-8').splitlines()
             results_data = []
             for line in lines:
@@ -398,7 +399,8 @@ def get_batch_job_status_and_results(batch_id: str) -> dict:
             response["results"] = results_data
         
         if batch_job.error_file_id:
-            error_content = client.files.content(batch_job.error_file_id).content
+            error_file = await client.files.content(batch_job.error_file_id)
+            error_content = error_file.content
             response["errors"] = error_content.decode('utf-8')
     
     return response

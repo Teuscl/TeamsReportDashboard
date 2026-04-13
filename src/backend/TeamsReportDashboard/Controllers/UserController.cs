@@ -9,6 +9,7 @@ using TeamsReportDashboard.Models.Dto;
 using TeamsReportDashboard.Services.User.Create;
 using TeamsReportDashboard.Services.User.Delete;
 using TeamsReportDashboard.Services.User.Read;
+using TeamsReportDashboard.Backend.Services.User.UpdateMyProfile;
 
 namespace TeamsReportDashboard.Backend.Controllers;
 [Route("[controller]")]
@@ -104,5 +105,21 @@ public class UserController : ControllerBase
         var userId = int.Parse(userIdClaim.Value);
         var user = await service.Get(userId);
         return Ok(user);
+    }
+
+    [HttpPut("my-profile")]
+    [Authorize]    
+    public async Task<IActionResult> UpdateMyProfile(
+        [FromServices] IUpdateMyProfileService service,
+        [FromBody] UpdateMyProfileDto updateMyProfileDto) 
+    {
+        var userIdClaim = User.FindFirst("id")?.Value;
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized(new { message = "Não foi possível identificar o usuário autenticado." });
+        }
+
+        await service.Execute(userId, updateMyProfileDto);
+        return NoContent();
     }
 }

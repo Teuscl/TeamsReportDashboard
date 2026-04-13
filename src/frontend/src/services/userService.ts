@@ -59,7 +59,16 @@ export const createUser = async (payload: CreateUserPayload): Promise<User> => {
 
 export const updateUser = async (payload: UpdateUserPayload): Promise<User> => {
   await AxiosConfig.put('/user', payload);
-  return payload as User; // Retorna o payload atualizado como User
+  return payload as User;
+};
+
+export interface UpdateMyProfilePayload {
+  name: string;
+  email: string;
+}
+
+export const updateMyProfile = async (payload: UpdateMyProfilePayload): Promise<void> => {
+  await axiosConfig.put('/user/my-profile', payload);
 };
 
 export const deleteUser = async (id: number): Promise<void> => {

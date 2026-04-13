@@ -13,9 +13,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 // Assumindo que updateUser e User (para o DTO) estão definidos em userService
 // e getRoleLabel em utils/role
-import { updateUser } from "@/services/userService"; // Seu serviço para atualizar o usuário
-import { User } from "@/types/User"; // Sua interface User
-import { getRoleLabel } from "@/utils/role"; // Sua função utilitária para o nome da role
+import { updateMyProfile } from "@/services/userService";
+import { getRoleLabel } from "@/utils/role";
 import { useAuth } from "@/context/AuthContext"; // 👈 Nosso AuthContext
 
 // Função para gerar iniciais (pode ser movida para um utilitário se usada em mais lugares)
@@ -58,25 +57,9 @@ const ProfilePage: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      // Crie o payload para a API de atualização.
-      // Adapte isso conforme o que seu backend espera no DTO de UpdateUser.
-      // Geralmente, para atualizar o próprio perfil, você não muda role ou isActive aqui.
-      const updatePayload: User = {
-        id: user.id, // Se seu backend /user/update precisar do ID no corpo
-        name: formData.name,
-        email: formData.email,
-        role: user.role, // Envia a role atual se o backend esperar
-        isActive: true, // Envia o status atual se o backend esperar
-      };
-      
-      // Seu serviço updateUser deve fazer a chamada PUT/PATCH para o backend
-      // Ex: await axiosConfig.put(`/user/${user.id}`, { name: formData.name, email: formData.email });
-      // Ou se o updateUser já faz isso:
-      console.log("Atualizando usuário com payload:", updatePayload);
-      await updateUser(updatePayload); // Ajuste updateUser para aceitar o payload correto
-
+      await updateMyProfile({ name: formData.name, email: formData.email });
       toast.success("Perfil atualizado com sucesso!");
-      await checkAuthStatus(); // 👈 Revalida o usuário no AuthContext para pegar as novas infos
+      await checkAuthStatus();
     } catch (error: any) {
       const message =
         error?.response?.data?.errors?.join(", ") ||
@@ -98,7 +81,7 @@ const ProfilePage: React.FC = () => {
     return <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">Usuário não encontrado.</div>;
   }
 
-  const initials = user.name[0].charAt(0).toUpperCase();
+  const initials = getInitials(user.name);
 
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-80px)] px-4 py-8">
