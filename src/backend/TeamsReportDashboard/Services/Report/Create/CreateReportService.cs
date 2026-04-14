@@ -31,7 +31,7 @@ public class CreateReportService : ICreateReportService
            {
                Name = createReportDto.RequesterName,
                Email = createReportDto.RequesterEmail,
-               CreatedAt = DateTime.Now,
+               CreatedAt = DateTime.UtcNow,
            };
            // Adicionamos ao repositório para ser salvo depois
            await _unitOfWork.RequesterRepository.CreateRequesterAsync(requester);
@@ -45,7 +45,7 @@ public class CreateReportService : ICreateReportService
            Category = createReportDto.Category,
            TechnicianName = createReportDto.TechnicianName,
            AverageHandlingTime = createReportDto.AverageHandlingTime,
-           CreatedAt = DateTime.Now,
+           CreatedAt = DateTime.UtcNow,
            RequestDate = createReportDto.RequestDate,
            FirstResponseTime = createReportDto.FirstResponseTime,
            AnalysisJobId = createReportDto.AnalysisJobId 

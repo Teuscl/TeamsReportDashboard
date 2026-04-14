@@ -32,7 +32,7 @@ public class CreateRequesterService : ICreateRequesterService
             Name = dto.Name,
             Email = dto.Email,
             DepartmentId = dto.DepartmentId,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
         
         await _unitOfWork.RequesterRepository.CreateRequesterAsync(requester);

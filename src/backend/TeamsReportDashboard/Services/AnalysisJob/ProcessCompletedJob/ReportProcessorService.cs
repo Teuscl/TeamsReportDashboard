@@ -134,32 +134,25 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
                             atendimento.EmailSolicitante, job.Id);
                     }
                 }
-                // Se chegamos até aqui, o loop terminou.
-                // Agora vamos comitar todas as inserções de relatórios de uma vez.
-                job.ErrorMessage = failureCount > 0 
-                    ? $"Processamento concluído com {failureCount} falhas de um total de {allAtendimentos.Count}." 
+
+                job.ErrorMessage = failureCount > 0
+                    ? $"Processamento concluído com {failureCount} falhas de um total de {allAtendimentos.Count}."
                     : null;
 
+                // Job e relatórios são salvos e commitados atomicamente na mesma transação.
                 _unitOfWork.AnalysisJobRepository.Update(job);
-
-                // ✅ PASSO CRÍTICO: ADICIONAR O COMMIT AQUI!
                 await _unitOfWork.CommitAsync();
 
                 _logger.LogInformation($"Job {job.Id}: Transação comitada com sucesso. {successCount} relatórios salvos.");
-
             }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackAsync();
-                
+
                 job.ErrorMessage = "Falha no processamento em lote. Nenhum relatório foi salvo. Verifique os logs.";
-            }
-            finally
-            {
-                // PASSO 4 (FINALLY): Garante que o status do Job seja sempre atualizado.
-                // Esta operação ocorre fora da transação principal, salvando o resultado final do job.
-                _logger.LogInformation("Atualizando status final do Job {JobId}.", job.Id);
-                // Usamos o novo repositório para atualizar o job.
+                _logger.LogError(ex, "Falha crítica no processamento do job {JobId}. Transação revertida.", job.Id);
+
+                // Salva o status de erro do job fora da transação revertida.
                 _unitOfWork.AnalysisJobRepository.Update(job);
                 await _unitOfWork.SaveChangesAsync();
             }

@@ -31,7 +31,7 @@ public class UpdateDepartmentService : IUpdateDepartmentService
 
         // 3. Atualizar as propriedades
         department.Name = departmentDto.Name;
-        department.UpdatedAt = DateTime.Now;
+        department.UpdatedAt = DateTime.UtcNow;
 
         _unitOfWork.DepartmentRepository.UpdateDepartment(department);
         // 4. Salvar as mudanças no banco de dados

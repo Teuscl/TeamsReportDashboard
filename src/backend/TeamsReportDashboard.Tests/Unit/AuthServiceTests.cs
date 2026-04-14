@@ -19,10 +19,10 @@ public class AuthServiceTests
         _sut = new AuthService(_uow, _tokenService, _passwordService);
     }
 
-    private User BuildActiveUser(int id = 1, string email = "user@example.com", string password = "password123") =>
+    private User BuildActiveUser(Guid? id = null, string email = "user@example.com", string password = "password123") =>
         new()
         {
-            Id = id,
+            Id = id ?? Guid.NewGuid(),
             Name = "Test User",
             Email = email,
             Password = _passwordService.HashPassword(password),

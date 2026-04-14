@@ -89,7 +89,7 @@ public class BulkCreateRequesterService : IBulkCreateRequesterService
             var validationResult = await _validator.ValidateAsync(createDto);
             if (!validationResult.IsValid)
             {
-                result.Failures.Add(new BulkInsertFailure { RowNumber = rowNumber, ErrorMessage = validationResult.Errors.First().ErrorMessage, OffendingLine = $"{record.Name};{record.Email}" });
+                result.Failures.Add(new BulkInsertFailure { RowNumber = rowNumber, ErrorMessage = string.Join("; ", validationResult.Errors.Select(e => e.ErrorMessage)), OffendingLine = $"{record.Name};{record.Email}" });
                 continue;
             }
             

@@ -24,7 +24,7 @@ public class UpdateReportValidator : AbstractValidator<UpdateReportDto>
         // Para RequestDate: se fornecida, não pode ser no futuro.
         // A validação de "NotEmpty" implícita já é coberta por DateTime? tendo um valor.
         RuleFor(x => x.RequestDate)
-            .LessThanOrEqualTo(DateTime.Now)
+            .LessThanOrEqualTo(_ => DateTime.UtcNow)
             .WithMessage("A data da solicitação não pode ser no futuro.")
             .When(x => x.RequestDate.HasValue);
 

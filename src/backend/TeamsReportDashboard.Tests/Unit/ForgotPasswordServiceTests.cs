@@ -28,7 +28,7 @@ public class ForgotPasswordServiceTests
 
     private User BuildActiveUser(string email = "user@example.com") => new()
     {
-        Id = 1,
+        Id = Guid.NewGuid(),
         Name = "Test User",
         Email = email,
         Password = "hashed:password",

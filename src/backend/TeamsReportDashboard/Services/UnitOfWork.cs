@@ -46,6 +46,9 @@ namespace TeamsReportDashboard.Services
 
         public async Task CommitAsync()
         {
+            if (_transaction == null)
+                throw new InvalidOperationException("Nenhuma transação ativa. Chame BeginTransactionAsync antes de CommitAsync.");
+
             try
             {
                 await _context.SaveChangesAsync(); // Salva as mudanças

@@ -21,9 +21,11 @@ public class TokenServiceTests
         _sut = new TokenService(Options.Create(new JwtSettings { Key = TestKey }));
     }
 
-    private static User BuildUser(int id = 1, UserRole role = UserRole.Admin) => new()
+    private static readonly Guid TestUserId = Guid.Parse("00000000-0000-0000-0000-000000000042");
+
+    private static User BuildUser(Guid? id = null, UserRole role = UserRole.Admin) => new()
     {
-        Id = id,
+        Id = id ?? TestUserId,
         Name = "Test User",
         Email = "test@example.com",
         Role = role,
@@ -45,10 +47,10 @@ public class TokenServiceTests
     [Fact]
     public void GenerateToken_ContainsUserIdClaim()
     {
-        var user = BuildUser(id: 42);
+        var user = BuildUser(id: TestUserId);
         var parsed = ParseToken(_sut.GenerateToken(user));
 
-        parsed.Claims.Should().Contain(c => c.Type == "id" && c.Value == "42");
+        parsed.Claims.Should().Contain(c => c.Type == "id" && c.Value == TestUserId.ToString());
     }
 
     [Fact]

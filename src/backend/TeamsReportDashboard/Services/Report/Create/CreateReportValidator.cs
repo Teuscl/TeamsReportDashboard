@@ -26,7 +26,7 @@ public class CreateReportValidator : AbstractValidator<CreateReportDto>
 
         RuleFor(x => x.RequestDate)
             .NotEmpty().WithMessage("A data da solicitação é obrigatória.")
-            .LessThanOrEqualTo(DateTime.Now).When(x => x.RequestDate != default(DateTime)) // Sugestão: não pode ser no futuro
+            .LessThanOrEqualTo(_ => DateTime.UtcNow).When(x => x.RequestDate != default(DateTime)) // Sugestão: não pode ser no futuro
             .WithMessage("A data da solicitação não pode ser no futuro.");
 
         RuleFor(x => x.ReportedProblem)

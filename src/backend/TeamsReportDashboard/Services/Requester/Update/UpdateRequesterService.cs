@@ -23,10 +23,12 @@ public class UpdateRequesterService : IUpdateRequesterService
             throw new KeyNotFoundException("Solicitante não encontrado.");
         }
 
+        await Validate(dto);
+
         requester.Name = dto.Name;
         requester.Email = dto.Email;
         requester.DepartmentId = dto.DepartmentId;
-        requester.UpdatedAt = DateTime.Now;
+        requester.UpdatedAt = DateTime.UtcNow;
         
         _unitOfWork.RequesterRepository.UpdateRequester(requester);
         await _unitOfWork.SaveChangesAsync();
