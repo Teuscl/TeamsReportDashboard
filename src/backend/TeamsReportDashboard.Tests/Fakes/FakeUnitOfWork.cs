@@ -6,13 +6,18 @@ namespace TeamsReportDashboard.Tests.Fakes;
 public class FakeUnitOfWork : IUnitOfWork
 {
     public FakeUserRepository UserRepo { get; } = new();
-    public IUserRepository UserRepository => UserRepo;
+    public FakeRequesterRepository RequesterRepo { get; } = new();
+    public FakeDepartmentRepository DepartmentRepo { get; } = new();
 
-    // Other repositories not needed for auth tests
-    public IReportRepository ReportRepository => throw new NotSupportedException("Not needed in auth tests.");
-    public IRequesterRepository RequesterRepository => throw new NotSupportedException("Not needed in auth tests.");
-    public IDepartmentRepository DepartmentRepository => throw new NotSupportedException("Not needed in auth tests.");
-    public IAnalysisJobRepository AnalysisJobRepository => throw new NotSupportedException("Not needed in auth tests.");
+    public IUserRepository UserRepository => UserRepo;
+    public IRequesterRepository RequesterRepository => RequesterRepo;
+    public IDepartmentRepository DepartmentRepository => DepartmentRepo;
+
+    public FakeReportRepository ReportRepo { get; } = new();
+    public IReportRepository ReportRepository => ReportRepo;
+
+    // Repository not needed for unit tests
+    public IAnalysisJobRepository AnalysisJobRepository => throw new NotSupportedException("Not needed in unit tests.");
 
     public int SaveChangesCallCount { get; private set; }
 
