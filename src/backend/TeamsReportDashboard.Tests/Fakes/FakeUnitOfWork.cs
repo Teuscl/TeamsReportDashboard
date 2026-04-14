@@ -19,6 +19,9 @@ public class FakeUnitOfWork : IUnitOfWork
     // Repository not needed for unit tests
     public IAnalysisJobRepository AnalysisJobRepository => throw new NotSupportedException("Not needed in unit tests.");
 
+    public FakeSystemPromptRepository SystemPromptRepo { get; } = new();
+    public ISystemPromptRepository SystemPromptRepository => SystemPromptRepo;
+
     public int SaveChangesCallCount { get; private set; }
 
     public Task BeginTransactionAsync() => Task.CompletedTask;

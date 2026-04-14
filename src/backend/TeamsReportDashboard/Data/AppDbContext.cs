@@ -74,7 +74,8 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Report> Reports { get; set; }
     public DbSet<Department> Departments { get; set; } 
-    public DbSet<Requester> Requesters { get; set; } 
+    public DbSet<Requester> Requesters { get; set; }
     
+    public DbSet<SystemPrompt> SystemPrompts { get; set; }    
     public DbSet<AnalysisJob> AnalysisJobs { get; set; }
 }

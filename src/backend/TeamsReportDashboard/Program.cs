@@ -115,6 +115,7 @@ builder.Services.AddReportServices();
 builder.Services.AddDepartmentServices();
 builder.Services.AddRequesterServices();
 builder.Services.AddAnalysisJobServices();
+builder.Services.AddPromptServices();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 var app = builder.Build();
@@ -137,6 +138,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 await DbInitializer.SeedMasterUser(app);
+await app.SyncPromptToPythonAsync();
 app.Run();
 
 // Exposes Program to WebApplicationFactory<Program> in the test project

@@ -10,8 +10,8 @@ namespace TeamsReportDashboard.Interfaces
         IReportRepository ReportRepository { get; }
         IRequesterRepository RequesterRepository { get; }
         IDepartmentRepository DepartmentRepository { get; }
-        
         IAnalysisJobRepository AnalysisJobRepository { get; }
+        ISystemPromptRepository SystemPromptRepository { get; }
 
         // Métodos para transação
         Task BeginTransactionAsync();

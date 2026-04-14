@@ -14,14 +14,35 @@ MAX_MSG_FILES = 2_000
 from analysis_logic import (
     process_msg_files_to_dataframe,
     start_openai_batch_job,
-    get_batch_job_status_and_results
+    get_batch_job_status_and_results,
+    get_analysis_prompt,
+    PROMPT_FILE_PATH
 )
+from pydantic import BaseModel
+
+class PromptUpdate(BaseModel):
+    prompt: str
 
 app = FastAPI(
     title="API de Análise de Chats do Help Desk",
     description="Faça upload de um arquivo .zip contendo arquivos .msg para iniciar uma análise assíncrona.",
     version="1.1.0"
 )
+
+@app.get("/analyze/prompt", summary="Obtém o prompt atual de análise")
+async def get_prompt():
+    """Retorna o conteúdo atual do arquivo prompt.txt."""
+    return {"prompt": get_analysis_prompt()}
+
+@app.post("/analyze/prompt", summary="Atualiza o prompt de análise")
+async def update_prompt(data: PromptUpdate):
+    """Atualiza o conteúdo do arquivo prompt.txt."""
+    try:
+        async with aiofiles.open(PROMPT_FILE_PATH, mode='w', encoding='utf-8') as f:
+            await f.write(data.prompt)
+        return {"message": "Prompt atualizado com sucesso."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao atualizar o prompt: {str(e)}")
 
 @app.post("/analyze/start", status_code=202, summary="Inicia a Análise de um Arquivo .zip")
 async def start_analysis(file: UploadFile = File(..., description="Um único arquivo .zip contendo os chats no formato .msg")):
