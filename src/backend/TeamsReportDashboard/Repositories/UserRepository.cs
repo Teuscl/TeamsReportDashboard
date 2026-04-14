@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Entities;
 using TeamsReportDashboard.Interfaces;
@@ -18,17 +18,13 @@ public class UserRepository : IUserRepository
 
     public void Update(User user) => _context.Users.Update(user);
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(Guid id)
     {
-        var user = await _context.Users.FindAsync(id);
-        if (user != null)
-        {
-            _context.Users.Remove(user);
-        }
+        await _context.Users.Where(u => u.Id == id).ExecuteDeleteAsync();
     }
 
-    public async Task<User?> GetByIdAsync(int id) => 
-        await _context.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Id == id);
+    public async Task<User?> GetByIdAsync(Guid id) => 
+        await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
 
     public async Task<User?> GetByEmailAsync(string email) => 
         await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.IsActive);
@@ -42,9 +38,9 @@ public class UserRepository : IUserRepository
     public async Task<User?> GetByPasswordResetToken(string resetToken) =>
         await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == resetToken && u.IsActive);
 
-    public async Task<bool> ExistsAsync(int id) =>
+    public async Task<bool> ExistsAsync(Guid id) =>
         await _context.Users.AnyAsync(u => u.Id == id);
 
-    public async Task<bool> ExistsWithEmailAsync(string email, int excludeId) =>
+    public async Task<bool> ExistsWithEmailAsync(string email, Guid excludeId) =>
         await _context.Users.AnyAsync(u => u.Email == email && u.Id != excludeId);
 }

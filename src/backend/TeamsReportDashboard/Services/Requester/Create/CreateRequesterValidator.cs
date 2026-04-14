@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using TeamsReportDashboard.Backend.Models.Requester;
 
 namespace TeamsReportDashboard.Backend.Services.Requester.Create;
@@ -18,6 +18,6 @@ public class CreateRequesterValidator : AbstractValidator<CreateRequesterDto>
             .WithMessage("Name is required");
 
         RuleFor(requester => requester.DepartmentId)
-            .GreaterThan(0);
+            .NotEmpty().When(x => x.DepartmentId.HasValue);
     }
 }

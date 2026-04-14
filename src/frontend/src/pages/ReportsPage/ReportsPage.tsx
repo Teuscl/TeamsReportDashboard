@@ -47,7 +47,7 @@ const ReportsPage: React.FC = () => {
   const [tempDateRange, setTempDateRange] = useState<DateRange | undefined>(dateRange);
 
   // New state to track dropdown menu open state
-  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
 
   const fetchReports = useCallback(async () => {
     setDataLoading(true);
@@ -101,7 +101,7 @@ const ReportsPage: React.FC = () => {
     });
   }, [reports, selectedTechnician, selectedCategory, dateRange]);
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     const originalReports = [...reports];
     // Close any open dropdowns before showing the toast
     setOpenDropdownId(null);

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Entities;
 
@@ -54,6 +54,13 @@ public class AppDbContext : DbContext
             .WithOne(r => r.AnalysisJob)
             .HasForeignKey(report => report.AnalysisJobId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // Relação: User → AnalysisJob (Um usuário pode iniciar muitos jobs)
+        modelBuilder.Entity<AnalysisJob>()
+            .HasOne(job => job.User)
+            .WithMany()
+            .HasForeignKey(job => job.UserId)
+            .OnDelete(DeleteBehavior.Restrict); // Impede que o usuário seja deletado se tiver jobs
 
         // PostgreSQL: mapeia xmin (system column) como concurrency token
         modelBuilder.Entity<AnalysisJob>()

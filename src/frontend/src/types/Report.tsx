@@ -2,8 +2,8 @@
 
 // Interface para o objeto Report como recebido da API e usado na tabela/estado
 export interface Report {
-  id: number;
-  requesterId: number; // Chave estrangeira para o Solicitante
+  id: string;
+  requesterId: string; // Chave estrangeira para o Solicitante
   requesterName: string;
   requesterEmail: string;
   technicianName?: string | null;
@@ -31,7 +31,7 @@ export interface CreateReportPayload {
 // Payload para atualizar um Report (espelha UpdateReportDto)
 // Todos os campos são opcionais para PATCH
 export interface UpdateReportPayload {
-  requesterId: number;
+  requesterId: string;
   requesterName?: string;
   requesterEmail?: string;
   technicianName?: string | null;

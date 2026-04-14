@@ -1,9 +1,9 @@
 // DTO para visualizar dados (vem da API com nome do depto)
 export interface RequesterDto {
-  id: number;
+  id: string;
   name: string;
   email: string;
-  departmentId?: number | null;
+  departmentId?: string | null;
   departmentName?: string | null;
 }
 
@@ -11,7 +11,7 @@ export interface RequesterDto {
 export interface CreateRequesterDto {
   name: string;
   email: string;
-  departmentId?: number | null;
+  departmentId?: string | null;
 }
 
 export interface BulkInsertFailure {

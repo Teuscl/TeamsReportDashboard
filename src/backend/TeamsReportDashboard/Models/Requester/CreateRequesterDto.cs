@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace TeamsReportDashboard.Backend.Models.Requester;
 
@@ -13,5 +13,5 @@ public class CreateRequesterDto
     [MaxLength(100)]
     public string Email { get; set; } = string.Empty;
 
-    public int? DepartmentId { get; set; } // Opcional, mas recomendado
+    public Guid? DepartmentId { get; set; } // Opcional, mas recomendado
 }

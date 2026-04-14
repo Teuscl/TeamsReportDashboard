@@ -1,5 +1,5 @@
 export interface Department {
-  id: number;
+  id: string;
   name: string;
   createdAt: string; // A data virá como string do JSON
 }

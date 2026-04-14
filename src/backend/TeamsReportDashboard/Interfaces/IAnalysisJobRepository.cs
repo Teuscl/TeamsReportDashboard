@@ -1,4 +1,5 @@
-﻿using TeamsReportDashboard.Backend.Entities;
+using TeamsReportDashboard.Backend.Entities;
+using TeamsReportDashboard.Backend.Entities.Enums;
 
 namespace TeamsReportDashboard.Backend.Interfaces;
 
@@ -10,4 +11,5 @@ public interface IAnalysisJobRepository
     Task<List<AnalysisJob>> GetPendingJobsAsync(CancellationToken ct = default);
     Task<IEnumerable<AnalysisJob>> GetAllOrderedByCreationDateAsync(CancellationToken ct = default);
     Task DeleteAsync(AnalysisJob job);
+    Task UpdateJobsStatusAtomicAsync(IEnumerable<Guid> jobIds, JobStatus status, CancellationToken ct = default);
 }

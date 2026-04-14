@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TeamsReportDashboard.Entities;
 
@@ -7,7 +7,7 @@ namespace TeamsReportDashboard.Backend.Entities;
 public class Report : EntityBase
 {
     [Required]
-    public int RequesterId { get; set; } // Chave estrangeira para a entidade Requester
+    public Guid RequesterId { get; set; } // Chave estrangeira para a entidade Requester
     public virtual Requester Requester { get; set; } = null!; // Propriedade de navegação
     [MaxLength(50)] public string? TechnicianName { get; set; } = string.Empty;
     public DateTime RequestDate { get; set; }

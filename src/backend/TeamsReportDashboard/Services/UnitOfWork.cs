@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage; // Adicione esta using
+using Microsoft.EntityFrameworkCore.Storage; // Adicione esta using
 using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Interfaces;
 using TeamsReportDashboard.Backend.Repositories;
@@ -30,12 +30,12 @@ namespace TeamsReportDashboard.Services
 
 
         // ... suas propriedades de repositório permanecem as mesmas ...
-        public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
-        public IReportRepository ReportRepository => _reportRepository ??= new ReportRepository(_context);
-        public IRequesterRepository RequesterRepository => _requesterRepository ??= new RequesterRepository(_context);
-        public IDepartmentRepository DepartmentRepository => _departmentRepository ??= new DepartmentRepository(_context);
+        public IUserRepository UserRepository => _userRepository;
+        public IReportRepository ReportRepository => _reportRepository;
+        public IRequesterRepository RequesterRepository => _requesterRepository;
+        public IDepartmentRepository DepartmentRepository => _departmentRepository;
         
-        public IAnalysisJobRepository AnalysisJobRepository => _analysisJobRepository ??= new AnalysisJobRepository(_context);
+        public IAnalysisJobRepository AnalysisJobRepository => _analysisJobRepository;
 
 
         // Implementação dos novos métodos
@@ -46,6 +46,9 @@ namespace TeamsReportDashboard.Services
 
         public async Task CommitAsync()
         {
+            if (_transaction == null)
+                throw new InvalidOperationException("Nenhuma transação ativa. Chame BeginTransactionAsync antes de CommitAsync.");
+
             try
             {
                 await _context.SaveChangesAsync(); // Salva as mudanças

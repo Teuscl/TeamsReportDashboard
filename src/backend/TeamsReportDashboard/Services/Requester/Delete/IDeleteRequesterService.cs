@@ -1,6 +1,6 @@
-﻿namespace TeamsReportDashboard.Backend.Services.Requester.Delete;
+namespace TeamsReportDashboard.Backend.Services.Requester.Delete;
 
 public interface IDeleteRequesterService
 {
-    Task Execute(int id);
+    Task Execute(Guid id);
 }

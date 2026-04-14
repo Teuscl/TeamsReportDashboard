@@ -1,5 +1,5 @@
 import axiosConfig from './axiosConfig';
-import { RequesterDto, CreateRequesterDto, UpdateRequesterDto, BulkInsertResultDto, BulkInsertFailure } from '@/types/Requester'; // Vamos criar este arquivo de tipos
+import { RequesterDto, CreateRequesterDto, UpdateRequesterDto, BulkInsertResultDto } from '@/types/Requester'; // Vamos criar este arquivo de tipos
 
 export const getRequesters = async (): Promise<RequesterDto[]> => {
   const response = await axiosConfig.get('/requesters');
@@ -11,11 +11,11 @@ export const createRequester = async (requester: CreateRequesterDto): Promise<Re
   return response.data;
 };
 
-export const updateRequester = async (id: number, requester: UpdateRequesterDto): Promise<void> => {
+export const updateRequester = async (id: string, requester: UpdateRequesterDto): Promise<void> => {
   await axiosConfig.put(`/requesters/${id}`, requester);
 };
 
-export const deleteRequester = async (id: number): Promise<void> => {
+export const deleteRequester = async (id: string): Promise<void> => {
   await axiosConfig.delete(`/requesters/${id}`);
 };
 

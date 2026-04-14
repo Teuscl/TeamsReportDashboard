@@ -1,8 +1,8 @@
-﻿namespace TeamsReportDashboard.Backend.Models.ReportDto;
+namespace TeamsReportDashboard.Backend.Models.ReportDto;
 
 public class UpdateReportDto 
 {
-    public int RequesterId { get; set; }
+    public Guid RequesterId { get; set; }
     public string? TechnicianName { get; set; } 
     public DateTime? RequestDate { get; set; }
     public string? ReportedProblem { get; set; }

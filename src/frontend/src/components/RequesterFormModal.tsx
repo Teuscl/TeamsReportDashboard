@@ -20,7 +20,7 @@ import { Department } from '@/types/Department';
 interface RequesterFormData {
   name: string;
   email: string;
-  departmentId: number | null;
+  departmentId: string | null;
 }
 
 interface RequesterFormModalProps {
@@ -74,7 +74,7 @@ export const RequesterFormModal: React.FC<RequesterFormModalProps> = ({
 
   const handleDepartmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
-    setFormData(prev => ({ ...prev, departmentId: value === 'null' ? null : parseInt(value, 10) }));
+    setFormData(prev => ({ ...prev, departmentId: value === 'null' ? null : value }));
   };
 
   const handleSubmit = async (e: FormEvent) => {

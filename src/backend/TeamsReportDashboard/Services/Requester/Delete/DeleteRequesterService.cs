@@ -1,4 +1,4 @@
-﻿using TeamsReportDashboard.Backend.Exceptions;
+using TeamsReportDashboard.Backend.Exceptions;
 using TeamsReportDashboard.Interfaces;
 
 namespace TeamsReportDashboard.Backend.Services.Requester.Delete;
@@ -12,7 +12,7 @@ public class DeleteRequesterService : IDeleteRequesterService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Execute(int id)
+    public async Task Execute(Guid id)
     {
         var requester = await _unitOfWork.RequesterRepository.GetRequesterAsync(id);
         if (requester == null)

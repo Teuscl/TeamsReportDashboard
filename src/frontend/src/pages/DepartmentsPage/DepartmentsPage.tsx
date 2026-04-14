@@ -39,7 +39,7 @@ const DepartmentsPage: React.FC = () => {
     fetchDepartments();
   }, [fetchDepartments]);
 
-   const handleDelete = (id: number, departmentName: string) => {
+   const handleDelete = (id: string, departmentName: string) => {
     toast("Você tem certeza?", {
       description: `Esta ação irá excluir permanentemente o departamento "${departmentName}". Os funcionários associados não serão excluídos, mas terão seu departamento definido como nulo.`,
       position: "top-center",

@@ -1,8 +1,8 @@
-﻿namespace TeamsReportDashboard.Entities;
+namespace TeamsReportDashboard.Entities;
 
 public class EntityBase
 {
-    public int Id { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; } = null;
 }

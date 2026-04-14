@@ -119,7 +119,7 @@ export const ReportFormModal: React.FC<ReportFormModalProps> = ({ mode, reportTo
       // **PAYLOAD PARA EDIÇÃO**
       // Envie o requesterId, e não o nome e o e-mail.
       const updatePayload: Partial<UpdateReportPayload> = {
-        requesterId: parseInt(data.requesterId, 10), // A correção principal está aqui!
+        requesterId: data.requesterId,
         technicianName: data.technicianName?.trim() === '' ? null : data.technicianName,
         requestDate: formatInputDateTimeToISOString(data.requestDate),
         reportedProblem: data.reportedProblem,

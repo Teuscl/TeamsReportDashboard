@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TeamsReportDashboard.Entities;
-using TeamsReportDashboard.Entities.Enums; // Para a entidade User
-using TeamsReportDashboard.Interfaces; // Para IPasswordService
-using TeamsReportDashboard.Entities.Enums; // Supondo que você tenha um enum para Roles
+using TeamsReportDashboard.Entities.Enums;
+using TeamsReportDashboard.Interfaces;
 
 namespace TeamsReportDashboard.Backend.Data;
 

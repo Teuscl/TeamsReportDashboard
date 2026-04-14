@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamsReportDashboard.Backend.Models.DepartmentDto;
 using TeamsReportDashboard.Backend.Services.Department.Create;
@@ -23,7 +23,7 @@ public class DepartmentsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<DepartmentResponseDto>> GetDepartment(
         [FromServices] IGetDepartmentsService service,
-        int id)
+        Guid id)
     {
         return Ok(await service.Get(id));
     }
@@ -41,7 +41,7 @@ public class DepartmentsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDepartmentAsync(
         [FromServices] IUpdateDepartmentService service,
-        int id,
+        Guid id,
         [FromBody] UpdateDepartmentDto departmentDto)
     {
         await service.Execute(id, departmentDto);
@@ -52,7 +52,7 @@ public class DepartmentsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDepartmentAsync(
         [FromServices] IDeleteDepartmentService service,
-        int id)
+        Guid id)
     {
         await service.Execute(id);
         return NoContent(); // 204 No Content é a resposta padrão para um delete bem-sucedido

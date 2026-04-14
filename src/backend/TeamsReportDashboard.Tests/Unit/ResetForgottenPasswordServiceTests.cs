@@ -33,7 +33,7 @@ public class ResetForgottenPasswordServiceTests
 
         var user = new User
         {
-            Id = 1,
+            Id = Guid.NewGuid(),
             Name = "Test User",
             Email = "user@example.com",
             Password = _passwordService.HashPassword("OldPassword1!"),

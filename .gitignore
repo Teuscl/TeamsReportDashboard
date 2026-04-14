@@ -40,5 +40,9 @@ Thumbs.db
 #files
 code-review-backend.md
 code-review-backend.pdf
+SETUP.md
+src/backend/.slopwatch/
+src/backend/TestResults/
+src/backend/coverage/
 # Verify snapshot testing — never commit received files
 *.received.*

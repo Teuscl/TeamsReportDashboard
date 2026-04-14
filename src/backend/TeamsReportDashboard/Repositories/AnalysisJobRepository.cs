@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Backend.Entities.Enums;
@@ -35,18 +35,26 @@ public class AnalysisJobRepository  : IAnalysisJobRepository
     {
         return await _context.AnalysisJobs
             .Where(j => j.Status == JobStatus.Pending)
+            .OrderBy(j => j.CreatedAt)
+            .Take(50)
             .ToListAsync(ct);
     }
 
+    public async Task UpdateJobsStatusAtomicAsync(IEnumerable<Guid> jobIds, JobStatus status, CancellationToken ct = default)
+    {
+        await _context.AnalysisJobs
+            .Where(j => jobIds.Contains(j.Id))
+            .ExecuteUpdateAsync(s => s.SetProperty(j => j.Status, status), ct);
+    }
+    
     public async Task<IEnumerable<AnalysisJob>> GetAllOrderedByCreationDateAsync(CancellationToken ct = default) =>
         await _context.AnalysisJobs
             .AsNoTracking()
             .OrderByDescending(j => j.CreatedAt)
             .ToListAsync(ct);
 
-    public Task DeleteAsync(AnalysisJob job)
+    public async Task DeleteAsync(AnalysisJob job)
     {
-        _context.AnalysisJobs.Remove(job);
-        return Task.CompletedTask;
+        await _context.AnalysisJobs.Where(j => j.Id == job.Id).ExecuteDeleteAsync();
     }
 }

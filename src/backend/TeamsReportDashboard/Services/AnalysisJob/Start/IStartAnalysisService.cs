@@ -1,8 +1,8 @@
-﻿using TeamsReportDashboard.Backend.Models.Job;
+using TeamsReportDashboard.Backend.Models.Job;
 
 namespace TeamsReportDashboard.Backend.Services.AnalysisJob.Start;
 
 public interface IStartAnalysisService
 {
-    Task<Guid> ExecuteAsync(StartJobAnalysisDto dto);
+    Task<Guid> ExecuteAsync(StartJobAnalysisDto dto, Guid userId);
 }

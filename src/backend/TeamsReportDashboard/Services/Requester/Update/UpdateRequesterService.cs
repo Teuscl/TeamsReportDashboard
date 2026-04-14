@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using TeamsReportDashboard.Backend.Models.Requester;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
@@ -15,7 +15,7 @@ public class UpdateRequesterService : IUpdateRequesterService
         _unitOfWork = unitOfWork;
         _validator = validator;
     }
-    public async Task Execute(int id, UpdateRequesterDto dto)
+    public async Task Execute(Guid id, UpdateRequesterDto dto)
     {
         var requester = await _unitOfWork.RequesterRepository.GetRequesterAsync(id);
         if (requester == null)
@@ -23,10 +23,12 @@ public class UpdateRequesterService : IUpdateRequesterService
             throw new KeyNotFoundException("Solicitante não encontrado.");
         }
 
+        await Validate(dto);
+
         requester.Name = dto.Name;
         requester.Email = dto.Email;
         requester.DepartmentId = dto.DepartmentId;
-        requester.UpdatedAt = DateTime.Now;
+        requester.UpdatedAt = DateTime.UtcNow;
         
         _unitOfWork.RequesterRepository.UpdateRequester(requester);
         await _unitOfWork.SaveChangesAsync();

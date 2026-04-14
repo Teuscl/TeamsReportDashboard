@@ -25,7 +25,7 @@ public class CreateDepartmentService : ICreateDepartmentService
         var dep = new Entities.Department()
         {
             Name = createDepartmentDto.Name,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         await _unitOfWork.DepartmentRepository.CreateDepartmentAsync(dep);

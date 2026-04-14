@@ -1,4 +1,7 @@
+import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class Settings(BaseSettings):
     """
@@ -13,7 +16,7 @@ class Settings(BaseSettings):
     openai_api_key: str | None = None
 
     model_config = SettingsConfigDict(
-        env_file=".env", 
+        env_file=os.path.join(BASE_DIR, ".env"), 
         env_file_encoding="utf-8", 
         extra="ignore"
     )

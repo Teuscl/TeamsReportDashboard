@@ -23,13 +23,13 @@ public class FakeUserRepository : IUserRepository
         if (index >= 0) _users[index] = user;
     }
 
-    public Task DeleteAsync(int id)
+    public Task DeleteAsync(Guid id)
     {
         _users.RemoveAll(u => u.Id == id);
         return Task.CompletedTask;
     }
 
-    public Task<User?> GetByIdAsync(int id) =>
+    public Task<User?> GetByIdAsync(Guid id) =>
         Task.FromResult(_users.FirstOrDefault(u => u.Id == id));
 
     public Task<User?> GetByEmailAsync(string email) =>
@@ -44,9 +44,9 @@ public class FakeUserRepository : IUserRepository
     public Task<User?> GetByPasswordResetToken(string resetToken) =>
         Task.FromResult(_users.FirstOrDefault(u => u.PasswordResetToken == resetToken && u.IsActive));
 
-    public Task<bool> ExistsAsync(int id) =>
+    public Task<bool> ExistsAsync(Guid id) =>
         Task.FromResult(_users.Any(u => u.Id == id));
 
-    public Task<bool> ExistsWithEmailAsync(string email, int excludeId) =>
+    public Task<bool> ExistsWithEmailAsync(string email, Guid excludeId) =>
         Task.FromResult(_users.Any(u => u.Email == email && u.Id != excludeId));
 }

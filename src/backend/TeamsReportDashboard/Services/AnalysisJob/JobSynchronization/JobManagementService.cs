@@ -52,10 +52,31 @@ namespace TeamsReportDashboard.Backend.Services.AnalysisJob.JobSynchronization
             }
 
             // CASO 2: Forçar uma nova sincronização com a API externa para qualquer outro status.
-            // Delega a lógica complexa para o orquestrador, eliminando duplicação de código.
+            // Delega a lógica complexa para o orquestrador, com retry em caso de falha transitória.
             _logger.LogInformation("Forçando sincronização do job {JobId} com a API externa.", job.Id);
-            await _orchestrator.SyncAndProcessJobResultAsync(job);
-            return new ReprocessResponseDto { Message = $"Sincronização forçada para o job '{job.Name}' foi concluída." };
+
+            const int maxAttempts = 3;
+            Exception? lastException = null;
+            for (var attempt = 1; attempt <= maxAttempts; attempt++)
+            {
+                try
+                {
+                    await _orchestrator.SyncAndProcessJobResultAsync(job);
+                    return new ReprocessResponseDto { Message = $"Sincronização forçada para o job '{job.Name}' foi concluída." };
+                }
+                catch (HttpRequestException ex) when (attempt < maxAttempts)
+                {
+                    lastException = ex;
+                    var delay = TimeSpan.FromSeconds(Math.Pow(2, attempt)); // 2s, 4s
+                    _logger.LogWarning(ex,
+                        "Tentativa {Attempt}/{MaxAttempts} de sincronização do job {JobId} falhou. Tentando novamente em {Delay}s.",
+                        attempt, maxAttempts, job.Id, delay.TotalSeconds);
+                    await Task.Delay(delay);
+                }
+            }
+
+            throw new InvalidOperationException(
+                $"Falha ao sincronizar job '{job.Name}' após {maxAttempts} tentativas.", lastException);
         }
     }
 }

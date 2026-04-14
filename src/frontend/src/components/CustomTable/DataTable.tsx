@@ -30,7 +30,6 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   filterColumnId: string 
-  isLoading?: boolean; 
   filterPlaceholder?: string
   initialSorting?: SortingState 
 }
@@ -39,7 +38,6 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   filterColumnId, 
-  isLoading = false, // ✨ PASSO 2: Receba a nova propriedade aqui.
   filterPlaceholder,
   initialSorting = [], // 👈 Define um array vazio como valor padrão se a prop não for passada
 }: DataTableProps<TData, TValue>) {

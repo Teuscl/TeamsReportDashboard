@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using TeamsReportDashboard.Backend.Models.DepartmentDto;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
@@ -16,7 +16,7 @@ public class UpdateDepartmentService : IUpdateDepartmentService
         _validator = validator;
     }
 
-    public async Task Execute(int id, UpdateDepartmentDto departmentDto)
+    public async Task Execute(Guid id, UpdateDepartmentDto departmentDto)
     {
         // 1. Validar os dados de entrada
         await Validate(departmentDto);
@@ -31,7 +31,7 @@ public class UpdateDepartmentService : IUpdateDepartmentService
 
         // 3. Atualizar as propriedades
         department.Name = departmentDto.Name;
-        department.UpdatedAt = DateTime.Now;
+        department.UpdatedAt = DateTime.UtcNow;
 
         _unitOfWork.DepartmentRepository.UpdateDepartment(department);
         // 4. Salvar as mudanças no banco de dados

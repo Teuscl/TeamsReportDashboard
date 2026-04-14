@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using TeamsReportDashboard.Exceptions;
 using TeamsReportDashboard.Interfaces;
 using TeamsReportDashboard.Models.Dto;
@@ -17,7 +17,7 @@ public class ChangeMyPasswordService : IChangeMyPasswordService
         _passwordService = passwordService;
         _validator = validator;
     }
-    public async Task Execute(int userId, ChangeMyPasswordDto changeMyPasswordDto)
+    public async Task Execute(Guid userId, ChangeMyPasswordDto changeMyPasswordDto)
     {
         var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
         if (user == null)

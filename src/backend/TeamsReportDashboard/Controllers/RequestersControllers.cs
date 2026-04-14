@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamsReportDashboard.Backend.Entities;
 using TeamsReportDashboard.Backend.Models.Requester;
@@ -24,7 +24,7 @@ public class RequestersController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize(Roles = "Admin, Master")]
-    public async Task<ActionResult<RequesterDto>> GetById([FromServices] IGetRequestersService service, int id)
+    public async Task<ActionResult<RequesterDto>> GetById([FromServices] IGetRequestersService service, Guid id)
     {
         // Busca o requester no serviço
         var requester = await service.Get(id);
@@ -56,7 +56,7 @@ public class RequestersController : ControllerBase
     [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Update(
         [FromServices] IUpdateRequesterService service,
-        int id,
+        Guid id,
         [FromBody] UpdateRequesterDto updateDto)
     {
         // O serviço irá validar o DTO e a lógica de negócio
@@ -70,7 +70,7 @@ public class RequestersController : ControllerBase
     [Authorize(Roles = "Admin, Master")]
     public async Task<IActionResult> Delete(
         [FromServices] IDeleteRequesterService service,
-        int id)
+        Guid id)
     {
         // O serviço irá verificar se o solicitante existe antes de deletar
         await service.Execute(id);

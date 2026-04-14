@@ -1,8 +1,8 @@
-﻿using TeamsReportDashboard.Backend.Models.ReportDto;
+using TeamsReportDashboard.Backend.Models.ReportDto;
 
 namespace TeamsReportDashboard.Backend.Services.Report.Update;
 
 public interface IUpdateReportService
 {
-    Task Execute(int id, UpdateReportDto updateReportDto);
+    Task Execute(Guid id, UpdateReportDto updateReportDto);
 }

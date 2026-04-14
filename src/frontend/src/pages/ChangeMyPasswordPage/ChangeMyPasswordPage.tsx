@@ -2,7 +2,7 @@
 
 import React from 'react'; // Removido useState se não for mais usado para passwordChangeSuccess local
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+
 import * as z from 'zod';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,7 +34,7 @@ const changeMyPasswordSchema = z.object({
 type ChangeMyPasswordFormData = z.infer<typeof changeMyPasswordSchema>;
 
 const ChangeMyPasswordPage: React.FC = () => {
-  const { user, logout, isLoading: authIsLoading } = useAuth(); // user pode ser necessário para o ID se o backend ainda precisar
+  const { user, isLoading: authIsLoading } = useAuth(); // user pode ser necessário para o ID se o backend ainda precisar
   const navigate = useNavigate();
 
   const { 

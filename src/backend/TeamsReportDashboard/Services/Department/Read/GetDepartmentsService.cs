@@ -1,4 +1,4 @@
-﻿using TeamsReportDashboard.Backend.Models.DepartmentDto;
+using TeamsReportDashboard.Backend.Models.DepartmentDto;
 using TeamsReportDashboard.Interfaces;
 
 namespace TeamsReportDashboard.Backend.Services.Department.Read;
@@ -18,7 +18,7 @@ public class GetDepartmentsService : IGetDepartmentsService
         return departments.Select(d => new DepartmentResponseDto(d.Id, d.Name, d.CreatedAt));
     }
 
-    public async Task<DepartmentResponseDto> Get(int id)
+    public async Task<DepartmentResponseDto> Get(Guid id)
     {
         var dep = await _unitOfWork.DepartmentRepository.GetDepartmentAsync(id);
         if (dep == null)

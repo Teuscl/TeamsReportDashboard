@@ -11,10 +11,10 @@ export const createDepartment = async (department: CreateDepartmentDto): Promise
   return response.data;
 };
 
-export const updateDepartment = async (id: number, department: Partial<CreateDepartmentDto>): Promise<void> => {
+export const updateDepartment = async (id: string, department: Partial<CreateDepartmentDto>): Promise<void> => {
   await axiosConfig.put(`/departments/${id}`, department);
 };
 
-export const deleteDepartment = async (id: number): Promise<void> => {
+export const deleteDepartment = async (id: string): Promise<void> => {
   await axiosConfig.delete(`/departments/${id}`);
 };
