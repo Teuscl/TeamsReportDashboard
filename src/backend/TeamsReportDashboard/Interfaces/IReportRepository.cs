@@ -20,4 +20,5 @@ public interface IReportRepository
     
     Task<bool> HasReportsForRequesterAsync(Guid requesterId);
 
+    Task DeleteByJobIdAsync(Guid jobId);
 }

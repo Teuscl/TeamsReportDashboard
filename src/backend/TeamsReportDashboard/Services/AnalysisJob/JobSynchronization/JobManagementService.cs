@@ -46,6 +46,10 @@ namespace TeamsReportDashboard.Backend.Services.AnalysisJob.JobSynchronization
             if (job.Status == JobStatus.Completed && !string.IsNullOrEmpty(job.ResultData))
             {
                 _logger.LogInformation("Iniciando reprocessamento local dos relatórios do job {JobId}", job.Id);
+
+                // Remove relatórios existentes antes de reprocessar para evitar duplicatas
+                await _unitOfWork.ReportRepository.DeleteByJobIdAsync(job.Id);
+
                 var storedResult = JsonSerializer.Deserialize<PythonApiDto.PythonResultResponse>(job.ResultData);
                 await _reportProcessor.ProcessAnalysisResult(job, storedResult!);
                 return new ReprocessResponseDto { Message = "Reprocessamento local dos relatórios concluído com sucesso." };

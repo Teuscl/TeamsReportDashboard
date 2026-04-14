@@ -38,12 +38,13 @@ public class JobResultOrchestrator : IJobResultOrchestrator
         switch (internalStatus)
         {
             case JobStatus.Completed:
-                _logger.LogInformation("Job {JobId} concluído.", job.Id);
+                _logger.LogInformation("Job {JobId} concluído pela API Python. Iniciando processamento dos relatórios.", job.Id);
                 job.Status = JobStatus.Completed;
                 job.CompletedAt = DateTime.UtcNow;
                 job.ResultData = JsonSerializer.Serialize(result);
                 job.ErrorMessage = null;
-                await _unitOfWork.SaveChangesAsync(ct);
+                // Não salva aqui: ProcessAnalysisResult persiste job + relatórios atomicamente na mesma transação.
+                // Isso garante que o job nunca apareça como Completed sem os relatórios correspondentes.
                 await _reportProcessor.ProcessAnalysisResult(job, result);
                 break;
             case JobStatus.Failed:

@@ -12,12 +12,18 @@ public class StartAnalysisService : IStartAnalysisService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<StartJobAnalysisDto> _validator;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger<StartAnalysisService> _logger;
 
-    public StartAnalysisService(IUnitOfWork unitOfWork, IValidator<StartJobAnalysisDto> validator, IHttpClientFactory httpClientFactory)
+    public StartAnalysisService(
+        IUnitOfWork unitOfWork,
+        IValidator<StartJobAnalysisDto> validator,
+        IHttpClientFactory httpClientFactory,
+        ILogger<StartAnalysisService> logger)
     {
         _unitOfWork = unitOfWork;
         _validator = validator;
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
     }
     public async Task<Guid> ExecuteAsync(StartJobAnalysisDto dto, Guid userId)
     {
@@ -39,23 +45,14 @@ public class StartAnalysisService : IStartAnalysisService
             
             var pythonResponse = await pythonApiClient.PostAsync("/analyze/start", content);
 
-            // DEBUG: Bloco para inspecionar a resposta antes de falhar
             if (!pythonResponse.IsSuccessStatusCode)
             {
-                // Lê o corpo da resposta de erro vinda da API Python
                 var errorBody = await pythonResponse.Content.ReadAsStringAsync();
-    
-                // Loga o erro detalhado no seu console ou sistema de log do C#
-                // Se estiver rodando em modo Debug no Visual Studio, isso aparecerá no "Output" window.
-                System.Diagnostics.Debug.WriteLine($"[HTTP DEBUG] Python API retornou erro: {pythonResponse.StatusCode}");
-                System.Diagnostics.Debug.WriteLine($"[HTTP DEBUG] Corpo da Resposta: {errorBody}");
-
-                // Você também pode usar seu ILogger aqui
-                // _logger.LogError("Python API Error: {StatusCode} - {ResponseBody}", pythonResponse.StatusCode, errorBody);
+                _logger.LogError("Python API retornou erro {StatusCode}: {ResponseBody}",
+                    pythonResponse.StatusCode, errorBody);
             }
 
-            // Esta linha vai agora lançar a mesma exceção de antes, mas já teremos o log detalhado.
-            pythonResponse.EnsureSuccessStatusCode(); 
+            pythonResponse.EnsureSuccessStatusCode();
 
             
             var startResponse = await pythonResponse.Content.ReadFromJsonAsync<PythonApiDto.PythonStartResponse>();

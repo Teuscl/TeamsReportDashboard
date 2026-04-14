@@ -61,4 +61,9 @@ public class ReportRepository : IReportRepository
     {
         return await _context.Reports.AnyAsync(r => r.RequesterId == requesterId);
     }
+
+    public async Task DeleteByJobIdAsync(Guid jobId)
+    {
+        await _context.Reports.Where(r => r.AnalysisJobId == jobId).ExecuteDeleteAsync();
+    }
 }

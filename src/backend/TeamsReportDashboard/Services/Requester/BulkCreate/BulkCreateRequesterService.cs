@@ -71,9 +71,11 @@ public class BulkCreateRequesterService : IBulkCreateRequesterService
             var rowNumber = i + 2; // +1 do índice 0 e +1 do cabeçalho
             
             // Validação de Departamento
-            if (!allDepartments.TryGetValue(record.Department.ToLowerInvariant(), out var departmentId))
+            if (string.IsNullOrWhiteSpace(record.Department) ||
+                !allDepartments.TryGetValue(record.Department.ToLowerInvariant(), out var departmentId))
             {
-                result.Failures.Add(new BulkInsertFailure { RowNumber = rowNumber, ErrorMessage = $"Departamento '{record.Department}' não encontrado.", OffendingLine = $"{record.Name};{record.Email}" });
+                var deptLabel = string.IsNullOrWhiteSpace(record.Department) ? "(vazio)" : record.Department;
+                result.Failures.Add(new BulkInsertFailure { RowNumber = rowNumber, ErrorMessage = $"Departamento '{deptLabel}' não encontrado.", OffendingLine = $"{record.Name};{record.Email}" });
                 continue;
             }
 

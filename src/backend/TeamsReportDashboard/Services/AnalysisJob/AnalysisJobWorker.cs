@@ -23,36 +23,53 @@ public class AnalysisJobWorker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            List<Guid> jobIdsToProcess;
 
-            using var scope = _scopeFactory.CreateScope();
-            var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-            var orchestrator = scope.ServiceProvider.GetRequiredService<IJobResultOrchestrator>();
-
-            var jobsToProcess = await unitOfWork.AnalysisJobRepository
-                .GetPendingJobsAsync(stoppingToken);
-
-            if (!jobsToProcess.Any())
+            // Escopo dedicado apenas para buscar e travar os jobs atomicamente.
+            // Descartado antes de processar para evitar DbContext compartilhado entre jobs.
+            using (var fetchScope = _scopeFactory.CreateScope())
             {
-                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
-                continue;
+                var fetchUow = fetchScope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                var pendingJobs = await fetchUow.AnalysisJobRepository.GetPendingJobsAsync(stoppingToken);
+
+                if (!pendingJobs.Any())
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+                    continue;
+                }
+
+                jobIdsToProcess = pendingJobs.Select(j => j.Id).ToList();
+                _logger.LogInformation("Travando {Count} job(s) para processamento.", jobIdsToProcess.Count);
+
+                // ExecuteUpdateAsync: atualização atômica sem race conditions (EF Core 7+)
+                await fetchUow.AnalysisJobRepository.UpdateJobsStatusAtomicAsync(
+                    jobIdsToProcess, JobStatus.Processing, stoppingToken);
             }
 
-            _logger.LogInformation("Travando {Count} job(s) para processamento.", jobsToProcess.Count);
-            
-            // ExecuteUpdateAsync ensures atomic update of status without race conditions on concurrency conflicts (EF Core 7+)
-            await unitOfWork.AnalysisJobRepository.UpdateJobsStatusAtomicAsync(jobsToProcess.Select(j => j.Id), JobStatus.Processing, stoppingToken);
-
-            foreach (var job in jobsToProcess)
+            // Um escopo isolado por job garante que um DbContext corrompido de um job
+            // não afete o processamento dos demais no mesmo batch.
+            foreach (var jobId in jobIdsToProcess)
             {
-                job.Status = JobStatus.Processing; // update in memory for the orchestrator below
-                
+                using var jobScope = _scopeFactory.CreateScope();
+                var unitOfWork = jobScope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                var orchestrator = jobScope.ServiceProvider.GetRequiredService<IJobResultOrchestrator>();
+
+                var job = await unitOfWork.AnalysisJobRepository.GetByIdAsync(jobId);
+                if (job is null)
+                {
+                    _logger.LogWarning("Job {JobId} não encontrado ao tentar processar. Ignorando.", jobId);
+                    continue;
+                }
+
+                job.Status = JobStatus.Processing; // sincroniza estado em memória com o DB
+
                 try
                 {
                     await orchestrator.SyncAndProcessJobResultAsync(job, stoppingToken);
                 }
                 catch (OperationCanceledException)
                 {
-                    // Shutdown solicitado — devolver o job para a fila e sair
+                    // Shutdown solicitado — devolver o job atual para a fila e sair
                     job.Status = JobStatus.Pending;
                     await unitOfWork.SaveChangesAsync(CancellationToken.None);
                     return;

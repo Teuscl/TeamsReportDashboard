@@ -25,14 +25,18 @@ public class DashboardService : IDashboardService
         var totalDepartamentos = await _unitOfWork.DepartmentRepository.CountAsync();
         var totalSolicitantes = await _unitOfWork.RequesterRepository.CountAsync();
         
-        // ... (Cálculo do Tempo Médio de Resposta continua igual) ...
-        string tempoMedioFormatado = "00:00:00"; // Valor padrão
-        var reportsWithResponseTimeQuery = _unitOfWork.ReportRepository.GetAll().Where(r => r.FirstResponseTime > TimeSpan.Zero);
-        if (await reportsWithResponseTimeQuery.AnyAsync())
+        // Tempo médio de primeira resposta: apenas busca os ticks (long) para evitar carregar
+        // objetos TimeSpan completos, calculando a média em memória sobre os valores brutos.
+        string tempoMedioFormatado = "00:00:00";
+        var allTicks = await _unitOfWork.ReportRepository
+            .GetAll()
+            .Where(r => r.FirstResponseTime > TimeSpan.Zero)
+            .Select(r => r.FirstResponseTime.Ticks)
+            .ToListAsync();
+
+        if (allTicks.Count > 0)
         {
-            var allTimeSpans = await reportsWithResponseTimeQuery.Select(r => r.FirstResponseTime).ToListAsync();
-            var averageSeconds = allTimeSpans.Average(ts => ts.TotalSeconds);
-            var averageTimeSpan = TimeSpan.FromSeconds(averageSeconds);
+            var averageTimeSpan = TimeSpan.FromTicks((long)allTicks.Average());
             tempoMedioFormatado = $"{(int)averageTimeSpan.TotalHours:00}:{averageTimeSpan.Minutes:00}:{averageTimeSpan.Seconds:00}";
         }
 
@@ -75,9 +79,27 @@ public class DashboardService : IDashboardService
         // Gráfico 4: Atendimentos nos últimos 12 meses
         var twelveMonthsAgo = now.AddMonths(-11);
         var startOfPeriod = new DateTime(twelveMonthsAgo.Year, twelveMonthsAgo.Month, 1);
-        var atendimentosMensais = await _unitOfWork.ReportRepository.GetAll().Where(r => r.RequestDate >= startOfPeriod).GroupBy(r => new { r.RequestDate.Year, r.RequestDate.Month }).Select(g => new { g.Key.Year, g.Key.Month, Total = g.Count() }).OrderBy(x => x.Year).ThenBy(x => x.Month).ToListAsync();
+        var atendimentosMensais = await _unitOfWork.ReportRepository
+            .GetAll()
+            .Where(r => r.RequestDate >= startOfPeriod)
+            .GroupBy(r => new { r.RequestDate.Year, r.RequestDate.Month })
+            .Select(g => new { g.Key.Year, g.Key.Month, Total = g.Count() })
+            .OrderBy(x => x.Year)
+            .ThenBy(x => x.Month)
+            .ToListAsync();
+
         var atendimentosPorMesFormatado = new List<ChartData>();
-        for (int i = 0; i < 12; i++){ var monthDate = startOfPeriod.AddMonths(i); var monthData = atendimentosMensais.FirstOrDefault(m => m.Year == monthDate.Year && m.Month == monthDate.Month); atendimentosPorMesFormatado.Add(new ChartData { Name = monthDate.ToString("MMM/yy", new CultureInfo("pt-BR")), Total = monthData?.Total ?? 0 }); }
+        for (int i = 0; i < 12; i++)
+        {
+            var monthDate = startOfPeriod.AddMonths(i);
+            var monthData = atendimentosMensais
+                .FirstOrDefault(m => m.Year == monthDate.Year && m.Month == monthDate.Month);
+            atendimentosPorMesFormatado.Add(new ChartData
+            {
+                Name = monthDate.ToString("MMM/yy", new CultureInfo("pt-BR")),
+                Total = monthData?.Total ?? 0
+            });
+        }
 
         // Montagem final do DTO
         var dashboardData = new DashboardDto()
