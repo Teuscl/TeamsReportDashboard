@@ -16,6 +16,7 @@ public static class PromptServiceExtensions
         services.AddScoped<IValidator<PromptDto>, UpdatePromptValidator>();
 
         services.AddScoped<IGetPromptService, GetPromptService>();
+        services.AddScoped<IGetPromptVersionService, GetPromptVersionService>();
         services.AddScoped<IUpdatePromptService, UpdatePromptService>();
 
         return services;

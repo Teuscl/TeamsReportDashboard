@@ -20,7 +20,13 @@ public class SystemPromptRepository : ISystemPromptRepository
             .OrderByDescending(p => p.CreatedAt)
             .FirstOrDefaultAsync();
 
-    public async Task<IReadOnlyList<SystemPrompt>> GetHistoryAsync(int limit = 10) =>
+    public async Task<SystemPrompt?> GetByIdAsync(Guid id, CancellationToken ct = default) =>
+        await _context.SystemPrompts
+            .Include(p => p.CreatedByUser)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == id, ct);
+
+    public async Task<IReadOnlyList<SystemPrompt>> GetHistoryAsync(int limit = 50) =>
         await _context.SystemPrompts
             .Include(p => p.CreatedByUser)
             .OrderByDescending(p => p.CreatedAt)

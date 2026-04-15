@@ -10,7 +10,10 @@ public class FakeSystemPromptRepository : ISystemPromptRepository
     public Task<SystemPrompt?> GetLatestAsync() =>
         Task.FromResult(_store.OrderByDescending(p => p.CreatedAt).FirstOrDefault());
 
-    public Task<IReadOnlyList<SystemPrompt>> GetHistoryAsync(int limit = 10) =>
+    public Task<SystemPrompt?> GetByIdAsync(Guid id, CancellationToken ct = default) =>
+        Task.FromResult(_store.FirstOrDefault(p => p.Id == id));
+
+    public Task<IReadOnlyList<SystemPrompt>> GetHistoryAsync(int limit = 50) =>
         Task.FromResult<IReadOnlyList<SystemPrompt>>(
             _store.OrderByDescending(p => p.CreatedAt).Take(limit).ToList());
 

@@ -20,6 +20,17 @@ public class PromptController : ControllerBase
         return Ok(await service.ExecuteAsync(ct));
     }
 
+    [HttpGet("history/{id:guid}")]
+    public async Task<ActionResult<PromptVersionDetailDto>> GetPromptVersion(
+        Guid id,
+        [FromServices] IGetPromptVersionService service,
+        CancellationToken ct)
+    {
+        var result = await service.ExecuteAsync(id, ct);
+        if (result is null) return NotFound(new { message = "Versão não encontrada." });
+        return Ok(result);
+    }
+
     [HttpPut]
     public async Task<IActionResult> UpdatePrompt(
         [FromServices] IUpdatePromptService service,

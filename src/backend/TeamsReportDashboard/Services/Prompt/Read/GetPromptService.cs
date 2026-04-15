@@ -24,7 +24,7 @@ public class GetPromptService : IGetPromptService
 
     public async Task<PromptResponseDto> ExecuteAsync(CancellationToken ct = default)
     {
-        var history = await _unitOfWork.SystemPromptRepository.GetHistoryAsync(10);
+        var history = await _unitOfWork.SystemPromptRepository.GetHistoryAsync(50);
 
         if (history.Count > 0)
         {
