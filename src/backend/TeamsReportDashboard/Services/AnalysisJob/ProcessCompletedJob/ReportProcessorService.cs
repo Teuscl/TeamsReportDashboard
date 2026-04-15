@@ -33,9 +33,18 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
 
         public async Task ProcessAnalysisResult(Entities.AnalysisJob job, PythonApiDto.PythonResultResponse result)
         {
+            // Caso: batch concluído na OpenAI mas sem output_file_id (todas as requisições falharam
+            // ou o arquivo não foi gerado). Deve salvar o job para não ficar preso em Processing.
             if (result.Results is null)
             {
-                _logger.LogWarning($"Job {job.Id}: Propriedade 'results' está nula.");
+                _logger.LogWarning(
+                    "Job {JobId}: API Python retornou 'results' nulo. O batch pode ter concluído sem output_file_id.",
+                    job.Id);
+                job.ErrorMessage =
+                    "O lote da OpenAI foi concluído mas não gerou relatórios (campo 'results' ausente). " +
+                    "Verifique a dashboard da OpenAI para detalhes do batch_id.";
+                _unitOfWork.AnalysisJobRepository.Update(job);
+                await _unitOfWork.SaveChangesAsync();
                 return;
             }
 
@@ -47,18 +56,18 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Job {job.Id}: Falha ao deserializar 'results'.");
-                job.ErrorMessage = "Erro de sistema: Falha ao deserializar resultado.";
-                _unitOfWork.AnalysisJobRepository.Update(job); // << ALTERADO: Usando o _context injetado
+                _logger.LogError(ex, "Job {JobId}: Falha ao deserializar 'results'.", job.Id);
+                job.ErrorMessage = "Erro de sistema: falha ao deserializar o resultado do batch.";
+                _unitOfWork.AnalysisJobRepository.Update(job);
                 await _unitOfWork.SaveChangesAsync();
                 return;
             }
 
             if (containers == null || !containers.Any())
             {
-                _logger.LogWarning($"Job {job.Id}: Não há contêineres de atendimento para processar.");
-                job.ErrorMessage = null;
-                _unitOfWork.AnalysisJobRepository.Update(job); // << ALTERADO: Usando o _context injetado
+                _logger.LogWarning("Job {JobId}: Nenhum container de atendimento encontrado no resultado.", job.Id);
+                job.ErrorMessage = "O lote foi processado mas não retornou atendimentos válidos para salvar.";
+                _unitOfWork.AnalysisJobRepository.Update(job);
                 await _unitOfWork.SaveChangesAsync();
                 return;
             }

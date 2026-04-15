@@ -19,6 +19,7 @@ client = AsyncOpenAI(api_key=settings.openai_api_key)
 # ==============================================================================
 
 PROMPT_FILE_PATH = os.path.join(os.path.dirname(__file__), "prompt.txt")
+CONVERSATIONS_DIR = os.path.join(os.path.dirname(__file__), "conversations")
 
 def get_analysis_prompt() -> str:
     """Lê o prompt de análise do arquivo prompt.txt."""
@@ -33,6 +34,20 @@ def get_analysis_prompt() -> str:
 
 # Mantemos a variável para compatibilidade, carregando-a inicialmente
 ANALYSIS_PROMPT = get_analysis_prompt()
+
+def save_conversations_to_excel(df: pd.DataFrame, batch_id: str) -> str:
+    """Salva o DataFrame de conversas tratadas em um arquivo Excel na pasta conversations."""
+    try:
+        os.makedirs(CONVERSATIONS_DIR, exist_ok=True)
+        filename = f"conversas_processadas_{batch_id}.xlsx"
+        file_path = os.path.join(CONVERSATIONS_DIR, filename)
+        
+        # Exporta para Excel (sem o index do pandas)
+        df.to_excel(file_path, index=False)
+        return file_path
+    except Exception as e:
+        print(f"Erro ao salvar o arquivo Excel: {e}")
+        return ""
 
 # ==============================================================================
 # SEÇÃO 1: FUNÇÕES DE HELPERS PARA LIMPEZA E NORMALIZAÇÃO DE DADOS
@@ -190,6 +205,10 @@ async def start_openai_batch_job(conversations_df: pd.DataFrame) -> str:
         os.remove(tmp_file_path) 
 
     batch_job = await client.batches.create(input_file_id=batch_file.id, endpoint="/v1/chat/completions", completion_window="24h")
+    
+    # Exporta as conversas tratadas para Excel para conferência (ambiente de dev)
+    save_conversations_to_excel(conversations_df, batch_job.id)
+    
     return batch_job.id
 
 async def get_batch_job_status_and_results(batch_id: str) -> dict:

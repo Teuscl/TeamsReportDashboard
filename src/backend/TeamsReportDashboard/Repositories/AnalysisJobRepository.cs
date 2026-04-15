@@ -57,4 +57,11 @@ public class AnalysisJobRepository  : IAnalysisJobRepository
     {
         await _context.AnalysisJobs.Where(j => j.Id == job.Id).ExecuteDeleteAsync();
     }
+
+    public async Task<int> ResetStuckProcessingJobsAsync(CancellationToken ct = default)
+    {
+        return await _context.AnalysisJobs
+            .Where(j => j.Status == JobStatus.Processing)
+            .ExecuteUpdateAsync(s => s.SetProperty(j => j.Status, JobStatus.Pending), ct);
+    }
 }

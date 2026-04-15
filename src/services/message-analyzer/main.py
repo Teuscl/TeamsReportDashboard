@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, Path
+from fastapi.responses import FileResponse
 from fastapi.concurrency import run_in_threadpool
 import uvicorn
 import zipfile
@@ -16,7 +17,8 @@ from analysis_logic import (
     start_openai_batch_job,
     get_batch_job_status_and_results,
     get_analysis_prompt,
-    PROMPT_FILE_PATH
+    PROMPT_FILE_PATH,
+    CONVERSATIONS_DIR
 )
 from pydantic import BaseModel
 
@@ -125,6 +127,25 @@ async def get_analysis_results(batch_id: str = Path(..., description="O ID do tr
         return result
     except Exception as e:
         raise HTTPException(status_code=404, detail=f"Não foi possível processar o trabalho com ID {batch_id}: {str(e)}")
+
+@app.get("/analyze/download/{batch_id}", summary="Baixa o Excel das Conversas Tratadas")
+async def download_analysis_export(batch_id: str = Path(..., description="ID do batch para baixar o Excel")):
+    """
+    Retorna o arquivo Excel gerado com as conversas agrupadas e tratadas para conferência.
+    """
+    file_path = os.path.join(CONVERSATIONS_DIR, f"conversas_processadas_{batch_id}.xlsx")
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(
+            status_code=404, 
+            detail="Arquivo não encontrado. Verifique se o ID está correto ou se houve erro no processamento."
+        )
+    
+    return FileResponse(
+        path=file_path, 
+        filename=f"conversas_processadas_{batch_id}.xlsx",
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
 # Comando para rodar o servidor: uvicorn main:app --reload --port 8001
 if __name__ == "__main__":
