@@ -56,7 +56,14 @@ namespace TeamsReportDashboard.Backend.Services.AnalysisJob.JobSynchronization
             }
 
             // CASO 2: Forçar uma nova sincronização com a API externa para qualquer outro status.
-            // Delega a lógica complexa para o orquestrador, com retry em caso de falha transitória.
+            // Reseta o histórico de retries para que o worker possa tentar novamente do zero
+            // após um reprocessamento manual. Sem isso, um job com RetryCount >= MaxRetries
+            // seria imediatamente marcado como Failed pelo worker mesmo que o reprocessamento tivesse sucesso.
+            job.RetryCount = 0;
+            job.ErrorMessage = null;
+            _unitOfWork.AnalysisJobRepository.Update(job);
+            await _unitOfWork.SaveChangesAsync();
+
             _logger.LogInformation("Forçando sincronização do job {JobId} com a API externa.", job.Id);
 
             const int maxAttempts = 3;

@@ -1,4 +1,5 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Path
+from fastapi import FastAPI, Form, UploadFile, File, HTTPException, Path
+from fastapi.responses import FileResponse
 from fastapi.concurrency import run_in_threadpool
 import uvicorn
 import zipfile
@@ -14,8 +15,15 @@ MAX_MSG_FILES = 2_000
 from analysis_logic import (
     process_msg_files_to_dataframe,
     start_openai_batch_job,
-    get_batch_job_status_and_results
+    get_batch_job_status_and_results,
+    get_analysis_prompt,
+    PROMPT_FILE_PATH,
+    CONVERSATIONS_DIR
 )
+from pydantic import BaseModel
+
+class PromptUpdate(BaseModel):
+    prompt: str
 
 app = FastAPI(
     title="API de Análise de Chats do Help Desk",
@@ -23,8 +31,26 @@ app = FastAPI(
     version="1.1.0"
 )
 
+@app.get("/analyze/prompt", summary="Obtém o prompt atual de análise")
+async def get_prompt():
+    """Retorna o conteúdo atual do arquivo prompt.txt."""
+    return {"prompt": get_analysis_prompt()}
+
+@app.post("/analyze/prompt", summary="Atualiza o prompt de análise")
+async def update_prompt(data: PromptUpdate):
+    """Atualiza o conteúdo do arquivo prompt.txt."""
+    try:
+        async with aiofiles.open(PROMPT_FILE_PATH, mode='w', encoding='utf-8') as f:
+            await f.write(data.prompt)
+        return {"message": "Prompt atualizado com sucesso."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao atualizar o prompt: {str(e)}")
+
 @app.post("/analyze/start", status_code=202, summary="Inicia a Análise de um Arquivo .zip")
-async def start_analysis(file: UploadFile = File(..., description="Um único arquivo .zip contendo os chats no formato .msg")):
+async def start_analysis(
+    file: UploadFile = File(..., description="Um único arquivo .zip contendo os chats no formato .msg"),
+    prompt: str = Form(None, description="Prompt de sistema a usar na análise. Se omitido, usa o arquivo prompt.txt local."),
+):
     """
     Recebe um arquivo .zip, descompacta os arquivos .msg em memória, inicia um trabalho
     em lote na OpenAI e retorna imediatamente o ID do trabalho para consulta futura.
@@ -82,7 +108,7 @@ async def start_analysis(file: UploadFile = File(..., description="Um único arq
         if grouped_conversations_df.empty:
             raise HTTPException(status_code=400, detail="Nenhuma conversa válida foi encontrada para processamento.")
 
-        batch_id = await start_openai_batch_job(grouped_conversations_df)
+        batch_id = await start_openai_batch_job(grouped_conversations_df, prompt=prompt)
         return {"message": f"{len(msg_files_from_zip)} arquivos .msg processados e análise assíncrona iniciada.", "batch_id": batch_id}
     except HTTPException:
         raise
@@ -104,6 +130,25 @@ async def get_analysis_results(batch_id: str = Path(..., description="O ID do tr
         return result
     except Exception as e:
         raise HTTPException(status_code=404, detail=f"Não foi possível processar o trabalho com ID {batch_id}: {str(e)}")
+
+@app.get("/analyze/download/{batch_id}", summary="Baixa o Excel das Conversas Tratadas")
+async def download_analysis_export(batch_id: str = Path(..., description="ID do batch para baixar o Excel")):
+    """
+    Retorna o arquivo Excel gerado com as conversas agrupadas e tratadas para conferência.
+    """
+    file_path = os.path.join(CONVERSATIONS_DIR, f"conversas_processadas_{batch_id}.xlsx")
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(
+            status_code=404, 
+            detail="Arquivo não encontrado. Verifique se o ID está correto ou se houve erro no processamento."
+        )
+    
+    return FileResponse(
+        path=file_path, 
+        filename=f"conversas_processadas_{batch_id}.xlsx",
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
 # Comando para rodar o servidor: uvicorn main:app --reload --port 8001
 if __name__ == "__main__":

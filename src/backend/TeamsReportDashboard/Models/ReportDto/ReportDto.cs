@@ -12,4 +12,5 @@ public class ReportDto
     public string Category { get; set; } = string.Empty;
     public TimeSpan FirstResponseTime { get; set; }
     public TimeSpan AverageHandlingTime { get; set; }
+    public string? AnalyticalThinking { get; set; }
 }

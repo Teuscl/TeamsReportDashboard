@@ -23,6 +23,7 @@ import ProtectedRoute from "@/Routes/ProtectedRoute";
 import RoleProtectedRoute from "@/Routes/RoleProtectedRoutes";
 import { RoleEnum } from "@/utils/role";
 import ImportsPage from "./pages/ImportsPage/ImportsPage";
+import PromptPage from "./pages/PromptPage/PromptPage";
 
 
 function App() {
@@ -57,9 +58,10 @@ function App() {
                 <Route path="/imports" element={<ImportsPage />} />
               </Route>
 
-              {/* Rota apenas para Master */}
+              {/* Rotas apenas para Master */}
               <Route element={<RoleProtectedRoute allowedRoles={[RoleEnum.Master]} />}>
                 <Route path="/users" element={<UsersPage />} />
+                <Route path="/prompt" element={<PromptPage />} />
               </Route>
               
             </Route>

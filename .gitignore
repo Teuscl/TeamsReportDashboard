@@ -46,3 +46,6 @@ src/backend/TestResults/
 src/backend/coverage/
 # Verify snapshot testing — never commit received files
 *.received.*
+
+# Manifesto de conversas Teams — contém dados pessoais (e-mails, mensagens)
+src/services/message-analyzer/conversations/

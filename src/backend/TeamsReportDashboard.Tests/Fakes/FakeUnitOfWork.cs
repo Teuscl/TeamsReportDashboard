@@ -16,8 +16,11 @@ public class FakeUnitOfWork : IUnitOfWork
     public FakeReportRepository ReportRepo { get; } = new();
     public IReportRepository ReportRepository => ReportRepo;
 
-    // Repository not needed for unit tests
-    public IAnalysisJobRepository AnalysisJobRepository => throw new NotSupportedException("Not needed in unit tests.");
+    public FakeAnalysisJobRepository AnalysisJobRepo { get; } = new();
+    public IAnalysisJobRepository AnalysisJobRepository => AnalysisJobRepo;
+
+    public FakeSystemPromptRepository SystemPromptRepo { get; } = new();
+    public ISystemPromptRepository SystemPromptRepository => SystemPromptRepo;
 
     public int SaveChangesCallCount { get; private set; }
 

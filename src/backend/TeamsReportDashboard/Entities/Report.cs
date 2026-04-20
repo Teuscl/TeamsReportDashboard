@@ -21,8 +21,9 @@ public class Report : EntityBase
     public TimeSpan AverageHandlingTime { get; set; }
     
     
+    public string? AnalyticalThinking { get; set; }
+
     public Guid AnalysisJobId { get; set; }
 
-    // ✅ NOVO: Propriedade de navegação para o EF Core entender o relacionamento
     public virtual AnalysisJob AnalysisJob { get; set; } = null!;
 }

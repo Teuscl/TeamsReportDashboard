@@ -48,7 +48,8 @@ public class CreateReportService : ICreateReportService
            CreatedAt = DateTime.UtcNow,
            RequestDate = createReportDto.RequestDate,
            FirstResponseTime = createReportDto.FirstResponseTime,
-           AnalysisJobId = createReportDto.AnalysisJobId 
+           AnalyticalThinking = createReportDto.AnalyticalThinking,
+           AnalysisJobId = createReportDto.AnalysisJobId
        };
        
        await _unitOfWork.ReportRepository.CreateReportAsync(report);

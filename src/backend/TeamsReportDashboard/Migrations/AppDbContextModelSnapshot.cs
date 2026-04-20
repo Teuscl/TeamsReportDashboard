@@ -61,10 +61,15 @@ namespace TeamsReportDashboard.Backend.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
+                    b.Property<Guid?>("SystemPromptId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SystemPromptId");
 
                     b.HasIndex("UserId");
 
@@ -101,6 +106,9 @@ namespace TeamsReportDashboard.Backend.Migrations
 
                     b.Property<Guid>("AnalysisJobId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("AnalyticalThinking")
+                        .HasColumnType("text");
 
                     b.Property<long>("AverageHandlingTime")
                         .HasColumnType("bigint");
@@ -178,6 +186,32 @@ namespace TeamsReportDashboard.Backend.Migrations
                     b.ToTable("Requesters");
                 });
 
+            modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.SystemPrompt", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.ToTable("SystemPrompts");
+                });
+
             modelBuilder.Entity("TeamsReportDashboard.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -233,11 +267,17 @@ namespace TeamsReportDashboard.Backend.Migrations
 
             modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.AnalysisJob", b =>
                 {
+                    b.HasOne("TeamsReportDashboard.Backend.Entities.SystemPrompt", "SystemPrompt")
+                        .WithMany()
+                        .HasForeignKey("SystemPromptId");
+
                     b.HasOne("TeamsReportDashboard.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("SystemPrompt");
 
                     b.Navigation("User");
                 });
@@ -269,6 +309,15 @@ namespace TeamsReportDashboard.Backend.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.SystemPrompt", b =>
+                {
+                    b.HasOne("TeamsReportDashboard.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId");
+
+                    b.Navigation("CreatedByUser");
                 });
 
             modelBuilder.Entity("TeamsReportDashboard.Backend.Entities.AnalysisJob", b =>

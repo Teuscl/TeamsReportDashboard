@@ -280,7 +280,9 @@ const ImportsPage: React.FC = () => {
             (job.status === "Completed");
           
           const canEdit = job.status !== "Processing";
-          const canDelete = job.status !== "Processing" ;
+          // Jobs em Processing podem ser excluídos mesmo assim — o caso principal é remover
+          // jobs presos nesse status por crash/restart da aplicação.
+          const canDelete = true;
           const isThisJobReprocessing = reprocessingId === job.id;
            // Adiciona um estado para controlar o DropdownMenu
           const [isMenuOpen, setIsMenuOpen] = useState(false);

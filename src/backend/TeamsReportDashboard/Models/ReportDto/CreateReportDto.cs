@@ -11,7 +11,7 @@ public class CreateReportDto
     public TimeSpan FirstResponseTime { get; set; }
     public TimeSpan AverageHandlingTime { get; set; }
     
-    public Guid AnalysisJobId { get; set; }
-    
+    public string? AnalyticalThinking { get; set; }
 
+    public Guid AnalysisJobId { get; set; }
 }

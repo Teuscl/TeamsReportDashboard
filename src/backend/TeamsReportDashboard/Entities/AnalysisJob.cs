@@ -26,12 +26,16 @@ public class AnalysisJob
 
     public uint RowVersion { get; set; }
 
-    // ─── Relacionamento com o usuário que criou o job ───
     [Required]
     public Guid UserId { get; set; }
 
     [ForeignKey(nameof(UserId))]
     public virtual User? User { get; set; }
+
+    public Guid? SystemPromptId { get; set; }
+
+    [ForeignKey(nameof(SystemPromptId))]
+    public virtual SystemPrompt? SystemPrompt { get; set; }
 
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
 }

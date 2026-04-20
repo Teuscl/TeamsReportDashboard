@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore.Storage; // Adicione esta using
+using Microsoft.EntityFrameworkCore.Storage;
 using TeamsReportDashboard.Backend.Data;
 using TeamsReportDashboard.Backend.Interfaces;
 using TeamsReportDashboard.Backend.Repositories;
@@ -16,9 +16,16 @@ namespace TeamsReportDashboard.Services
         private IRequesterRepository _requesterRepository;
         private IDepartmentRepository _departmentRepository;
         private IAnalysisJobRepository _analysisJobRepository;
+        private ISystemPromptRepository _systemPromptRepository;
 
-        // ... seu construtor permanece o mesmo ...
-        public UnitOfWork(AppDbContext context, IUserRepository userRepository, IReportRepository reportRepository, IRequesterRepository requesterRepository, IDepartmentRepository departmentRepository, IAnalysisJobRepository analysisJobRepository)
+        public UnitOfWork(
+            AppDbContext context,
+            IUserRepository userRepository,
+            IReportRepository reportRepository,
+            IRequesterRepository requesterRepository,
+            IDepartmentRepository departmentRepository,
+            IAnalysisJobRepository analysisJobRepository,
+            ISystemPromptRepository systemPromptRepository)
         {
             _context = context;
             _userRepository = userRepository;
@@ -26,16 +33,15 @@ namespace TeamsReportDashboard.Services
             _requesterRepository = requesterRepository;
             _departmentRepository = departmentRepository;
             _analysisJobRepository = analysisJobRepository;
+            _systemPromptRepository = systemPromptRepository;
         }
 
-
-        // ... suas propriedades de repositório permanecem as mesmas ...
         public IUserRepository UserRepository => _userRepository;
         public IReportRepository ReportRepository => _reportRepository;
         public IRequesterRepository RequesterRepository => _requesterRepository;
         public IDepartmentRepository DepartmentRepository => _departmentRepository;
-        
         public IAnalysisJobRepository AnalysisJobRepository => _analysisJobRepository;
+        public ISystemPromptRepository SystemPromptRepository => _systemPromptRepository;
 
 
         // Implementação dos novos métodos

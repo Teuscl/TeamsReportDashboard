@@ -21,6 +21,11 @@ public class AnalysisJobWorker : BackgroundService
     {
         _logger.LogInformation("Analysis Job Worker iniciado em {Time}.", DateTimeOffset.Now);
 
+        // Recupera jobs que ficaram presos em Processing de uma execução anterior
+        // (crash, kill do processo, restart do app). Sem isso, eles nunca seriam reprocessados
+        // porque o worker só busca jobs com status Pending.
+        await RecoverStuckProcessingJobsAsync(stoppingToken);
+
         while (!stoppingToken.IsCancellationRequested)
         {
             List<Guid> jobIdsToProcess;
@@ -48,8 +53,10 @@ public class AnalysisJobWorker : BackgroundService
 
             // Um escopo isolado por job garante que um DbContext corrompido de um job
             // não afete o processamento dos demais no mesmo batch.
-            foreach (var jobId in jobIdsToProcess)
+            for (var i = 0; i < jobIdsToProcess.Count; i++)
             {
+                var jobId = jobIdsToProcess[i];
+
                 using var jobScope = _scopeFactory.CreateScope();
                 var unitOfWork = jobScope.ServiceProvider.GetRequiredService<IUnitOfWork>();
                 var orchestrator = jobScope.ServiceProvider.GetRequiredService<IJobResultOrchestrator>();
@@ -69,9 +76,27 @@ public class AnalysisJobWorker : BackgroundService
                 }
                 catch (OperationCanceledException)
                 {
-                    // Shutdown solicitado — devolver o job atual para a fila e sair
+                    // Shutdown solicitado — devolver o job atual para a fila.
                     job.Status = JobStatus.Pending;
+                    unitOfWork.AnalysisJobRepository.Update(job);
                     await unitOfWork.SaveChangesAsync(CancellationToken.None);
+
+                    // Os jobs restantes do batch (ainda não iniciados) foram marcados como
+                    // Processing atomicamente no início do ciclo. Devem ser revertidos para
+                    // Pending, caso contrário ficariam presos até o próximo startup.
+                    var notStarted = jobIdsToProcess.Skip(i + 1).ToList();
+                    if (notStarted.Count > 0)
+                    {
+                        _logger.LogWarning(
+                            "Shutdown durante o processamento do batch. Revertendo {Count} job(s) não iniciados para Pending.",
+                            notStarted.Count);
+
+                        using var resetScope = _scopeFactory.CreateScope();
+                        var resetUow = resetScope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                        await resetUow.AnalysisJobRepository.UpdateJobsStatusAtomicAsync(
+                            notStarted, JobStatus.Pending, CancellationToken.None);
+                    }
+
                     return;
                 }
                 catch (Exception ex)
@@ -94,9 +119,36 @@ public class AnalysisJobWorker : BackgroundService
                         job.Status = JobStatus.Pending;
                     }
 
+                    unitOfWork.AnalysisJobRepository.Update(job);
                     await unitOfWork.SaveChangesAsync(stoppingToken);
                 }
             }
+
+            // Aguarda antes do próximo ciclo para evitar tight loop quando os jobs
+            // retornam para Pending (batch da OpenAI ainda em andamento).
+            await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+        }
+    }
+
+    private async Task RecoverStuckProcessingJobsAsync(CancellationToken ct)
+    {
+        try
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var uow = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+            var recovered = await uow.AnalysisJobRepository.ResetStuckProcessingJobsAsync(ct);
+
+            if (recovered > 0)
+                _logger.LogWarning(
+                    "Recovery: {Count} job(s) encontrado(s) preso(s) em Processing foram revertidos para Pending.",
+                    recovered);
+            else
+                _logger.LogInformation("Recovery: nenhum job preso em Processing encontrado.");
+        }
+        catch (Exception ex)
+        {
+            // Não deve impedir o worker de iniciar
+            _logger.LogError(ex, "Erro durante o recovery de jobs em Processing. O worker continuará normalmente.");
         }
     }
 }
