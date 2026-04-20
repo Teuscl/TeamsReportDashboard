@@ -21,7 +21,7 @@ client = AsyncOpenAI(api_key=settings.openai_api_key)
 PROMPT_FILE_PATH = os.path.join(os.path.dirname(__file__), "prompt.txt")
 CONVERSATIONS_DIR = os.path.join(os.path.dirname(__file__), "conversations")
 
-def get_analysis_prompt() -> str:
+def      get_analysis_prompt() -> str:
     """Lê o prompt de análise do arquivo prompt.txt."""
     try:
         if not os.path.exists(PROMPT_FILE_PATH):
@@ -169,11 +169,10 @@ def process_msg_files_to_dataframe(file_paths: List[str]) -> pd.DataFrame:
     
     return grouped_conversations
 
-async def start_openai_batch_job(conversations_df: pd.DataFrame) -> str:
+async def start_openai_batch_job(conversations_df: pd.DataFrame, prompt: str | None = None) -> str:
     """Recebe o DataFrame de conversas, cria um trabalho em lote na OpenAI e retorna o ID."""
     tasks = []
-    # Recarrega o prompt para garantir que estamos usando a versão mais recente
-    current_prompt = get_analysis_prompt()
+    current_prompt = prompt if prompt is not None else get_analysis_prompt()
     
     for index, row in conversations_df.iterrows():
         # custom_id deve ter no máximo 64 chars (limite da OpenAI Batch API).

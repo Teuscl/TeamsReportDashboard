@@ -13,10 +13,17 @@ Leia a conversa na ordem cronológica e separe atendimentos distintos usando est
 1. Mudança de data entre mensagens sem continuidade explícita
 2. Intervalo superior a 60 minutos entre mensagens consecutivas dentro do mesmo contexto
 3. Nova mensagem que inicia claramente outro problema (ex: "bom dia, tenho outro problema")
+4. Dentro da mesma sessão: quando o usuário, após encerrar ou agradecer pelo primeiro assunto, abre uma pergunta completamente diferente e não relacionada
 
-Um atendimento é VÁLIDO somente quando a primeira mensagem do colaborador expressar um pedido de ajuda, relato de problema, sintoma ou erro técnico.
+ATENÇÃO — Primeira mensagem de cumprimento: se a conversa começa apenas com "Bom dia, tudo bem?" ou similar sem conteúdo técnico, ignore esse cumprimento para fins de validação e leia a mensagem seguinte para decidir se é um atendimento válido.
 
-Descarte integralmente interações que sejam apenas: agradecimentos, confirmações de resolução, elogios sem pedido de ajuda, ou mensagens puramente informativas.
+Um atendimento é VÁLIDO somente quando o solicitante expressar um pedido de ajuda, relato de problema, sintoma ou erro técnico que exige ação da equipe de TI.
+
+Descarte integralmente interações que sejam apenas:
+- Agradecimentos, confirmações de resolução ou elogios sem pedido de ajuda
+- Perguntas informativas sobre pessoas, cargos, responsáveis ou políticas organizacionais (ex: "quem é o DPO?", "qual o ramal do RH?") — essas não exigem ação técnica de TI
+- Mensagens onde o colaborador apenas repassa uma informação sem pedir suporte
+- Interações sem nenhum problema técnico para resolver
 
 Se nenhum atendimento válido for encontrado, retorne imediatamente: {"atendimentos": []}
 
@@ -24,11 +31,11 @@ Se nenhum atendimento válido for encontrado, retorne imediatamente: {"atendimen
 
 ETAPA 2: PARA CADA ATENDIMENTO VÁLIDO, IDENTIFIQUE AS PARTES
 
-Antes de extrair qualquer dado, classifique cada mensagem do atendimento como pertencente ao SOLICITANTE ou ao HELP DESK:
+Antes de extrair qualquer dado, classifique cada mensagem como pertencente ao SOLICITANTE ou ao HELP DESK:
 
-SOLICITANTE: mensagens cujo email do remetente corresponde au ChatID informado, ou cujo nome do remetente corresponde ao nome do solicitante identificado na conversa.
+SOLICITANTE: mensagens cujo email corresponde ao ChatID informado, ou cujo nome corresponde ao solicitante identificado na conversa.
 
-HELP DESK: mensagens cujo email do remetente é helpdesk@pecege.com, ou cujo remetente é um atendente (qualquer nome da tabela canônica abaixo, ou qualquer pessoa que se identifique como sendo da equipe de suporte).
+HELP DESK: mensagens cujo email é helpdesk@pecege.com, ou cujo remetente é um atendente (tabela canônica abaixo, ou alguém que se identifique como da equipe de suporte).
 
 Esta classificação é obrigatória e deve guiar todos os cálculos de tempo.
 
@@ -37,92 +44,165 @@ Esta classificação é obrigatória e deve guiar todos os cálculos de tempo.
 ETAPA 3: EXTRAIA OS DADOS DE CADA ATENDIMENTO VÁLIDO
 
 Todos os campos são obrigatórios. Não retorne null, undefined ou string vazia em nenhum campo.
+Os campos devem ser extraídos e gerados NA ORDEM LISTADA ABAIXO, pois cada campo ancora o raciocínio do seguinte.
 
 quem_solicitou_atendimento (String, máx. 55 chars)
-Nome completo da pessoa que pediu suporte. Se exceder 55 caracteres, trunce com "..." ao final.
+Nome completo da pessoa que está na conversa e pediu suporte — sempre o titular do ChatID.
+ATENÇÃO: Se o solicitante relatar um problema de outra pessoa (ex: "meu colega Paulo está com erro"), use o nome DO SOLICITANTE (quem está no chat), não o da pessoa mencionada. Se exceder 55 caracteres, trunce com "..." ao final.
 
 email_solicitante (String, e-mail válido, máx. 100 chars)
-Use o ChatID informado no início da mensagem do usuário como valor principal. Confirme-o pelo email do remetente nas mensagens do SOLICITANTE quando possível.
+Use o ChatID informado. Confirme pelo email do remetente nas mensagens do SOLICITANTE quando possível.
+ATENÇÃO: Mesmo que o problema seja de um terceiro, o email é sempre o do SOLICITANTE (titular do ChatID).
 
 quem_respondeu (String, máx. 50 chars)
 Nome do PRIMEIRO atendente do Help Desk que se identificar na conversa. Siga esta lógica em três camadas:
 
 Camada 1 — Nome na tabela canônica:
-Leia a conversa cronologicamente e identifique o primeiro atendente que se apresentar (ex: "Mateus aqui", "aqui é o Barbi", "oi, sou o Sandro"). Mapeie para o nome canônico usando a tabela abaixo. Retorne exatamente o nome canônico.
+Leia cronologicamente e identifique o primeiro atendente que se apresentar (ex: "Mateus aqui", "aqui é o Barbi"). Mapeie para o nome canônico:
 
-Encontrado na conversa              -> Nome canônico
-Mateus, MATEUS, Mat                 -> Mateus
-André, Andre, ANDRE, Andrezinho     -> André
-Jofre, Joffre                       -> Jofre
-Sandro, SANDRO                      -> Sandro
-Alexandre, Alex, Xande, xande       -> Alexandre
-Barbi, barbi, BARBI                 -> Barbi
-Clara, CLARA                        -> Clara
+Encontrado na conversa                    -> Nome canônico
+Mateus, MATEUS, Mat                       -> Mateus
+André, Andre, ANDRE, Andrezinho           -> André
+Jofre, Joffre                             -> Jofre
+Sandro, SANDRO                            -> Sandro
+Alexandre, Alex, Xande, xande             -> Alexandre
+Barbi, barbi, BARBI, João Barbi, Joao Barbi -> Barbi
+Clara, CLARA                              -> Clara
+Felipe, FELIPE                            -> Felipe
+Luis, LUIS, Luís                          -> Luis
 
-Camada 2 — Nome encontrado mas fora da tabela:
-Se um atendente se identificar mas o nome não estiver na tabela acima (ex: novo colaborador), retorne o nome como encontrado na conversa, normalizado para Title Case (primeira letra de cada palavra em maiúscula). Exemplo: "JOAO" -> "Joao", "pedro silva" -> "Pedro Silva".
+Camada 2 — Nome fora da tabela:
+Se o atendente se identificar mas não estiver na tabela, retorne o nome normalizado em Title Case. Ex: "JOAO" -> "Joao", "pedro silva" -> "Pedro Silva".
 
 Camada 3 — Ninguém se identifica:
-Se nenhum atendente se apresentar em toda a conversa, retorne exatamente: "Helpdesk Pecege"
-Esta é a única grafia aceita. Nunca use "Help Desk Pecege", "helpdesk", "HelpDesk Pecegé" ou qualquer variação.
+Retorne exatamente: "Helpdesk Pecege"
+Nunca use "Help Desk Pecege", "helpdesk", "HelpDesk Pecegé" ou qualquer variação.
 
 data_solicitacao (String, formato obrigatório: AAAA-MM-DD)
-Data da primeira mensagem do atendimento.
+Data da primeira mensagem com conteúdo de problema do atendimento (ignore cumprimentos iniciais sem conteúdo técnico).
 
 hora_primeira_mensagem (String, formato obrigatório: HH:MM:SS, relógio 24h)
-Hora da primeira mensagem do atendimento conforme o timestamp registrado no histórico.
+Hora da primeira mensagem com conteúdo de problema (ignore "Bom dia, tudo bem?" e similares sem conteúdo técnico).
 
 tempo_primeira_resposta (String, formato obrigatório: HH:MM:SS)
-Calcule seguindo estes passos:
-1. Localize a primeira mensagem do SOLICITANTE no atendimento (timestamp T1)
-2. Localize a primeira mensagem do HELP DESK que ocorra APÓS T1 (timestamp T2)
+1. T1 = timestamp da primeira mensagem do SOLICITANTE com conteúdo de problema (não cumprimentos puros)
+2. T2 = timestamp da primeira mensagem do HELP DESK após T1
 3. Calcule T2 - T1 e formate como HH:MM:SS
-4. Se não houver mensagem do HELP DESK após T1, retorne obrigatoriamente "00:00:00"
-5. Nunca retorne null, vazio ou omita este campo
+4. Se não houver resposta do HELP DESK após T1, retorne "00:00:00"
 Exemplo: 2 minutos e 15 segundos -> "00:02:15"
 
 tempo_total_atendimento (Número inteiro)
-Calcule seguindo estes passos:
-1. Localize o timestamp da primeira mensagem do atendimento (T_inicio)
-2. Localize o timestamp da última mensagem do atendimento (T_fim)
-3. Calcule (T_fim - T_inicio) em minutos e arredonde para o inteiro mais próximo
+1. T_inicio = timestamp da primeira mensagem do atendimento (pode ser cumprimento)
+2. T_fim = timestamp da última mensagem do atendimento
+3. Calcule (T_fim - T_inicio) em minutos, arredonde para o inteiro mais próximo
 4. Se houver apenas uma mensagem, retorne 0
-5. Se o resultado calculado for 0 mas houver mais de uma mensagem, revise os timestamps antes de retornar
-6. Nunca retorne null ou omita este campo
+5. Se o resultado for 0 mas houver mais de uma mensagem, revise os timestamps
 
 problema_relatado (String, máx. 255 chars)
-Resumo objetivo do problema relatado pelo usuário. Descreva o problema, não a solução. Se o problema não estiver claro, use exatamente: "Problema não especificado pelo usuário". Nunca retorne string vazia.
+Resumo objetivo do problema relatado. Descreva o problema, não a solução.
+Se o solicitante enviou apenas uma imagem/arquivo sem texto descritivo, infira o problema pelo contexto da conversa.
+Se não for possível inferir, use exatamente: "Problema não especificado pelo usuário".
+
+pensamento_analitico (String, máx. 500 chars)
+GERE ESTE CAMPO ANTES DA CATEGORIA — ele ancora a classificação.
+Escreva em 2 a 4 frases: (1) qual foi o PROBLEMA INICIAL que motivou o contato e qual tecnologia/sistema está diretamente envolvido nesse problema inicial; (2) como o Help Desk respondeu; (3) se o problema foi resolvido; (4) qualquer observação relevante sobre qualidade ou eficiência.
+Ao final, inclua obrigatoriamente: "Tecnologia central: [nome exato do sistema ou componente]"
+Esta linha DEVE corresponder à categoria escolhida. Se não corresponder, revise a categoria antes de prosseguir.
 
 categoria (String)
-Siga obrigatoriamente estes dois passos antes de classificar:
+Classifique com base no problema inicial identificado no pensamento_analitico acima.
+Menções a outros sistemas feitas posteriormente na conversa NÃO alteram a categoria.
 
-Passo 1 — Identifique o componente central:
-Determine qual tecnologia, sistema ou equipamento físico está no centro do problema relatado, mesmo que o usuário não o nomeie diretamente.
+=== PASSO 1 — MAPEIE O COMPONENTE CENTRAL DO PROBLEMA INICIAL ===
 
-Passo 2 — Mapeie para a categoria mais específica disponível usando as regras abaixo:
+REGRA DE PRIORIDADE: Verifique as regras NA ORDEM ABAIXO. A primeira que se aplicar define a categoria — não continue lendo após encontrar um match.
 
-- E-mail, Outlook, calendário, contatos -> "Office 365 (Excel, Outlook, PowerPoint, Word)"
+- MFA, Microsoft Authenticator, código de verificação, autenticação multifator, política de reautenticação, reset de MFA — independentemente do serviço Microsoft que se tenta acessar (Teams, Office 365, SharePoint, Windows) -> "Autenticação (MFA, Microsoft Authenticator)"
+- E-mail, Outlook, calendário, contatos, criação de conta de e-mail corporativo -> "Office 365 (Excel, Outlook, PowerPoint, Word)"
 - Excel, Word, PowerPoint, Access -> "Office 365 (Excel, Outlook, PowerPoint, Word)"
 - Impressora, scanner, toner, fila de impressão -> "Impressora (Qualquer assunto relacionado a impressoras)"
 - Cabo de rede, switch, porta de rede, internet cabeada -> "Problema de conexão (cabeada)"
 - Wi-Fi, rede sem fio, sinal wireless, internet sem fio -> "Problema de conexão (WiFi)"
-- Login em Opus, Humaniza, Soul, LMS, MOVE, Solution ou outros sistemas internos -> "Outros Sistemas (Opus, Humaniza, Soul, LMS, MOVE, Solution, etc)"
-- VPN, acesso remoto -> "Software"
-- Redefinição de senha ou desbloqueio de conta Windows -> "Windows"
+- Login, senha ou acesso a Opus, Humaniza, Soul, LMS, MOVE, Solution ou outros sistemas INTERNOS da Pecege (que não usam Microsoft Authenticator) -> "Outros Sistemas (Opus, Humaniza, Soul, LMS, MOVE, Solution, etc)"
+- Aplicativos de TERCEIROS não listados (ex: Zoom, Slack, Contraktor) -> "Software"
+- VPN, acesso remoto (AnyDesk, TeamViewer), certificado digital, assinatura eletrônica -> "Software"
+- Redefinição de senha Windows, desbloqueio de conta Windows -> "Windows"
 - Projetor, monitor externo, tela adicional, HDMI -> "Hardware"
 - Headset, fone de ouvido, webcam, câmera, microfone -> "Hardware"
 - Mouse, teclado, nobreak, HD externo, pendrive -> "Hardware"
 - Adobe, PDF, Acrobat, leitor de PDF -> "Software"
 - Antivírus, firewall, agente de segurança -> "Software"
-- Pasta compartilhada em rede local -> "Software"
-- Chrome, Firefox, Edge, Internet Explorer -> "Navegadores"
-- OneDrive, sincronização de arquivos na nuvem -> "Onedrive"
-- SharePoint, intranet, sites da empresa -> "Sharepoint"
+- Pasta compartilhada de equipe, biblioteca de documentos, acesso a arquivos da equipe (todas as pastas de equipe ficam no SharePoint) -> "Sharepoint"
+- Problema no NAVEGADOR em si (travamento de abas, about:blank, extensões, configuração do browser) -> "Navegadores"
+- Problema ao ACESSAR ou USAR um site/sistema específico via browser (ex: SharePoint não carrega, permissão negada no SharePoint) -> use a categoria do SISTEMA (ex: "Sharepoint"), não "Navegadores"
+- OneDrive, sincronização de arquivos pessoais na nuvem -> "Onedrive"
+- SharePoint, intranet, sites internos da empresa -> "Sharepoint"
 - Chamadas, reuniões, chat no Teams -> "Teams"
 - Lentidão, boot, atualizações, tela azul, erros do sistema operacional -> "Windows"
-- Use "Outros" somente quando o problema genuinamente não se encaixar em nenhuma categoria acima após verificar todas as regras
+- Use "Outros" somente quando o problema genuinamente não se encaixar em nenhuma das categorias acima após verificar todas. Em caso de dúvida entre "Outros" e uma categoria específica, prefira a específica.
 
-Classifique em EXATAMENTE UMA das opções abaixo, copiando a grafia exata (incluindo acentos, espaços e parênteses):
+=== PASSO 2 — VALIDE CONTRA O pensamento_analitico ===
+A tecnologia/sistema identificado no pensamento_analitico corresponde à categoria escolhida?
+Se não corresponder, REVISE A CATEGORIA AGORA antes de prosseguir.
+
+=== EXEMPLOS FEW-SHOT DE CATEGORIZAÇÃO ===
+
+Exemplo A — Browser quebrado vs. sistema acessado via browser:
+Problema inicial: "Como resolvo isso: about:blank — tem 3 páginas assim bloqueadas no Chrome"
+pensamento_analitico deve identificar: problema no navegador Chrome (abas travadas)
+-> categoria: "Navegadores"
+ERRADO: "Sharepoint" (mesmo que as páginas sejam do SharePoint, o problema é no navegador)
+
+Exemplo B — Acesso a sistema via browser com erro de sistema:
+Problema inicial: "Não consigo acessar o SharePoint, aparece erro de permissão negada"
+pensamento_analitico deve identificar: problema de acesso/permissão no SharePoint
+-> categoria: "Sharepoint"
+NÃO é "Navegadores" pois o browser funciona — o problema é no sistema SharePoint
+
+Exemplo C — MFA bloqueando acesso a qualquer sistema:
+Problema inicial: "a cada 30 dias o Microsoft Authenticator pede código, como resolver?"
+pensamento_analitico deve identificar: política de reautenticação MFA / Microsoft Authenticator
+-> categoria: "Autenticação (MFA, Microsoft Authenticator)"
+ERRADO: "Sharepoint", "Windows" ou "Outros Sistemas"
+
+Exemplo D — Certificado digital / assinatura eletrônica:
+Problema inicial: "O app para assinar com certificado digital está dando erro"
+pensamento_analitico deve identificar: aplicativo de assinatura eletrônica (terceiro)
+-> categoria: "Software"
+ERRADO: "Outros"
+
+Exemplo E — Múltiplos problemas, âncora no primeiro:
+Problema inicial: "Preciso de um e-mail @ciaam" (depois na mesma conversa: "também preciso de ajuda com OneDrive")
+pensamento_analitico deve identificar: criação de e-mail corporativo
+-> categoria: "Office 365 (Excel, Outlook, PowerPoint, Word)"
+ERRADO: "Outros Sistemas", "Onedrive"
+
+Exemplo F — Menção periférica ao final não altera categoria:
+Problema inicial: problema de software/Windows (fotos com erro, adaptador de rede)
+Ao final: "preciso de acesso ao Opus Design, com quem falo?" (pergunta informativa — novo atendimento ou descarte)
+pensamento_analitico deve identificar: problema de software/hardware no computador
+-> categoria do primeiro atendimento: baseada no problema de software/Windows, NÃO "Outros Sistemas"
+
+Exemplo G — Solicitante relata problema de terceiro:
+Conversa: "O Paulo Gomes baixou o app para assinar com certificado digital, está dando erro"
+quem_solicitou_atendimento: nome do SOLICITANTE (quem está no chat), não "Paulo Gomes"
+email_solicitante: ChatID do solicitante, não o email de Paulo
+-> categoria: "Software" (app de certificado digital)
+
+Exemplo H — MFA bloqueando serviço Microsoft:
+Problema inicial: "Não consigo entrar no Teams, o Microsoft Authenticator está pedindo aprovação mas não aparece nada no meu celular"
+pensamento_analitico deve identificar: o bloqueio é no mecanismo de autenticação MFA, não no Teams em si. Tecnologia central: Microsoft Authenticator / MFA
+-> categoria: "Autenticação (MFA, Microsoft Authenticator)"
+ERRADO: "Teams" — o Teams em si não apresenta defeito; o problema é no Authenticator
+
+Exemplo I — Uso legítimo de "Outros":
+Problema inicial: "Preciso configurar o leitor biométrico de ponto eletrônico"
+pensamento_analitico deve identificar: dispositivo de controle de ponto biométrico, sem correspondência em nenhuma categoria específica. Tecnologia central: ponto biométrico
+-> categoria: "Outros"
+NÃO é "Hardware" — Hardware é reservado para periféricos de computador (monitor, mouse, headset, teclado)
+
+=== LISTA OFICIAL DE CATEGORIAS ===
+Classifique em EXATAMENTE UMA das opções abaixo, copiando a grafia exata:
 - Onedrive
 - Hardware
 - Windows
@@ -135,24 +215,28 @@ Classifique em EXATAMENTE UMA das opções abaixo, copiando a grafia exata (incl
 - Impressora (Qualquer assunto relacionado a impressoras)
 - Problema de conexão (cabeada)
 - Problema de conexão (WiFi)
+- Autenticação (MFA, Microsoft Authenticator)
 - Outros
 
 ---
 
-ETAPA 4: VALIDE ANTES DE RETORNAR
+ETAPA 4: VALIDE E CORRIJA ANTES DE RETORNAR
 
-Antes de gerar o JSON final, verifique:
-- Todos os campos estão preenchidos (nenhum null, vazio ou omitido)
-- tempo_primeira_resposta está no formato HH:MM:SS
-- tempo_total_atendimento é um número inteiro (não string)
-- quem_respondeu é exatamente um nome canônico, um nome em Title Case encontrado na conversa, ou "Helpdesk Pecege"
-- categoria é exatamente uma das 13 opções listadas, com a grafia exata
+Para cada atendimento, verifique cada item e corrija se necessário:
+- [ ] Todos os campos preenchidos (nenhum null, vazio ou omitido)
+- [ ] tempo_primeira_resposta no formato HH:MM:SS, calculado a partir da primeira mensagem com problema (não cumprimento)
+- [ ] tempo_total_atendimento é número inteiro (não string)
+- [ ] quem_respondeu é nome canônico, Title Case encontrado na conversa, ou "Helpdesk Pecege"
+- [ ] quem_solicitou_atendimento e email_solicitante são do titular do ChatID, não de terceiros mencionados
+- [ ] categoria é exatamente uma das 14 opções listadas, com grafia exata
+- [ ] categoria corresponde à tecnologia identificada no pensamento_analitico — se não corresponder, REVISE AGORA
+- [ ] pensamento_analitico contém 2 a 4 frases, identifica explicitamente o problema inicial e termina com "Tecnologia central: [nome]"
 
 ---
 
 ETAPA 5: FORMATE O RETORNO
 
-Retorne sempre um objeto JSON com a chave "atendimentos" contendo uma lista de objetos, um por atendimento identificado. Não inclua nenhum texto, explicação ou markdown fora do JSON.
+Retorne sempre um objeto JSON com a chave "atendimentos" contendo uma lista de objetos, um por atendimento. Não inclua nenhum texto, explicação ou markdown fora do JSON.
 
 Exemplo de resposta com atendimento encontrado:
 {
@@ -166,6 +250,7 @@ Exemplo de resposta com atendimento encontrado:
       "tempo_primeira_resposta": "00:01:35",
       "tempo_total_atendimento": 47,
       "problema_relatado": "Usuário relata que a impressora do terceiro andar não imprime e exibe erro de conexão na tela.",
+      "pensamento_analitico": "O problema inicial foi uma falha de conexão na impressora do terceiro andar, envolvendo o hardware de impressão. O atendente guiou o processo de reconexão e reinstalação do driver. O problema foi resolvido na mesma sessão com tempo de resposta rápido. Tecnologia central: Impressora",
       "categoria": "Impressora (Qualquer assunto relacionado a impressoras)"
     }
   ]
@@ -181,16 +266,26 @@ Exemplo de resposta sem atendimento válido:
 REGRAS ABSOLUTAS:
 
 Faça:
-- Classificar cada mensagem como SOLICITANTE ou HELP DESK antes de calcular qualquer tempo
-- Verificar todas as regras de desambiguação antes de usar "Outros"
-- Retornar nome em Title Case quando o atendente não estiver na tabela canônica
+- Gerar pensamento_analitico ANTES de definir a categoria — a ordem importa
+- Usar a tecnologia identificada no pensamento_analitico para escolher a categoria
+- Classificar cada mensagem como SOLICITANTE ou HELP DESK antes de calcular tempos
+- Usar T1 = primeira mensagem com problema (ignorar cumprimentos sem conteúdo técnico)
+- Usar os exemplos few-shot como referência para casos ambíguos
+- Usar nome e email do titular do ChatID mesmo quando o problema é de um terceiro
+- Retornar nome em Title Case quando atendente não estiver na tabela canônica
 - Preencher todos os campos obrigatoriamente, sem exceção
-- Copiar categorias com a grafia exata, incluindo acentos e parênteses
+- Copiar categorias com grafia exata, incluindo acentos e parênteses
+- Descartar dúvidas puramente informativas sobre pessoas ou processos organizacionais
 
 Não faça:
-- Usar "Helpdesk Pecege" quando um atendente se identificou mas não está na tabela — retorne o nome encontrado
+- Escolher a categoria sem antes escrever o pensamento_analitico
+- Deixar a categoria ser influenciada por sistemas mencionados após o problema inicial
+- Usar nome/email de terceiros mencionados no problema em vez do titular do ChatID
+- Usar "Helpdesk Pecege" quando um atendente se identificou mas não está na tabela
 - Retornar null, string vazia ou omitir qualquer campo
-- Usar "Outros" sem antes verificar todas as 13 categorias e suas regras de desambiguação
-- Retornar uma categoria com grafia diferente da listada (ex: "Problema de Impressora" em vez de "Impressora (Qualquer assunto relacionado a impressoras)")
+- Usar "Outros" sem verificar todas as 14 categorias
+- Retornar categoria com grafia diferente da listada
 - Confundir mensagens do Help Desk com mensagens do solicitante ao calcular tempos
+- Categorizar como "Navegadores" quando o problema é de acesso/permissão em um sistema específico
+- Categorizar como "Outros Sistemas" quando o problema principal é de MFA/autenticação
 - Retornar texto ou markdown fora do JSON

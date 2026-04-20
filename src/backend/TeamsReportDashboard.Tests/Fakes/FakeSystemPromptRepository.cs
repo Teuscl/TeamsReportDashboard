@@ -7,6 +7,8 @@ public class FakeSystemPromptRepository : ISystemPromptRepository
 {
     private readonly List<SystemPrompt> _store = [];
 
+    public void Seed(params SystemPrompt[] prompts) => _store.AddRange(prompts);
+
     public Task<SystemPrompt?> GetLatestAsync() =>
         Task.FromResult(_store.OrderByDescending(p => p.CreatedAt).FirstOrDefault());
 

@@ -38,6 +38,7 @@ const ReportsPage: React.FC = () => {
   const [dataLoading, setDataLoading] = useState(true);
   
   const [problemToShow, setProblemToShow] = useState<string | null>(null);
+  const [analyticalThinkingToShow, setAnalyticalThinkingToShow] = useState<string | null>(null);
 
   // Estados para filtros
   const [selectedTechnician, setSelectedTechnician] = useState<string>('all');
@@ -176,9 +177,13 @@ const ReportsPage: React.FC = () => {
   };
 
   const handleShowProblem = (problem: string) => {
-    // Close any open dropdowns first
     setOpenDropdownId(null);
     setProblemToShow(problem);
+  };
+
+  const handleShowAnalyticalThinking = (thinking: string) => {
+    setOpenDropdownId(null);
+    setAnalyticalThinkingToShow(thinking);
   };
 
   const columns = useMemo<ColumnDef<Report>[]>(() => {
@@ -243,7 +248,7 @@ const ReportsPage: React.FC = () => {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-[200px]">
                                 <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                                <DropdownMenuItem 
+                                <DropdownMenuItem
                                   onSelect={(e) => {
                                     e.preventDefault();
                                     handleShowProblem(report.reportedProblem);
@@ -252,6 +257,17 @@ const ReportsPage: React.FC = () => {
                                 >
                                     Ver Problema Relatado
                                 </DropdownMenuItem>
+                                {report.analyticalThinking && (
+                                  <DropdownMenuItem
+                                    onSelect={(e) => {
+                                      e.preventDefault();
+                                      handleShowAnalyticalThinking(report.analyticalThinking!);
+                                    }}
+                                    className="cursor-pointer"
+                                  >
+                                    Ver Raciocínio da IA
+                                  </DropdownMenuItem>
+                                )}
                                 <DropdownMenuItem 
                                   onSelect={(e) => {
                                     e.preventDefault();
@@ -404,9 +420,7 @@ const ReportsPage: React.FC = () => {
       <AlertDialog
         open={!!problemToShow}
         onOpenChange={(isOpen) => {
-          if (!isOpen) {
-            setProblemToShow(null);
-          }
+          if (!isOpen) setProblemToShow(null);
         }}
       >
         <AlertDialogContent className="max-w-2xl">
@@ -421,6 +435,30 @@ const ReportsPage: React.FC = () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction onClick={() => setProblemToShow(null)}>
+              Fechar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={!!analyticalThinkingToShow}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) setAnalyticalThinkingToShow(null);
+        }}
+      >
+        <AlertDialogContent className="max-w-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Raciocínio da IA</AlertDialogTitle>
+            <AlertDialogDescription
+              className="text-base text-foreground max-h-[60vh] overflow-y-auto pt-4"
+              style={{ whiteSpace: 'pre-wrap' }}
+            >
+              {analyticalThinkingToShow}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setAnalyticalThinkingToShow(null)}>
               Fechar
             </AlertDialogAction>
           </AlertDialogFooter>

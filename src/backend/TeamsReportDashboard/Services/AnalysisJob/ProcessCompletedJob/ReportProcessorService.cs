@@ -111,6 +111,7 @@ namespace TeamsReportDashboard.Backend.Services.ProcessCompletedJob
                             RequestDate = requestDate,
                             FirstResponseTime = firstResponseTime,
                             AverageHandlingTime = handlingTime,
+                            AnalyticalThinking = atendimento.PensamentoAnalitico,
                             AnalysisJobId = job.Id
                         };
 

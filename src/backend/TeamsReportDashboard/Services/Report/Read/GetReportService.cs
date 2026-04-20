@@ -20,14 +20,15 @@ public class GetReportService : IGetReportService
         {
             Id = report.Id,
             RequesterId = report.RequesterId,
-            RequesterName = report.Requester?.Name, // Pega o nome do objeto aninhado
-            RequesterEmail = report.Requester?.Email, // Pega o email do objeto aninhado
+            RequesterName = report.Requester?.Name,
+            RequesterEmail = report.Requester?.Email,
             TechnicianName = report.TechnicianName,
             RequestDate = report.RequestDate,
             ReportedProblem = report.ReportedProblem,
             Category = report.Category,
             FirstResponseTime = report.FirstResponseTime,
-            AverageHandlingTime = report.AverageHandlingTime
+            AverageHandlingTime = report.AverageHandlingTime,
+            AnalyticalThinking = report.AnalyticalThinking
         });
     }
 
@@ -40,14 +41,15 @@ public class GetReportService : IGetReportService
         {
             Id = report.Id,
             RequesterId = report.RequesterId,
-            RequesterName = report.Requester?.Name, // Pega o nome do objeto aninhado
-            RequesterEmail = report.Requester?.Email, // Pega o email do objeto aninhado
+            RequesterName = report.Requester?.Name,
+            RequesterEmail = report.Requester?.Email,
             TechnicianName = report.TechnicianName,
             RequestDate = report.RequestDate,
             ReportedProblem = report.ReportedProblem,
             Category = report.Category,
             FirstResponseTime = report.FirstResponseTime,
-            AverageHandlingTime = report.AverageHandlingTime
+            AverageHandlingTime = report.AverageHandlingTime,
+            AnalyticalThinking = report.AnalyticalThinking
         };
     }
     

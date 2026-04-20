@@ -7,6 +7,9 @@ namespace TeamsReportDashboard.Backend.Models.ReportDto
     // Representa cada atendimento individual
     public class AtendimentoDto
     {
+        [JsonPropertyName("pensamento_analitico")]
+        public string? PensamentoAnalitico { get; set; }
+
         [JsonPropertyName("quem_solicitou_atendimento")]
         public string QuemSolicitouAtendimento { get; set; }
 

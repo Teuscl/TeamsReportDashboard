@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Path
+from fastapi import FastAPI, Form, UploadFile, File, HTTPException, Path
 from fastapi.responses import FileResponse
 from fastapi.concurrency import run_in_threadpool
 import uvicorn
@@ -47,7 +47,10 @@ async def update_prompt(data: PromptUpdate):
         raise HTTPException(status_code=500, detail=f"Erro ao atualizar o prompt: {str(e)}")
 
 @app.post("/analyze/start", status_code=202, summary="Inicia a Análise de um Arquivo .zip")
-async def start_analysis(file: UploadFile = File(..., description="Um único arquivo .zip contendo os chats no formato .msg")):
+async def start_analysis(
+    file: UploadFile = File(..., description="Um único arquivo .zip contendo os chats no formato .msg"),
+    prompt: str = Form(None, description="Prompt de sistema a usar na análise. Se omitido, usa o arquivo prompt.txt local."),
+):
     """
     Recebe um arquivo .zip, descompacta os arquivos .msg em memória, inicia um trabalho
     em lote na OpenAI e retorna imediatamente o ID do trabalho para consulta futura.
@@ -105,7 +108,7 @@ async def start_analysis(file: UploadFile = File(..., description="Um único arq
         if grouped_conversations_df.empty:
             raise HTTPException(status_code=400, detail="Nenhuma conversa válida foi encontrada para processamento.")
 
-        batch_id = await start_openai_batch_job(grouped_conversations_df)
+        batch_id = await start_openai_batch_job(grouped_conversations_df, prompt=prompt)
         return {"message": f"{len(msg_files_from_zip)} arquivos .msg processados e análise assíncrona iniciada.", "batch_id": batch_id}
     except HTTPException:
         raise
